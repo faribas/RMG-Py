@@ -299,7 +299,7 @@ class MoleculeDrawer:
                 for ringSystem in self.ringSystems:
                     for ring in ringSystem:
                         if any([atom in ring for atom in cycle]) and not found:
-                            self.ringSystem.append(cycle)
+                            self.ringSystems.append([cycle])
                             found = True
                 if not found:
                     self.ringSystems.append([cycle])
@@ -575,6 +575,8 @@ class MoleculeDrawer:
     
             # We're done assigning coordinates for this cycle, so mark it as processed
             processed.append(cycle)
+
+        return coordinates
     
     def __generateStraightChainCoordinates(self, atoms):
         """
