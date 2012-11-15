@@ -31,6 +31,8 @@
 """
 This module contains the main execution functionality for Reaction Mechanism
 Generator (RMG).
+
+The work is done by the :meth:`RMG.execute` method.
 """
 
 import os.path
@@ -310,6 +312,14 @@ class RMG:
         """
         Execute an RMG job using the command-line arguments `args` as returned
         by the :mod:`argparse` package.
+        
+        This contains the base RMG algorithm.
+        
+         1) If not done:
+         
+           1.1) Run simulations using :meth:`rmgpy.solver.base.ReactionSystem.simulate` 
+        
+         2) Expand the model core, etc.
         """
     
         self.initialize(args)
