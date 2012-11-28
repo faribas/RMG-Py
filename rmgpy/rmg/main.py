@@ -313,13 +313,28 @@ class RMG:
         Execute an RMG job using the command-line arguments `args` as returned
         by the :mod:`argparse` package.
         
-        This contains the base RMG algorithm.
+        This contains the base RMG algorithm (Main RMG Loop).
         
-         1) If not done:
-         
-           1.1) Run simulations using :meth:`rmgpy.solver.base.ReactionSystem.simulate` 
+             1) Run simulations using :meth:`rmgpy.solver.base.ReactionSystem.simulate` 
+             
+             2) If not done:
+             
+               2.1) Expand the model core, etc. Note which species should be added to the core.
+                
+               2.2) If we reached our termination conditions, then try to prune species from the  edge :class:`rmgpy.reaction.ReactionModel`
+               
+             3) Update RMG execution statistics :meth:`saveExecutionStatistics`
+             
+        Consider stopping gracefully if the next iteration might take us past the wall time.
         
-         2) Expand the model core, etc.
+        Write output file :meth:`rmgpy.rmg.main.initializeLog`
+        
+        Loading Restart File :meth:`rmgpy.rmg.main.RMG.loadRestartFile`
+        
+           
+             
+           
+
         """
     
         self.initialize(args)
@@ -1005,9 +1020,11 @@ def initializeLog(verbose, log_file_name):
 ################################################################################
 
 class Tee:
-    """A simple tee to create a stream which prints to many streams.
+    """
+    A simple tee to create a stream which prints to many streams :meth:`rmgpy.rmg.main.Tee`
     
     This is used to report the profiling statistics to both the log file
+    
     and the standard output.
     """
     def __init__(self, *fileobjects):
@@ -1039,7 +1056,9 @@ def makeProfileGraph(stats_file):
     Uses gprof2dot to create a graphviz dot file of the profiling information.
     
     This requires the gprof2dot package available via `pip install gprof2dot`.
+    
     Render the result using the program 'dot' via a command like
+    
     `dot -Tpdf input.dot -o output.pdf`.
     """
     try:
