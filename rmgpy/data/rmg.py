@@ -35,6 +35,7 @@ for working with the RMG database.
 
 import os
 import os.path
+import logging
 
 from base import ForbiddenStructures
 from thermo import ThermoDatabase
@@ -43,6 +44,9 @@ from statmech import StatmechDatabase
 
 # Module-level variable to store the (only) instance of RMGDatabase in use.
 database = None
+
+#: Module-level variable to store the path to the pickle of the current database
+databaseFilePath = None
 
 ################################################################################
 
@@ -175,3 +179,18 @@ class RMGDatabase:
         self.forbiddenStructures.saveOld(os.path.join(path, 'ForbiddenStructures.txt'))
         self.kinetics.saveOld(path)
         self.statmech.saveOld(path)
+        
+    def saveToPickle(self, path):
+        """
+        Save the database to a pickle file.
+        
+        This is so that other workers (in a parallel computing environment)
+        can load it easily from disk.
+        """
+        import cPickle
+        global databaseFilePath
+        databaseFilePath = path
+        logging.info('Saving database pickle file...')
+        f = open(path, 'wb')
+        cPickle.dump(self, f, cPickle.HIGHEST_PROTOCOL)
+        f.close()
