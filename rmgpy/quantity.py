@@ -32,7 +32,6 @@ This module contains classes and methods for working with physical quantities,
 particularly the :class:`Quantity` class for representing physical quantities.
 """
 
-import math
 import numpy
 import quantities as pq
 
@@ -50,6 +49,7 @@ pq.UnitQuantity('kilojoules', pq.J*1e3, symbol='kJ')
 pq.UnitQuantity('kilomoles', pq.mol*1e3, symbol='kmol')
 pq.UnitQuantity('molecule', pq.mol/6.02214179e23, symbol='molecule')
 pq.UnitQuantity('molecules', pq.mol/6.02214179e23, symbol='molecules')
+pq.UnitQuantity('debye', 1.0/(constants.c*1e21)*pq.C*pq.m, symbol='De')
 
 ################################################################################
 
@@ -567,6 +567,10 @@ Concentration = UnitType('mol/m^3')
 
 Dimensionless = UnitType('')
 
+DipoleMoment = UnitType('C*m', extraDimensionality={
+    'De': 1.0 / (1.0e21 * constants.c), 
+})
+
 Energy = Enthalpy = FreeEnergy = UnitType('J/mol', commonUnits=['kJ/mol', 'cal/mol', 'kcal/mol'])
 
 Entropy = HeatCapacity = UnitType('J/(mol*K)', commonUnits=['kJ/(mol*K)', 'cal/(mol*K)', 'kcal/(mol*K)'])
@@ -586,7 +590,7 @@ Inertia = UnitType('kg*m^2')
 
 Length = UnitType('m')
 
-Mass = UnitType('amu', extraDimensionality={'kg/mol': 1000.})
+Mass = UnitType('amu', extraDimensionality={'kg/mol': 1000.*constants.amu})
 
 Momentum = UnitType('kg*m/s^2')
 
@@ -613,12 +617,20 @@ RATECOEFFICIENT_CONVERSION_FACTORS = {
     (pq.m**6/(pq.mol**2*pq.s)).dimensionality: 1.0,              
     (pq.m**9/(pq.mol**3*pq.s)).dimensionality: 1.0,              
 }
+RATECOEFFICIENT_COMMON_UNITS = ['s^-1', 'm^3/(mol*s)', 'cm^3/(mol*s)', 'm^3/(molecule*s)', 'cm^3/(molecule*s)']
 def RateCoefficient(*args, **kwargs):
     # Make a ScalarQuantity or ArrayQuantity object out of the given parameter
     quantity = Quantity(*args, **kwargs)
     if quantity is None:
         return quantity
     
+    units = quantity.units
+        
+    # If the units are in the common units, then we can do the conversion
+    # very quickly and avoid the slow calls to the quantities package
+    if units in RATECOEFFICIENT_COMMON_UNITS:
+        return quantity
+
     dimensionality = pq.Quantity(1.0, quantity.units).simplified.dimensionality
     try:
         factor = RATECOEFFICIENT_CONVERSION_FACTORS[dimensionality]

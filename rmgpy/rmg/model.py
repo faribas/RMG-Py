@@ -44,9 +44,9 @@ from rmgpy.display import display
 import rmgpy.constants as constants
 from rmgpy.quantity import Quantity
 import rmgpy.species
-from rmgpy.thermo import Wilhoit, NASA
+from rmgpy.thermo import Wilhoit, NASA, ThermoData
 from rmgpy.pdep import LennardJones, SingleExponentialDown
-from rmgpy.statmech import *
+from rmgpy.statmech import  Conformer
 
 from rmgpy.data.thermo import *
 from rmgpy.data.kinetics import *
@@ -82,8 +82,11 @@ def makeThermoForSpecies(spec):
 
 class Species(rmgpy.species.Species):
 
-    def __init__(self, index=-1, label='', thermo=None, conformer=None, molecule=None, lennardJones=None, molecularWeight=None, energyTransferModel=None, reactive=True, coreSizeAtCreation=0):
-        rmgpy.species.Species.__init__(self, index, label, thermo, conformer, molecule, lennardJones, molecularWeight, energyTransferModel, reactive)
+    def __init__(self, index=-1, label='', thermo=None, conformer=None, 
+                 molecule=None, lennardJones=None, molecularWeight=None, 
+                 dipoleMoment=None, polarizability=None, Zrot=None, 
+                 energyTransferModel=None, reactive=True, coreSizeAtCreation=0):
+        rmgpy.species.Species.__init__(self, index, label, thermo, conformer, molecule, lennardJones, molecularWeight, dipoleMoment, polarizability, Zrot, energyTransferModel, reactive)
         self.coreSizeAtCreation = coreSizeAtCreation
 
     def __reduce__(self):
@@ -118,14 +121,14 @@ class Species(rmgpy.species.Species):
             CpInf = self.calculateCpInf()
             wilhoit = thermo0.toWilhoit(Cp0=Cp0, CpInf=CpInf)
             
-        # Compute E0 by extrapolation to 0 K
-        if self.conformer is None:
-            self.conformer = Conformer()
-        self.conformer.E0 = (wilhoit.getEnthalpy(1.0)*1e-3,"kJ/mol")
+        wilhoit.comment = thermo0.comment
         
         # Convert to desired thermo class
         if isinstance(thermo0, thermoClass):
             self.thermo = thermo0
+            # If we don't have an E0, copy it across from the Wilhoit that was fitted
+            if self.thermo.E0 is None:
+                self.thermo.E0 = wilhoit.E0
         elif isinstance(wilhoit, thermoClass):
             self.thermo = wilhoit
         else:
@@ -138,7 +141,7 @@ class Species(rmgpy.species.Species):
             for T in Tlist:
                 err += (self.thermo.getHeatCapacity(T) - thermo0.getHeatCapacity(T))**2
             err = math.sqrt(err/len(Tlist))/constants.R
-            logging.log(logging.WARNING if err > 0.1 else 0, 'Average RMS error in heat capacity fit to {0} = {1:g}*R'.format(self, err))
+            logging.log(logging.WARNING if err > 0.2 else 0, 'Average RMS error in heat capacity fit to {0} = {1:g}*R'.format(self, err))
 
         return self.thermo
 
@@ -152,6 +155,9 @@ class Species(rmgpy.species.Species):
             raise Exception("Unable to determine statmech model for species {0}: No thermodynamics model found.".format(self))
         molecule = self.molecule[0]
         conformer = database.statmech.getStatmechData(molecule, self.thermo)
+        if self.conformer is None:
+            self.conformer = Conformer()
+        self.conformer.E0 = self.thermo.E0
         self.conformer.modes = conformer.modes
         self.conformer.spinMultiplicity = conformer.spinMultiplicity
             
@@ -250,7 +256,9 @@ class CoreEdgeReactionModel:
         self.outputSpeciesList = []
         self.outputReactionList = []
         self.pressureDependence = None
+        self.verboseComments = False
         self.kineticsEstimator = 'group additivity'
+        self.reactionGenerationOptions = {}
 
     def checkForExistingSpecies(self, molecule):
         """
@@ -514,14 +522,15 @@ class CoreEdgeReactionModel:
         Generates reactions involving :class:`rmgpy.species.Species` speciesA and speciesB.
         """
         reactionList = []
+        options = self.reactionGenerationOptions
         if speciesB is None:
             for moleculeA in speciesA.molecule:
-                reactionList.extend(database.kinetics.generateReactions([moleculeA]))
+                reactionList.extend(database.kinetics.generateReactions([moleculeA], **options))
                 moleculeA.clearLabeledAtoms()
         else:
             for moleculeA in speciesA.molecule:
                 for moleculeB in speciesB.molecule:
-                    reactionList.extend(database.kinetics.generateReactions([moleculeA, moleculeB]))
+                    reactionList.extend(database.kinetics.generateReactions([moleculeA, moleculeB], **options))
                     moleculeA.clearLabeledAtoms()
                     moleculeB.clearLabeledAtoms()
         return reactionList
@@ -829,6 +838,19 @@ class CoreEdgeReactionModel:
                 
             kinetics.comment += "\nKinetics were estimated in this direction instead of the reverse because:\n{0}".format(reason)
             kinetics.comment += "\ndHrxn(298 K) = {0:.2f} kJ/mol, dGrxn(298 K) = {1:.2f} kJ/mol".format(H298 / 1000., G298 / 1000.)
+        
+        # The comments generated by the database for estimated kinetics can
+        # be quite long, and therefore not very useful
+        # We don't want to waste lots of memory storing these long, 
+        # uninformative strings, so here we replace them with much shorter ones
+        if not self.verboseComments:
+            # Only keep a short comment (to save memory)
+            if 'Exact' in kinetics.comment:
+                # Exact match of rate rule
+                kinetics.comment = '{0} exact: [{1}]'.format(reaction.family.label, ','.join([g.label for g in reaction.template])) 
+            else:
+                # Estimated (averaged) rate rule
+                kinetics.comment = '{0} estimate: [{1}]'.format(reaction.family.label, ','.join([g.label for g in reaction.template])) 
         
         return kinetics, source, entry, isForward
     
@@ -1507,7 +1529,7 @@ class CoreEdgeReactionModel:
         for rxn in seedReactionList:
             self.addReactionToCore(rxn)
 
-    def saveChemkinFile(self, path, dictionaryPath=None):
+    def saveChemkinFile(self, path, verbose_path, dictionaryPath=None):
         """
         Save a Chemkin file for the current model core as well as any desired output
         species and reactions to `path`.
@@ -1515,6 +1537,7 @@ class CoreEdgeReactionModel:
         from rmgpy.chemkin import saveChemkinFile, saveSpeciesDictionary
         speciesList = self.core.species + self.outputSpeciesList
         rxnList = self.core.reactions + self.outputReactionList
-        saveChemkinFile(path, speciesList, rxnList)
+        saveChemkinFile(path, speciesList, rxnList, verbose = False)
+        saveChemkinFile(verbose_path, speciesList, rxnList, verbose = True)
         if dictionaryPath:
             saveSpeciesDictionary(dictionaryPath, speciesList)

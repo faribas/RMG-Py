@@ -33,10 +33,9 @@ This script contains unit tests of the :mod:`rmgpy.kinetics.falloff` module.
 """
 
 import unittest
-import math
 import numpy
 
-from rmgpy.kinetics.falloff import *
+from rmgpy.kinetics.falloff import ThirdBody, Lindemann, Troe
 from rmgpy.kinetics.arrhenius import Arrhenius
 
 ################################################################################
@@ -161,7 +160,8 @@ class TestThirdBody(unittest.TestCase):
         thirdBody = cPickle.loads(cPickle.dumps(self.thirdBody))
         self.assertAlmostEqual(self.thirdBody.arrheniusLow.A.value, thirdBody.arrheniusLow.A.value, delta=1e0)
         self.assertEqual(self.thirdBody.arrheniusLow.A.units, thirdBody.arrheniusLow.A.units)
-        self.assertAlmostEqual(self.thirdBody.arrheniusLow.n, thirdBody.arrheniusLow.n, 4)
+        self.assertAlmostEqual(self.thirdBody.arrheniusLow.n.value, thirdBody.arrheniusLow.n.value, 4)
+        self.assertEqual(self.thirdBody.arrheniusLow.n.units, thirdBody.arrheniusLow.n.units, 4)
         self.assertAlmostEqual(self.thirdBody.arrheniusLow.Ea.value, thirdBody.arrheniusLow.Ea.value, 4)
         self.assertEqual(self.thirdBody.arrheniusLow.Ea.units, thirdBody.arrheniusLow.Ea.units)
         self.assertAlmostEqual(self.thirdBody.arrheniusLow.T0.value, thirdBody.arrheniusLow.T0.value, 4)
@@ -182,10 +182,12 @@ class TestThirdBody(unittest.TestCase):
         Test that a ThirdBody object can be successfully reconstructed
         from its repr() output with no loss of information.
         """
+        thirdBody = None
         exec('thirdBody = {0!r}'.format(self.thirdBody))
         self.assertAlmostEqual(self.thirdBody.arrheniusLow.A.value, thirdBody.arrheniusLow.A.value, delta=1e0)
         self.assertEqual(self.thirdBody.arrheniusLow.A.units, thirdBody.arrheniusLow.A.units)
-        self.assertAlmostEqual(self.thirdBody.arrheniusLow.n, thirdBody.arrheniusLow.n, 4)
+        self.assertAlmostEqual(self.thirdBody.arrheniusLow.n.value, thirdBody.arrheniusLow.n.value, 4)
+        self.assertEqual(self.thirdBody.arrheniusLow.n.units, thirdBody.arrheniusLow.n.units, 4)
         self.assertAlmostEqual(self.thirdBody.arrheniusLow.Ea.value, thirdBody.arrheniusLow.Ea.value, 4)
         self.assertEqual(self.thirdBody.arrheniusLow.Ea.units, thirdBody.arrheniusLow.Ea.units)
         self.assertAlmostEqual(self.thirdBody.arrheniusLow.T0.value, thirdBody.arrheniusLow.T0.value, 4)
@@ -315,14 +317,16 @@ class TestLindemann(unittest.TestCase):
         lindemann = cPickle.loads(cPickle.dumps(self.lindemann))
         self.assertAlmostEqual(self.lindemann.arrheniusHigh.A.value, lindemann.arrheniusHigh.A.value, delta=1e0)
         self.assertEqual(self.lindemann.arrheniusHigh.A.units, lindemann.arrheniusHigh.A.units)
-        self.assertAlmostEqual(self.lindemann.arrheniusHigh.n, lindemann.arrheniusHigh.n, 4)
+        self.assertAlmostEqual(self.lindemann.arrheniusHigh.n.value, lindemann.arrheniusHigh.n.value, 4)
+        self.assertEqual(self.lindemann.arrheniusHigh.n.units, lindemann.arrheniusHigh.n.units, 4)
         self.assertAlmostEqual(self.lindemann.arrheniusHigh.Ea.value, lindemann.arrheniusHigh.Ea.value, 4)
         self.assertEqual(self.lindemann.arrheniusHigh.Ea.units, lindemann.arrheniusHigh.Ea.units)
         self.assertAlmostEqual(self.lindemann.arrheniusHigh.T0.value, lindemann.arrheniusHigh.T0.value, 4)
         self.assertEqual(self.lindemann.arrheniusHigh.T0.units, lindemann.arrheniusHigh.T0.units)
         self.assertAlmostEqual(self.lindemann.arrheniusLow.A.value, lindemann.arrheniusLow.A.value, delta=1e0)
         self.assertEqual(self.lindemann.arrheniusLow.A.units, lindemann.arrheniusLow.A.units)
-        self.assertAlmostEqual(self.lindemann.arrheniusLow.n, lindemann.arrheniusLow.n, 4)
+        self.assertAlmostEqual(self.lindemann.arrheniusLow.n.value, lindemann.arrheniusLow.n.value, 4)
+        self.assertEqual(self.lindemann.arrheniusLow.n.units, lindemann.arrheniusLow.n.units, 4)
         self.assertAlmostEqual(self.lindemann.arrheniusLow.Ea.value, lindemann.arrheniusLow.Ea.value, 4)
         self.assertEqual(self.lindemann.arrheniusLow.Ea.units, lindemann.arrheniusLow.Ea.units)
         self.assertAlmostEqual(self.lindemann.arrheniusLow.T0.value, lindemann.arrheniusLow.T0.value, 4)
@@ -343,17 +347,20 @@ class TestLindemann(unittest.TestCase):
         Test that a Lindemann object can be reconstructed from its repr()
         output with no loss of information.
         """
+        lindemann = None
         exec('lindemann = {0!r}'.format(self.lindemann))
         self.assertAlmostEqual(self.lindemann.arrheniusHigh.A.value, lindemann.arrheniusHigh.A.value, delta=1e0)
         self.assertEqual(self.lindemann.arrheniusHigh.A.units, lindemann.arrheniusHigh.A.units)
-        self.assertAlmostEqual(self.lindemann.arrheniusHigh.n, lindemann.arrheniusHigh.n, 4)
+        self.assertAlmostEqual(self.lindemann.arrheniusHigh.n.value, lindemann.arrheniusHigh.n.value, 4)
+        self.assertEqual(self.lindemann.arrheniusHigh.n.units, lindemann.arrheniusHigh.n.units, 4)
         self.assertAlmostEqual(self.lindemann.arrheniusHigh.Ea.value, lindemann.arrheniusHigh.Ea.value, 4)
         self.assertEqual(self.lindemann.arrheniusHigh.Ea.units, lindemann.arrheniusHigh.Ea.units)
         self.assertAlmostEqual(self.lindemann.arrheniusHigh.T0.value, lindemann.arrheniusHigh.T0.value, 4)
         self.assertEqual(self.lindemann.arrheniusHigh.T0.units, lindemann.arrheniusHigh.T0.units)
         self.assertAlmostEqual(self.lindemann.arrheniusLow.A.value, lindemann.arrheniusLow.A.value, delta=1e0)
         self.assertEqual(self.lindemann.arrheniusLow.A.units, lindemann.arrheniusLow.A.units)
-        self.assertAlmostEqual(self.lindemann.arrheniusLow.n, lindemann.arrheniusLow.n, 4)
+        self.assertAlmostEqual(self.lindemann.arrheniusLow.n.value, lindemann.arrheniusLow.n.value, 4)
+        self.assertEqual(self.lindemann.arrheniusLow.n.units, lindemann.arrheniusLow.n.units, 4)
         self.assertAlmostEqual(self.lindemann.arrheniusLow.Ea.value, lindemann.arrheniusLow.Ea.value, 4)
         self.assertEqual(self.lindemann.arrheniusLow.Ea.units, lindemann.arrheniusLow.Ea.units)
         self.assertAlmostEqual(self.lindemann.arrheniusLow.T0.value, lindemann.arrheniusLow.T0.value, 4)
@@ -515,14 +522,16 @@ class TestTroe(unittest.TestCase):
         troe = cPickle.loads(cPickle.dumps(self.troe))
         self.assertAlmostEqual(self.troe.arrheniusHigh.A.value, troe.arrheniusHigh.A.value, delta=1e0)
         self.assertEqual(self.troe.arrheniusHigh.A.units, troe.arrheniusHigh.A.units)
-        self.assertAlmostEqual(self.troe.arrheniusHigh.n, troe.arrheniusHigh.n, 4)
+        self.assertAlmostEqual(self.troe.arrheniusHigh.n.value, troe.arrheniusHigh.n.value, 4)
+        self.assertEqual(self.troe.arrheniusHigh.n.units, troe.arrheniusHigh.n.units, 4)
         self.assertAlmostEqual(self.troe.arrheniusHigh.Ea.value, troe.arrheniusHigh.Ea.value, 4)
         self.assertEqual(self.troe.arrheniusHigh.Ea.units, troe.arrheniusHigh.Ea.units)
         self.assertAlmostEqual(self.troe.arrheniusHigh.T0.value, troe.arrheniusHigh.T0.value, 4)
         self.assertEqual(self.troe.arrheniusHigh.T0.units, troe.arrheniusHigh.T0.units)
         self.assertAlmostEqual(self.troe.arrheniusLow.A.value, troe.arrheniusLow.A.value, delta=1e0)
         self.assertEqual(self.troe.arrheniusLow.A.units, troe.arrheniusLow.A.units)
-        self.assertAlmostEqual(self.troe.arrheniusLow.n, troe.arrheniusLow.n, 4)
+        self.assertAlmostEqual(self.troe.arrheniusLow.n.value, troe.arrheniusLow.n.value, 4)
+        self.assertEqual(self.troe.arrheniusLow.n.units, troe.arrheniusLow.n.units, 4)
         self.assertAlmostEqual(self.troe.arrheniusLow.Ea.value, troe.arrheniusLow.Ea.value, 4)
         self.assertEqual(self.troe.arrheniusLow.Ea.units, troe.arrheniusLow.Ea.units)
         self.assertAlmostEqual(self.troe.arrheniusLow.T0.value, troe.arrheniusLow.T0.value, 4)
@@ -550,17 +559,20 @@ class TestTroe(unittest.TestCase):
         Test that a Troe object can be reconstructed from its repr() output
         with no loss of information.
         """
+        troe = None
         exec('troe = {0!r}'.format(self.troe))
         self.assertAlmostEqual(self.troe.arrheniusHigh.A.value, troe.arrheniusHigh.A.value, delta=1e0)
         self.assertEqual(self.troe.arrheniusHigh.A.units, troe.arrheniusHigh.A.units)
-        self.assertAlmostEqual(self.troe.arrheniusHigh.n, troe.arrheniusHigh.n, 4)
+        self.assertAlmostEqual(self.troe.arrheniusHigh.n.value, troe.arrheniusHigh.n.value, 4)
+        self.assertEqual(self.troe.arrheniusHigh.n.units, troe.arrheniusHigh.n.units, 4)
         self.assertAlmostEqual(self.troe.arrheniusHigh.Ea.value, troe.arrheniusHigh.Ea.value, 4)
         self.assertEqual(self.troe.arrheniusHigh.Ea.units, troe.arrheniusHigh.Ea.units)
         self.assertAlmostEqual(self.troe.arrheniusHigh.T0.value, troe.arrheniusHigh.T0.value, 4)
         self.assertEqual(self.troe.arrheniusHigh.T0.units, troe.arrheniusHigh.T0.units)
         self.assertAlmostEqual(self.troe.arrheniusLow.A.value, troe.arrheniusLow.A.value, delta=1e0)
         self.assertEqual(self.troe.arrheniusLow.A.units, troe.arrheniusLow.A.units)
-        self.assertAlmostEqual(self.troe.arrheniusLow.n, troe.arrheniusLow.n, 4)
+        self.assertAlmostEqual(self.troe.arrheniusLow.n.value, troe.arrheniusLow.n.value, 4)
+        self.assertEqual(self.troe.arrheniusLow.n.units, troe.arrheniusLow.n.units, 4)
         self.assertAlmostEqual(self.troe.arrheniusLow.Ea.value, troe.arrheniusLow.Ea.value, 4)
         self.assertEqual(self.troe.arrheniusLow.Ea.units, troe.arrheniusLow.Ea.units)
         self.assertAlmostEqual(self.troe.arrheniusLow.T0.value, troe.arrheniusLow.T0.value, 4)

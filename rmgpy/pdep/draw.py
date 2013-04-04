@@ -64,6 +64,7 @@ class NetworkDrawer:
             'wellSpacing': 64,
             'Eslope': 1.5,
             'TSwidth': 16,
+            'E0offset': 0.0,
         }
         if options: self.options.update(options)
         self.clear()
@@ -252,6 +253,8 @@ class NetworkDrawer:
         Eslope = self.options['Eslope']
         TSwidth = self.options['TSwidth']
         
+        E0_offset = self.options['E0offset'] * 0.001
+        
         # Choose multiplier to convert energies to desired units (on figure only)
         Eunits = self.options['Eunits']
         try:
@@ -293,6 +296,7 @@ class NetworkDrawer:
             wellRects.append([l + x - 0.5 * w, t + y + 6, w, h])
         
         # Squish columns together from the left where possible until an isomer is encountered
+        oldLeft = numpy.min(coordinates[:,0])
         Nleft = wells.index(network.isomers[0])-1
         columns = []
         for i in range(Nleft, -1, -1):
@@ -319,6 +323,8 @@ class NetworkDrawer:
                 delta = x - coordinates[c,0]
                 wellRects[c][0] += delta
                 coordinates[c,0] += delta
+        newLeft = numpy.min(coordinates[:,0])
+        coordinates[:,0] -= newLeft - oldLeft
 
         # Squish columns together from the right where possible until an isomer is encountered
         Nright = wells.index(network.isomers[-1])+1
@@ -383,9 +389,9 @@ class NetworkDrawer:
                     break
             else:
                 raise Exception
-            E0_reac = wells[reac].E0 * 0.001
-            E0_prod = wells[prod].E0 * 0.001
-            E0_TS = rxn.transitionState.conformer.E0.value_si * 0.001
+            E0_reac = wells[reac].E0 * 0.001 - E0_offset
+            E0_prod = wells[prod].E0 * 0.001 - E0_offset
+            E0_TS = rxn.transitionState.conformer.E0.value_si * 0.001 - E0_offset
             if reac < prod:
                 x1, y1 = coordinates[reac,:]
                 x2, y2 = coordinates[prod,:]
@@ -402,7 +408,7 @@ class NetworkDrawer:
                     else:           x0 = x1 + wellSpacing * 0.5
                 else:
                     x0 = 0.5 * (x1 + x2)
-                y0 = y_E0 - E0_TS * Eslope
+                y0 = y_E0 - (E0_TS + E0_offset) * Eslope
                 width1 = (x0 - x1)
                 width2 = (x2 - x0)
                 # Draw horizontal line for TS
@@ -448,7 +454,8 @@ class NetworkDrawer:
             cr.set_source_rgba(0.0, 0.0, 0.0, 1.0)
             cr.stroke()
             # Add background and text for energy
-            E0 = "{0:.1f}".format(well.E0 * Emult)
+            E0 = well.E0 * 0.001 - E0_offset
+            E0 = "{0:.1f}".format(E0 * 1000. * Emult)
             extents = cr.text_extents(E0)
             x = x0 - extents[2] / 2.0; y = y0 - 6.0
             cr.rectangle(x + extents[0] - 2.0, y + extents[1] - 2.0, extents[2] + 4.0, extents[3] + 4.0)

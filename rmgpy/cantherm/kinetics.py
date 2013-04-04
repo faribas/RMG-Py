@@ -47,7 +47,7 @@ class KineticsJob:
         self.reaction = reaction
         self.kunits = None
         
-    def execute(self, outputFile=None):
+    def execute(self, outputFile=None, plot=False):
         """
         Execute the kinetics job, saving the results to the given `outputFile`
         on disk.
@@ -55,7 +55,8 @@ class KineticsJob:
         self.generateKinetics()
         if outputFile is not None:
             self.save(outputFile)
-            self.plot(os.path.dirname(outputFile))
+            if plot:
+                self.plot(os.path.dirname(outputFile))
     
     def generateKinetics(self):
         """
@@ -96,6 +97,9 @@ class KineticsJob:
         
         logging.info('Saving kinetics for {0}...'.format(reaction))
         
+        order = len(self.reaction.reactants)
+        factor = 1e6 ** (order-1)
+        
         f = open(outputFile, 'a')
     
         f.write('#   ======= =========== =========== =========== ===============\n')
@@ -104,9 +108,9 @@ class KineticsJob:
         for T in [300,400,500,600,800,1000,1500,2000]:  
             tunneling = reaction.transitionState.tunneling
             reaction.transitionState.tunneling = None
-            k0 = reaction.calculateTSTRateCoefficient(T)
+            k0 = reaction.calculateTSTRateCoefficient(T) * factor
             reaction.transitionState.tunneling = tunneling
-            k = reaction.calculateTSTRateCoefficient(T)
+            k = reaction.calculateTSTRateCoefficient(T) * factor
             tunneling = reaction.transitionState.tunneling
             kappa = k / k0
             f.write('#    {0:4g} K {1:11.3e} {2:11g} {3:11.3e} {4}\n'.format(T, k0, kappa, k, self.kunits))
@@ -139,8 +143,8 @@ class KineticsJob:
             klist2[i] = self.reaction.kinetics.getRateCoefficient(Tlist[i])
 
         order = len(self.reaction.reactants)
-        klist *= 1e6 * (order-1)
-        klist2 *= 1e6 * (order-1)
+        klist *= 1e6 ** (order-1)
+        klist2 *= 1e6 ** (order-1)
 
         pylab.semilogy(1000.0 / Tlist, klist, 'ok')
         pylab.semilogy(1000.0 / Tlist, klist2, '-k')
