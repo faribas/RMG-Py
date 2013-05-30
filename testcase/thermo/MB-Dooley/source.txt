@@ -1,0 +1,9 @@
+Methyl Butanoate.
+S. Dooley, H. J. Curran, J. M. Simmie.
+Combustion Chemistry Centre, National University of Ireland, Galway, University Road, Galway, Ireland.
+
+Downloaded from http://c3.nuigalway.ie/methylbutanoate.html in May 2013.
+Reportedly from [1] although that paper contains no supplementary material.
+
+[1]	Dooley, S.; Curran, H. J.; Simmie, J. M. “Autoignition measurements and a validated kinetic model for the biodiesel surrogate, methyl butanoate.” Combust. Flame 2008, 153, 2–32 [doi:10.1016/j.combustflame.2008.01.005].
+
