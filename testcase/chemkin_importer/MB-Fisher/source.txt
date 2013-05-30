@@ -1,0 +1,12 @@
+Methyl Butanoate (and Methyl Formate)
+E. M. Fisher, W. J. Pitz, H. J. Curran, and C. K. Westbrook.
+Lawrence Livermore National Laboratory, Livermore, CA, UCRL-JC-137097.
+
+Downloaded from https://www-pls.llnl.gov/?url=science_and_technology-chemistry-combustion-mbutanoate in May 2013.
+Reportedly from [1] although that paper contains no supplementary material, and the files 
+describe a few changes that were made since the symposium paper was published.
+
+Note the helpful naming convention described in mb_notes.txt
+
+[1]	Fisher, E. M.; Pitz, W. J.; Curran, H. J.; Westbrook, C. K. “Detailed chemical kinetic mechanisms for combustion of oxygenated fuels.” Proc. Combust. Inst. 2000, 28, 1579–1586 [doi:10.1016/S0082-0784(00)80555-X].
+
