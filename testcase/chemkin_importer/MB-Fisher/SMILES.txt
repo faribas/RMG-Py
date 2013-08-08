@@ -1,1 +1,6 @@
 ch3co	C[C]=O
+ch2co	C=C=O
+c2h2	C#C
+c2h	[C]#C
+ch3cho	CC=O
+hcco	[CH]=C=O
