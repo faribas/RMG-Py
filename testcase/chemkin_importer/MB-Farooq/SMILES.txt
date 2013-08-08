@@ -78,3 +78,6 @@ mb3j	C[CH]CC(=O)OC
 c3h5o	[O]CC=C
 c3h6cho-3	CC[CH]C=O
 c3h6cho-1	[CH2]CCC=O
+ch2(s)	singlet[CH2]
+ch2	triplet[CH2]
+

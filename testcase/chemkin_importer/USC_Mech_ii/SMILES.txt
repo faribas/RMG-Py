@@ -53,7 +53,8 @@ CH3CCH2	C[C]=C
 o-C6H4	c1c[c][c]cc1
 C6H5C2H	C#Cc1ccccc1
 
-CH2	[CH2]
+CH2	triplet[CH2]
+CH2*	singlet[CH2]
 C6H5CH2OH	OCc1ccccc1
 C6H5CHO	O=Cc1ccccc1
 c-C4H5 C1C=C[CH]1
