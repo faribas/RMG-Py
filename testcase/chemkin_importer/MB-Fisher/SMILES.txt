@@ -4,3 +4,20 @@ c2h2	C#C
 c2h	[C]#C
 ch3cho	CC=O
 hcco	[CH]=C=O
+
+hocho	O=CO
+ch2o	C=O
+ch2oh	[CH2]O
+ch3coch3	CC(C)=O
+ch2ch2coch3	[CH2]CC(C)=O
+ch3coch2	[CH2]C(C)=O
+c2h3	[CH]=C
+hco	[CH]=O
+hoch2o	[O]CO
+c2h5oh	CCO
+nc3h7	[CH2]CC
+chocho	O=CC=O
+ic3h7	C[CH]C
+ch3cocho	CC(=O)C=O
+ic3h7cho	CC(C)C=O
+
