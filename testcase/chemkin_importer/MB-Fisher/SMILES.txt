@@ -6,7 +6,6 @@ c2h2	C#C
 c2h	[C]#C
 ch3cho	CC=O
 hcco	[CH]=C=O
-
 c2h4o1,2	C1CO1
 hco	[CH]=O
 ch3co3	CC(=O)O[O]
@@ -38,9 +37,11 @@ c3h5-a	[CH2]C=C
 ch3co3h	CC(=O)OO
 c3h4-a	C=C=C
 c2h5coch3	CCC(C)=O
-
 c2h5co	CC[C]=O
 c2h3o1,2	[CH]1CO1
 me2j	[CH2]C(=O)OC
 ch3coch2o	CC(=O)C[O]
 ho2cho	O=COO
+nc3h7	[CH2]CC
+ic3h7	C[CH]C
+ic3h7cho	CC(C)C=O
