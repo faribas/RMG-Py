@@ -36,7 +36,7 @@ IC8H18         INDENE         C9H10O2        C10H8          C10H7OH
 C10H7CHO       C10H7CH3       CH3C10H6OH     C11H12O4       C12H8          
 BIPHENYL       DIFENET        FLUORENE       C6H5CH2C6H5    C14H10         
 C6H5C2H4C6H5   C16H10         BIN1B          BIN1A          
-O              H              OH             HO2            CSOLID         
+O              H              OH             HO2            ! CSOLID         
 C              CH             HCO            HCO3           CH2S           
 CH2            CH3            CH3O           CH2OH          CH3OO          
 C2H            HCCO           C2H3           CH2CHO         CH3CO          
@@ -1604,7 +1604,7 @@ CYC5H7+CYC5H8=>C6H6+C2H4+C2H5             .1000E+13    .000  16000.0
 CYC5H7+CYC5H6=>C6H6+C2H4+C2H3             .1000E+13    .000  16000.0
 CYC5H5+CYC5H8=>C6H6+C2H4+C2H3             .1000E+13    .000  16000.0
 CYC5H7=H+CYC5H6                          .2000E+13    .000  48000.0
-CSOLID+O2=>CO2                            .1000E+09    .000  80000.0
+!CSOLID+O2=>CO2                            .1000E+09    .000  80000.0
 NC3H7OH=CH3+C2H4OH                       .2000E+17    .000  88000.0
 NC3H7OH=C2H5+CH2OH                       .2000E+17    .000  85000.0
 NC3H7OH=OH+NC3H7                         .1500E+17    .000  93200.0
