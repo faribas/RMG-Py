@@ -1300,7 +1300,10 @@ class CoreEdgeReactionModel:
             if spec.reactive: spec.generateThermoData(database, quantumMechanics=self.quantumMechanics)
             spec.generateTransportData(database)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 7b84153... Add and modify calls for generateTransportData()
         for spec in self.newSpeciesList:
 >>>>>>> 7b84153... Add and modify calls for generateTransportData()
             self.addSpeciesToCore(spec)
@@ -1367,6 +1370,9 @@ class CoreEdgeReactionModel:
 =======
             if spec.reactive: spec.generateThermoData(database, quantumMechanics=self.quantumMechanics)
             spec.generateTransportData(database)
+<<<<<<< HEAD
+>>>>>>> 7b84153... Add and modify calls for generateTransportData()
+=======
 >>>>>>> 7b84153... Add and modify calls for generateTransportData()
         for spec in self.newSpeciesList:
             if spec.reactive: spec.generateThermoData(database, quantumMechanics=self.quantumMechanics)
