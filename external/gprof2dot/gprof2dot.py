@@ -1750,7 +1750,7 @@ class Theme:
             bgcolor = (0.0, 0.0, 1.0),
             mincolor = (0.0, 0.0, 0.0),
             maxcolor = (0.0, 0.0, 1.0),
-            fontname = "Arial",
+            fontname = "ArialMT",
             minfontsize = 10.0,
             maxfontsize = 10.0,
             minpenwidth = 0.5,
