@@ -1041,7 +1041,7 @@ class Molecule(Graph):
         if not Chem.inchi.INCHI_AVAILABLE:
             return "RDKitInstalledWithoutInChI"
         rdkitmol = self.toRDKitMol()
-        return Chem.inchi.MolToInchi(rdkitmol)
+        return Chem.inchi.MolToInchi(rdkitmol, options='-SNon')
     
     def toAugmentedInChI(self):
         """
