@@ -268,6 +268,8 @@ class KineticsLibrary(Database):
                   reactant3=None,
                   product2=None,
                   product3=None,
+                  product4=None,
+                  product5=None,
                   degeneracy=1,
                   label='',
                   duplicate=False,
@@ -286,6 +288,8 @@ class KineticsLibrary(Database):
         products = [Species(label=product1.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product1)])]
         if product2 is not None: products.append(Species(label=product2.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product2)]))
         if product3 is not None: products.append(Species(label=product3.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product3)]))
+        if product4 is not None: products.append(Species(label=product4.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product4)]))
+        if product5 is not None: products.append(Species(label=product5.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product5)]))
         
         comment = "Reaction and kinetics from {0}.".format(self.label)
         if shortDesc.strip(): 
