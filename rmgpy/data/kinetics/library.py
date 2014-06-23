@@ -178,7 +178,8 @@ class KineticsLibrary(Database):
                     if (reaction0 is not reaction and
                         reaction0.reactants == reaction.reactants and
                         reaction0.products == reaction.products and
-                        reaction0.reversible == reaction.reversible
+                        reaction0.reversible == reaction.reversible and 
+                        entry0.data.isPressureDependent() == entry.data.isPressureDependent() # Chemkin allows undeclared duplicates if only one of them has (+M)
                         ):
                         # We found a duplicate reaction that wasn't marked!
                         raise DatabaseError('Unexpected duplicate reaction {0} in kinetics library {1}.'.format(reaction0, self.label))                   
