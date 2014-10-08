@@ -150,7 +150,16 @@ class KineticsLibrary(Database):
                 # This means that if we find any duplicate reactions, it is an error
                 for entry in self.entries.values():
                     reaction = entry.item
+<<<<<<< HEAD
                     if reaction0 is not reaction and reaction0.isIsomorphic(reaction): 
+=======
+                    if (reaction0 is not reaction and
+                        reaction0.reactants == reaction.reactants and
+                        reaction0.products == reaction.products and
+                        reaction0.reversible == reaction.reversible and 
+                        entry0.data.isPressureDependent() == entry.data.isPressureDependent() # Chemkin allows undeclared duplicates if only one of them has (+M)
+                        ):
+>>>>>>> richard/importer
                         # We found a duplicate reaction that wasn't marked!
                         raise DatabaseError('Unexpected duplicate reaction {0} in kinetics library {1}.'.format(reaction0, self.label))        
 
@@ -258,6 +267,15 @@ class KineticsLibrary(Database):
                   index,
                   label,
                   kinetics,
+<<<<<<< HEAD
+=======
+                  reactant2=None,
+                  reactant3=None,
+                  product2=None,
+                  product3=None,
+                  product4=None,
+                  product5=None,
+>>>>>>> richard/importer
                   degeneracy=1,
                   duplicate=False,
                   reversible=True,
@@ -267,6 +285,7 @@ class KineticsLibrary(Database):
                   longDesc='',
                   ):
         
+<<<<<<< HEAD
 #        reactants = [Species(label=reactant1.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(reactant1)])]
 #        if reactant2 is not None: reactants.append(Species(label=reactant2.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(reactant2)]))
 #        if reactant3 is not None: reactants.append(Species(label=reactant3.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(reactant3)]))
@@ -282,6 +301,26 @@ class KineticsLibrary(Database):
 #        label = str(rxn)
         assert index not in self.entries, "Reaction {0} already present!".format(label)
         self.entries[index] = Entry(
+=======
+        reactants = [Species(label=reactant1.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(reactant1)])]
+        if reactant2 is not None: reactants.append(Species(label=reactant2.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(reactant2)]))
+        if reactant3 is not None: reactants.append(Species(label=reactant3.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(reactant3)]))
+
+        products = [Species(label=product1.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product1)])]
+        if product2 is not None: products.append(Species(label=product2.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product2)]))
+        if product3 is not None: products.append(Species(label=product3.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product3)]))
+        if product4 is not None: products.append(Species(label=product4.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product4)]))
+        if product5 is not None: products.append(Species(label=product5.strip().splitlines()[0].strip(), molecule=[Molecule().fromAdjacencyList(product5)]))
+        
+        comment = "Reaction and kinetics from {0}.".format(self.label)
+        if shortDesc.strip(): 
+            comment += "{0!s}\n".format(shortDesc.strip())
+        if longDesc.strip():
+            comment += str(re.sub('\s*\n\s*','\n',longDesc))
+        kinetics.comment = comment.strip()
+        
+        self.entries['{0:d}:{1}'.format(index,label)] = Entry(
+>>>>>>> richard/importer
             index = index,
             label = label,
             item = rxn,
