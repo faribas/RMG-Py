@@ -45,6 +45,7 @@ import numpy
 import logging
 import re
 import os.path
+from copy import copy, deepcopy
 
 import rmgpy.constants as constants
 from rmgpy.molecule.molecule import Molecule, Atom
@@ -180,10 +181,10 @@ class Reaction:
 
         url = "http://rmg.mit.edu/database/kinetics/reaction/"
         for i,species in enumerate(self.reactants):
-            adjlist = species.molecule[0].toAdjacencyList(removeH=True)
+            adjlist = species.molecule[0].toAdjacencyList(removeH=False)
             url += "reactant{0}={1}__".format(i+1, re.sub('\s+', '%20', adjlist.replace('\n', ';')))
         for i,species in enumerate(self.products):
-            adjlist = species.molecule[0].toAdjacencyList(removeH=True)
+            adjlist = species.molecule[0].toAdjacencyList(removeH=False)
             url += "product{0}={1}__".format(i+1, re.sub('\s+', '%20', adjlist.replace('\n', ';')))
         return url.strip('_')
         
@@ -765,10 +766,10 @@ class Reaction:
         for spec in self.reactants:
             logging.debug('    Calculating Partition function for ' + spec.label)
             Qreac *= spec.getPartitionFunction(T) / (constants.R * T / 101325.)
-            E0 -= spec.conformer._E0.value_si
+            E0 -= spec.conformer.E0.value_si
         logging.debug('    Calculating Partition function for ' + self.transitionState.label)
         Qts = self.transitionState.getPartitionFunction(T) / (constants.R * T / 101325.)
-        E0 += self.transitionState.conformer._E0.value_si
+        E0 += self.transitionState.conformer.E0.value_si
         k = (constants.kB * T / constants.h * Qts / Qreac) * math.exp(-E0 / constants.R / T)
         
         # Apply tunneling correction
@@ -980,6 +981,31 @@ class Reaction:
                         zCoord[k] = dirVec[k].z*lenVec[k]
             reactionAxis = [sum(xCoord), sum(yCoord), sum(zCoord)]
             products[i].reactionAxis = reactionAxis
+            
+    def copy(self):
+        """
+        Create a deep copy of the current reaction.
+        """
+        
+        cython.declare(other=Reaction)
+
+        other = Reaction.__new__(Reaction)
+        other.index = self.index
+        other.label = self.label
+        other.reactants = []
+        for reactant in self.reactants:
+            other.reactants.append(reactant.copy(deep=True))
+        other.products = []
+        for product in self.products:
+            other.products.append(product.copy(deep=True))
+        other.kinetics = deepcopy(self.kinetics)
+        other.reversible = self.reversible
+        other.transitionState = deepcopy(self.transitionState)
+        other.duplicate = self.duplicate
+        other.degeneracy = self.degeneracy
+        other.pairs = deepcopy(self.pairs)
+        
+        return other
 
                 
 ################################################################################

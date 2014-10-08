@@ -58,9 +58,10 @@ class TestSpecies(unittest.TestCase):
         ...with no loss of information.
         """
         import cPickle
-        species = cPickle.loads(cPickle.dumps(self.species))
+        species = cPickle.loads(cPickle.dumps(self.species,-1))
         self.assertEqual(self.species.index, species.index)
         self.assertEqual(self.species.label, species.label)
+        self.assertEqual(self.species.molecule[0].multiplicity, species.molecule[0].multiplicity)
         self.assertEqual(self.species.thermo.H298.value_si, species.thermo.H298.value_si)
         self.assertEqual(self.species.thermo.H298.units, species.thermo.H298.units)
         self.assertEqual(len(self.species.conformer.modes), len(species.conformer.modes))
@@ -86,6 +87,7 @@ class TestSpecies(unittest.TestCase):
         exec('species = {0!r}'.format(self.species))
         self.assertEqual(self.species.index, species.index)
         self.assertEqual(self.species.label, species.label)
+        self.assertEqual(self.species.molecule[0].multiplicity, species.molecule[0].multiplicity)
         self.assertEqual(self.species.thermo.H298.value_si, species.thermo.H298.value_si)
         self.assertEqual(self.species.thermo.H298.units, species.thermo.H298.units)
         self.assertEqual(len(self.species.conformer.modes), len(species.conformer.modes))
@@ -106,8 +108,30 @@ class TestSpecies(unittest.TestCase):
         Test that toAdjacencyList() works as expected.
         """
         string = self.species.toAdjacencyList()
-        self.assertTrue(string.startswith(self.species.molecule[0].toAdjacencyList(label=self.species.label,removeH=True)))
-
+        self.assertTrue(string.startswith(self.species.molecule[0].toAdjacencyList(label=self.species.label,removeH=False)),string)
+    
+    def testSpeciesProps(self):
+        """
+        Test a key-value pair is added to the props attribute of Species.
+        """
+        self.species.props['foo'] = 'bar'
+        self.assertIsInstance(self.species.props, dict)
+        self.assertEquals(self.species.props['foo'], 'bar')
+        
+    def testSpeciesProps_object_attribute(self):
+        """
+        Test that Species's props dictionaries are independent of each other.
+        
+        Create a test in which is checked whether props is an object attribute rather
+        than a class attribute
+        """
+        spc2 = Species()
+        self.species.props['foo'] = 'bar'
+        spc3 = Species()
+        spc3.props['foo'] = 'bla'
+        self.assertEquals(self.species.props['foo'], 'bar')
+        self.assertDictEqual(spc2.props, {})
+        self.assertDictEqual(spc3.props, {'foo': 'bla'})
 ################################################################################
 
 if __name__ == '__main__':

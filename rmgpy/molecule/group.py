@@ -61,28 +61,28 @@ class GroupAtom(Vertex):
     =================== =================== ====================================
     `atomType`          ``list``            The allowed atom types (as :class:`AtomType` objects)
     `radicalElectrons`  ``list``            The allowed numbers of radical electrons (as short integers)
-    `spinMultiplicity`  ``list``            The allowed spin multiplicities (as short integers)
     `charge`            ``list``            The allowed formal charges (as short integers)
     `label`             ``str``             A string label that can be used to tag individual atoms
+    `lonePairs`         ``list``            The number of lone electron pairs
     =================== =================== ====================================
 
     Each list represents a logical OR construct, i.e. an atom will match the
     group if it matches *any* item in the list. However, the
-    `radicalElectrons`, `spinMultiplicity`, and `charge` attributes are linked
+    `radicalElectrons`, and `charge` attributes are linked
     such that an atom must match values from the same index in each of these in
     order to match.
     """
 
-    def __init__(self, atomType=None, radicalElectrons=None, spinMultiplicity=None, charge=None, label=''):
+    def __init__(self, atomType=None, radicalElectrons=None, charge=None, label='', lonePairs=None):
         Vertex.__init__(self)
         self.atomType = atomType or []
         for index in range(len(self.atomType)):
             if isinstance(self.atomType[index], str):
                 self.atomType[index] = atomTypes[self.atomType[index]]
         self.radicalElectrons = radicalElectrons or []
-        self.spinMultiplicity = spinMultiplicity or []
         self.charge = charge or []
         self.label = label
+        self.lonePairs = lonePairs or []
 
     def __reduce__(self):
         """
@@ -98,7 +98,7 @@ class GroupAtom(Vertex):
         atomType = self.atomType
         if atomType is not None:
             atomType = [a.label for a in atomType]
-        return (GroupAtom, (atomType, self.radicalElectrons, self.spinMultiplicity, self.charge, self.label), d)
+        return (GroupAtom, (atomType, self.radicalElectrons, self.charge, self.label, self.lonePairs), d)
 
     def __setstate__(self, d):
         """
@@ -130,7 +130,7 @@ class GroupAtom(Vertex):
         Return a deep copy of the :class:`GroupAtom` object. Modifying the
         attributes of the copy will not affect the original.
         """
-        return GroupAtom(self.atomType[:], self.radicalElectrons[:], self.spinMultiplicity[:], self.charge[:], self.label)
+        return GroupAtom(self.atomType[:], self.radicalElectrons[:], self.charge[:], self.label)
 
     def __changeBond(self, order):
         """
@@ -189,15 +189,12 @@ class GroupAtom(Vertex):
         where `radical` specifies the number of radical electrons to add.
         """
         radicalElectrons = []
-        spinMultiplicity = []
         if any([len(atomType.incrementRadical) == 0 for atomType in self.atomType]):
             raise ActionError('Unable to update GroupAtom due to GAIN_RADICAL action: Unknown atom type produced from set "{0}".'.format(self.atomType))
-        for electron, spin in zip(self.radicalElectrons, self.spinMultiplicity):
+        for electron in self.radicalElectrons:
             radicalElectrons.append(electron + radical)
-            spinMultiplicity.append(spin + radical)
-        # Set the new radical electron counts and spin multiplicities
+        # Set the new radical electron counts
         self.radicalElectrons = radicalElectrons
-        self.spinMultiplicity = spinMultiplicity
 
     def __loseRadical(self, radical):
         """
@@ -205,28 +202,45 @@ class GroupAtom(Vertex):
         where `radical` specifies the number of radical electrons to remove.
         """
         radicalElectrons = []
-        spinMultiplicity = []
         pairs = set()
         if any([len(atomType.decrementRadical) == 0 for atomType in self.atomType]):
             raise ActionError('Unable to update GroupAtom due to LOSE_RADICAL action: Unknown atom type produced from set "{0}".'.format(self.atomType))
-        for electron, spin in zip(self.radicalElectrons, self.spinMultiplicity):
+        for electron in self.radicalElectrons:
             electron = electron - radical
             if electron < 0:
-                raise ActionError('Unable to update GroupAtom due to LOSE_RADICAL action: Invalid radical electron set "{0}".'.format(self.radicalElectrons))
-            spin = spin - radical
-            if spin <= 0:
-                spin += 2
-            
-            pair = (electron,spin)
-            if pair in pairs:
-                continue # with next electron,spin pair, so we don't get redundant answers. Otherwise....
-            pairs.add(pair)
+                raise ActionError('Unable to update GroupAtom due to LOSE_RADICAL action: Invalid radical electron set "{0}".'.format(self.radicalElectrons))    
             radicalElectrons.append(electron)
-            spinMultiplicity.append(spin)
             
-        # Set the new radical electron counts and spin multiplicities
+        # Set the new radical electron counts
         self.radicalElectrons = radicalElectrons
-        self.spinMultiplicity = spinMultiplicity
+        
+    def __gainPair(self, pair):
+        """
+        Update the atom group as a result of applying a GAIN_PAIR action,
+        where `pair` specifies the number of lone electron pairs to add.
+        """
+        lonePairs = []
+        if any([len(atomType.incrementLonePair) == 0 for atomType in self.atomType]):
+            raise ActionError('Unable to update GroupAtom due to GAIN_PAIR action: Unknown atom type produced from set "{0}".'.format(self.atomType))
+        for lonePairs in zip(self.lonePairs):
+            lonePairs.append(lonePairs + pair)
+        # Set the new lone electron pair count
+        self.lonePairs = lonePairs
+        
+    def __losePair(self, pair):
+        """
+        Update the atom group as a result of applying a LOSE_PAIR action,
+        where `pair` specifies the number of lone electron pairs to remove.
+        """
+        lonePairs = []
+        if any([len(atomType.decrementLonePair) == 0 for atomType in self.atomType]):
+            raise ActionError('Unable to update GroupAtom due to LOSE_PAIR action: Unknown atom type produced from set "{0}".'.format(self.atomType))
+        for lonePairs in zip(self.lonePairs):
+            if lonePairs - pair < 0:
+                raise ActionError('Unable to update GroupAtom due to LOSE_PAIR action: Invalid lone electron pairs set "{0}".'.format(self.lonePairs))
+            lonePairs.append(lonePairs - pair)
+        # Set the new lone electron pair count
+        self.lonePairs = lonePairs
 
     def applyAction(self, action):
         """
@@ -246,6 +260,10 @@ class GroupAtom(Vertex):
             self.__gainRadical(action[2])
         elif act == 'LOSE_RADICAL':
             self.__loseRadical(action[2])
+        elif action[0].upper() == 'GAIN_PAIR':
+            self.__gainPair(action[2])
+        elif action[0].upper() == 'LOSE_PAIR':
+            self.__losePair(action[2])
         else:
             raise ActionError('Unable to update GroupAtom: Invalid action {0}".'.format(action))
 
@@ -276,14 +294,26 @@ class GroupAtom(Vertex):
             else:
                 return False
         # Each free radical electron state in self must have an equivalent in other (and vice versa)
-        for radical1, spin1 in zip(self.radicalElectrons, self.spinMultiplicity):
-            for radical2, spin2 in zip(other.radicalElectrons, other.spinMultiplicity):
-                if radical1 == radical2 and spin1 == spin2: break
+        for radical1 in self.radicalElectrons:
+            for radical2  in other.radicalElectrons:
+                if radical1 == radical2: break
             else:
                 return False
-        for radical1, spin1 in zip(other.radicalElectrons, other.spinMultiplicity):
-            for radical2, spin2 in zip(self.radicalElectrons, self.spinMultiplicity):
-                if radical1 == radical2 and spin1 == spin2: break
+        for radical1 in other.radicalElectrons:
+            for radical2 in self.radicalElectrons:
+                if radical1 == radical2: break
+            else:
+                return False
+        #TODO: Lone pairs??
+        #Each charge in self must have an equivalent in other (and vice versa)
+        for charge1 in self.charge:
+            for charge2 in other.charge:
+                if charge1 == charge2: break
+            else:
+                return False
+        for charge1 in other.charge:
+            for charge2 in self.charge:
+                if charge1 == charge2: break
             else:
                 return False
         # Otherwise the two atom groups are equivalent
@@ -310,14 +340,20 @@ class GroupAtom(Vertex):
             else:
                 return False
         # Each free radical electron state in self must have an equivalent in other (and vice versa)
-        for radical1, spin1 in zip(self.radicalElectrons, self.spinMultiplicity): # all these must match
-            for radical2, spin2 in zip(other.radicalElectrons, other.spinMultiplicity): # can match any of these
-                if radical1 == radical2 and spin1 == spin2: break
+        for radical1 in self.radicalElectrons:
+            for radical2 in other.radicalElectrons:
+                if radical1 == radical2: break
+            else:
+                return False
+        # TODO: Lone pairs??
+        #Each charge in self must have an equivalent in other
+        for charge1 in self.charge:
+            for charge2 in other.charge:
+                if charge1 == charge2: break
             else:
                 return False
         # Otherwise self is in fact a specific case of other
         return True
-
 ################################################################################
 
 class GroupBond(Edge):
@@ -464,6 +500,7 @@ class Group(Graph):
 
     def __init__(self, atoms=None):
         Graph.__init__(self, atoms)
+        self.multiplicity = [1,2,3,4,5]
         self.updateConnectivityValues()
         self.updateFingerprint()
     
@@ -621,7 +658,9 @@ class Group(Graph):
         ``False``.
         """
         from .adjlist import fromAdjacencyList
-        self.vertices = fromAdjacencyList(adjlist, group=True)
+        self.vertices, multiplicity = fromAdjacencyList(adjlist, group=True)
+        if multiplicity is not None:
+            self.multiplicity = multiplicity
         self.updateConnectivityValues()
         self.updateFingerprint()
         return self
@@ -631,7 +670,7 @@ class Group(Graph):
         Convert the molecular structure to a string adjacency list.
         """
         from .adjlist import toAdjacencyList
-        return toAdjacencyList(self.vertices, label='', group=True)
+        return toAdjacencyList(self.vertices, multiplicity=self.multiplicity, label='', group=True)
 
     def updateFingerprint(self):
         """
@@ -639,28 +678,33 @@ class Group(Graph):
         isomorphism checks.
         """
         cython.declare(atom=GroupAtom, atomType=AtomType)
-        cython.declare(carbon=AtomType, oxygen=AtomType, sulfur=AtomType)
-        cython.declare(isCarbon=cython.bint, isOxygen=cython.bint, isSulfur=cython.bint, radical=cython.int)
+        cython.declare(carbon=AtomType, nitrogen=AtomType, oxygen=AtomType, sulfur=AtomType)
+        cython.declare(isCarbon=cython.bint, isNitrogen=cython.bint, isOxygen=cython.bint, isSulfur=cython.bint, radical=cython.int)
         
-        carbon = atomTypes['C']
-        oxygen = atomTypes['O']
-        sulfur = atomTypes['S']
+        carbon   = atomTypes['C']
+        nitrogen = atomTypes['N']
+        oxygen   = atomTypes['O']
+        sulfur   = atomTypes['S']
         
-        self.carbonCount = 0
-        self.oxygenCount = 0
-        self.sulfurCount = 0
-        self.radicalCount = 0
+        self.carbonCount   = 0
+        self.nitrogenCount = 0
+        self.oxygenCount   = 0
+        self.sulfurCount   = 0
+        self.radicalCount  = 0
         for atom in self.vertices:
             if len(atom.atomType) == 1:
-                atomType = atom.atomType[0]
-                isCarbon = atomType.equivalent(carbon)
-                isOxygen = atomType.equivalent(oxygen)
-                isSulfur = atomType.equivalent(sulfur)
-                if isCarbon and not isOxygen and not isSulfur:
+                atomType   = atom.atomType[0]
+                isCarbon   = atomType.equivalent(carbon)
+                isNitrogen = atomType.equivalent(nitrogen)
+                isOxygen   = atomType.equivalent(oxygen)
+                isSulfur   = atomType.equivalent(sulfur)
+                if isCarbon and not isNitrogen and not isOxygen and not isSulfur:
                     self.carbonCount += 1
-                elif isOxygen and not isCarbon and not isSulfur:
+                elif isNitrogen and not isCarbon and not isOxygen and not isSulfur:
+                    self.nitrogenCount += 1
+                elif isOxygen and not isCarbon and not isNitrogen and not isSulfur:
                     self.oxygenCount += 1
-                elif isSulfur and not isCarbon and not isOxygen:
+                elif isSulfur and not isCarbon and not isNitrogen and not isOxygen:
                     self.sulfurCount += 1
             if len(atom.radicalElectrons) == 1:
                 radical = atom.radicalElectrons[0]
@@ -730,3 +774,25 @@ class Group(Graph):
             raise TypeError('Got a {0} object for parameter "other", when a Group object is required.'.format(other.__class__))
         # Do the isomorphism comparison
         return Graph.findSubgraphIsomorphisms(self, other, initialMap)
+    
+    def isIdentical(self, other):
+        """
+        Returns ``True`` if `other` is identical and ``False`` otherwise.
+        The function `isIsomorphic` respects wildcards, while this function
+        does not, make it more useful for checking groups to groups (as
+        opposed to molecules to groups)
+        """
+        # It only makes sense to compare a Group to a Group for full
+        # isomorphism, so raise an exception if this is not what was requested
+        if not isinstance(other, Group):
+            raise TypeError('Got a {0} object for parameter "other", when a Group object is required.'.format(other.__class__))
+        # An identical group is always a child of itself and 
+        # is the only case where that is true. Therefore
+        # if we do both directions of isSubgraphIsmorphic, we need
+        # to get True twice for it to be identical
+        if not self.isSubgraphIsomorphic(other):
+            return False
+        elif not other.isSubgraphIsomorphic(self):
+            return False
+        else:
+            return True

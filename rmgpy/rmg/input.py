@@ -82,12 +82,10 @@ def database(
     else:
         assert isinstance(kineticsDepositories,list), "kineticsDepositories should be either 'default', 'all', or a list of names eg. ['training','PrIMe']."
         rmg.kineticsDepositories = kineticsDepositories
-    if kineticsFamilies == 'default':
-        pass
-    elif kineticsFamilies == 'all':
-        pass
+    if kineticsFamilies in ('default', 'all', 'none'):
+        rmg.kineticsFamilies = kineticsFamilies
     else:
-        assert isinstance(kineticsFamilies,list), "kineticsFamilies should be either 'default', 'all', or a list of names eg. ['H_Abstraction','!Intra_Disproportionation']."
+        assert isinstance(kineticsFamilies,list), "kineticsFamilies should be either 'default', 'all', 'none', or a list of names eg. ['H_Abstraction','R_Recombination'] or ['!Intra_Disproportionation']."
         rmg.kineticsFamilies = kineticsFamilies
 
 def species(label, structure, reactive=True):
@@ -182,6 +180,7 @@ def model(toleranceMoveToCore, toleranceKeepInEdge=0.0, toleranceInterruptSimula
 
 def quantumMechanics(
                     software,
+                    method,
                     fileStore = None,
                     scratchDirectory = None,
                     onlyCyclics = False,
@@ -190,6 +189,7 @@ def quantumMechanics(
     from rmgpy.qm.main import QMCalculator
     rmg.quantumMechanics = QMCalculator()
     rmg.quantumMechanics.settings.software = software
+    rmg.quantumMechanics.settings.method = method
     rmg.quantumMechanics.settings.fileStore = fileStore
     rmg.quantumMechanics.settings.scratchDirectory = scratchDirectory
     rmg.quantumMechanics.settings.onlyCyclics = onlyCyclics
@@ -242,16 +242,18 @@ def pressureDependence(
     rmg.pressureDependence.activeKRotor = True
     rmg.pressureDependence.rmgmode = True
 
-def options(units='si', saveRestartPeriod=None, drawMolecules=False, generatePlots=False, saveConcentrationProfiles=False, verboseComments=False):
+def options(units='si', saveRestartPeriod=None, drawMolecules=False, generatePlots=False, saveConcentrationProfiles=False, verboseComments=False, saveEdgeSpecies=False):
     rmg.units = units
     rmg.saveRestartPeriod = Quantity(saveRestartPeriod) if saveRestartPeriod else None
     rmg.drawMolecules = drawMolecules
     rmg.generatePlots = generatePlots
     rmg.saveConcentrationProfiles = saveConcentrationProfiles
     rmg.verboseComments = verboseComments
+    rmg.saveEdgeSpecies = saveEdgeSpecies
 
 def generatedSpeciesConstraints(**kwargs):
     validConstraints = [
+        'allowed',
         'maximumCarbonAtoms',
         'maximumHydrogenAtoms',
         'maximumOxygenAtoms',
@@ -265,7 +267,7 @@ def generatedSpeciesConstraints(**kwargs):
     for key, value in kwargs.items():
         if key not in validConstraints:
             raise InputError('Invalid generated species constraint {0!r}.'.format(key))
-        rmg.reactionGenerationOptions[key] = value
+        rmg.speciesConstraints[key] = value
 
 ################################################################################
 
@@ -274,7 +276,6 @@ def readInputFile(path, rmg0):
     Read an RMG input file at `path` on disk into the :class:`RMG` object 
     `rmg`.
     """
-
     global rmg, speciesDict
     
     full_path = os.path.abspath(os.path.expandvars(path))
@@ -326,7 +327,7 @@ def readInputFile(path, rmg0):
 
     # convert keys from species names into species objects.
     for reactionSystem in rmg.reactionSystems:
-        reactionSystem.convertInitalKeysToSpeciesObjects(speciesDict)
+        reactionSystem.convertInitialKeysToSpeciesObjects(speciesDict)
 
     logging.info('')
     
@@ -412,24 +413,31 @@ def saveInputFile(path, rmg):
         f.write(species.molecule[0].toAdjacencyList())
         f.write('"""),\n')
         f.write(')\n\n')
-
+    
     # Reaction systems
     for system in rmg.reactionSystems:
-        f.write('simpleReactor(\n')
-        f.write('    temperature = ({0:g},"{1!s}"),\n'.format(system.T.getValueInGivenUnits(),system.T.units))
-        # Convert the pressure from SI pascal units to bar here
-        # Do something more fancy later for converting to user's desired units for both T and P..
-        f.write('    pressure = ({0:g},"{1!s}"),\n'.format(system.P.getValueInGivenUnits(),system.P.units))
-        f.write('    initialMoleFractions={\n')
-        for species, molfrac in system.initialMoleFractions.iteritems():
-            f.write('        "{0!s}": {1:g},\n'.format(species.label, molfrac))
+        if rmg.solvent:
+            f.write('liquidReactor(\n')
+            f.write('    temperature = ({0:g},"{1!s}"),\n'.format(system.T.getValue(),system.T.units))
+            f.write('    initialConcentrations={\n')
+            for species, conc in system.initialConcentrations.iteritems():
+                f.write('        "{0!s}": ({1:g},"{2!s}"),\n'.format(species.label,conc.getValue(),conc.units))
+        else:
+            f.write('simpleReactor(\n')
+            f.write('    temperature = ({0:g},"{1!s}"),\n'.format(system.T.getValue(),system.T.units))
+            # Convert the pressure from SI pascal units to bar here
+            # Do something more fancy later for converting to user's desired units for both T and P..
+            f.write('    pressure = ({0:g},"{1!s}"),\n'.format(system.P.getValue(),system.P.units))
+            f.write('    initialMoleFractions={\n')
+            for species, molfrac in system.initialMoleFractions.iteritems():
+                f.write('        "{0!s}": {1:g},\n'.format(species.label, molfrac))
         f.write('    },\n')               
         
         # Termination criteria
         conversions = ''
         for term in system.termination:
             if isinstance(term, TerminationTime):
-                f.write('    terminationTime = ({0:g},"{1!s}"),\n'.format(term.time.getValueInGivenUnits(),term.time.units))
+                f.write('    terminationTime = ({0:g},"{1!s}"),\n'.format(term.time.getValue(),term.time.units))
                 
             else:
                 conversions += '        "{0:s}": {1:g},\n'.format(term.species.label, term.conversion)
@@ -440,14 +448,13 @@ def saveInputFile(path, rmg):
         
         # Sensitivity analysis
         if system.sensitivity:
-            f.write('    sensitivity = {0},\n'.format(system.sensitivity))       
-        if system.sensitivityThreshold:
-            f.write('    sensitivityThreshold = {0},\n'.format(system.sensitivity))      
+            f.write('    sensitivity = {0},\n'.format(system.sensitivity))
+            f.write('    sensitivityThreshold = {0},\n'.format(system.sensitivityThreshold))      
         
         f.write(')\n\n')
     
     if rmg.solvent:
-    	f.write("solvation(\n    solvent = '{0!s}'\n)\n\n".format(solvent))
+        	f.write("solvation(\n    solvent = '{0!s}'\n)\n\n".format(rmg.solvent))
         
     # Simulator tolerances
     f.write('simulator(\n')
@@ -467,28 +474,36 @@ def saveInputFile(path, rmg):
     if rmg.pressureDependence:
         f.write('pressureDependence(\n')
         f.write('    method = "{0!s}",\n'.format(rmg.pressureDependence.method))
-        f.write('    maximumGrainSize = ({0:g},"{1!s}"),\n'.format(rmg.pressureDependence.grainSize.getValueInGivenUnits(),rmg.pressureDependence.grainSize.units))
+        f.write('    maximumGrainSize = ({0:g},"{1!s}"),\n'.format(rmg.pressureDependence.grainSize.getValue(),rmg.pressureDependence.grainSize.units))
         f.write('    minimumNumberOfGrains = {0},\n'.format(rmg.pressureDependence.grainCount))
         f.write('    temperatures = ({0:g},{1:g},"{2!s}",{3:d}),\n'.format(
-            rmg.pressureDependence.Tmin.getValueInGivenUnits(),
-            rmg.pressureDependence.Tmax.getValueInGivenUnits(),
+            rmg.pressureDependence.Tmin.getValue(),
+            rmg.pressureDependence.Tmax.getValue(),
             rmg.pressureDependence.Tmax.units,
             rmg.pressureDependence.Tcount,
         ))
         f.write('    pressures = ({0:g},{1:g},"{2!s}",{3:d}),\n'.format(
-            rmg.pressureDependence.Pmin.getValueInGivenUnits(),
-            rmg.pressureDependence.Pmax.getValueInGivenUnits(),
+            rmg.pressureDependence.Pmin.getValue(),
+            rmg.pressureDependence.Pmax.getValue(),
             rmg.pressureDependence.Pmax.units,
             rmg.pressureDependence.Pcount,
         ))
         f.write('    interpolation = {0},\n'.format(rmg.pressureDependence.model))
+        f.write(')\n\n')
+    
+    if rmg.quantumMechanics:
+        f.write('quantumMechanics(\n')
+        f.write('    software="{0!s}",\n'.format(rmg.quantumMechanics.settings.software))
+        f.write('    method="{0!s}",\n'.format(rmg.quantumMechanics.settings.method))
+        f.write('    onlyCyclics="{0}",\n'.format(rmg.quantumMechanics.settings.onlyCyclics))
+        f.write('    maxRadicalNumber="{0!s}",\n'.format(rmg.quantumMechanics.settings.maxRadicalNumber))
         f.write(')\n\n')
         
     # Options
     f.write('options(\n')
     f.write('    units = "{0}",\n'.format(rmg.units))
     if rmg.saveRestartPeriod:
-        f.write('    saveRestartPeriod = ({0},"{1}"),\n'.format(rmg.saveRestartPeriod.getValueInGivenUnits(), rmg.saveRestartPeriod.units))
+        f.write('    saveRestartPeriod = ({0},"{1}"),\n'.format(rmg.saveRestartPeriod.getValue(), rmg.saveRestartPeriod.units))
     else:
         f.write('    saveRestartPeriod = None,\n')
     f.write('    drawMolecules = {0},\n'.format(rmg.drawMolecules))

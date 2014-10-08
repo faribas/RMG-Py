@@ -1,11 +1,16 @@
 # Data sources
 database(
-	thermoLibraries = ['primaryThermoLibrary', 'GRI-Mech3.0'],
+	thermoLibraries = ['primaryThermoLibrary', 'GRI-Mech3.0-N'],
 	reactionLibraries = [],
-	seedMechanisms = [],
-	kineticsDepositories = ['training'], #  'all', 'default'==['training'], [], 
-	kineticsFamilies = ['!Intra_Disproportionation'],
+	seedMechanisms = ['GRI-Mech3.0-N'],
+	kineticsDepositories = ['training'], 
+	kineticsFamilies = 'default',
 	kineticsEstimator = 'rate rules',
+)
+
+generatedSpeciesConstraints(
+    allowed = ['seed mechanisms'],
+    maximumRadicalElectrons = 4,
 )
 
 # List of species

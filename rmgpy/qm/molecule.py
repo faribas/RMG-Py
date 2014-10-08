@@ -23,14 +23,24 @@ class Geometry:
     A geometry, used for quantum calculations.
     
     Created from a molecule. Geometry estimated by RDKit.
+    
+    The attributes are:
+    
+    =================== ======================= ====================================
+    Attribute           Type                    Description
+    =================== ======================= ====================================
+    `settings`          :class:`QMSettings`     Settings for QM calculations
+    `uniqueID`          ``str``                 A short ID such as an augmented InChI Key
+    `molecule`          :class:`Molecule`       RMG Molecule object
+    `uniqueIDlong`      ``str``                 A long, truly unique ID such as an augmented InChI
+    =================== ======================= ====================================
+    
     """
-    def __init__(self, settings, uniqueID, molecule, multiplicity, uniqueIDlong=None):
+    def __init__(self, settings, uniqueID, molecule, uniqueIDlong=None):
         self.settings = settings
         #: A short unique ID such as an augmented InChI Key.
         self.uniqueID = uniqueID
         self.molecule = molecule
-        #: The multiplicity, eg. the number of free radicals plus one.
-        self.multiplicity = multiplicity
         if uniqueIDlong is None:
             self.uniqueIDlong = uniqueID
         else:
@@ -68,7 +78,7 @@ class Geometry:
             distGeomAttempts = 5*(atoms-3) #number of conformer attempts is just a linear scaling with molecule size, due to time considerations in practice, it is probably more like 3^(n-3) or something like that
         
         rdmol, minEid = self.rd_embed(rdmol, distGeomAttempts, boundsMatrix)
-        self.save_coordinates(rdmol, minEid, rdAtIdx)
+        self.saveCoordinatesFromRDMol(rdmol, minEid, rdAtIdx)
         
     def rd_build(self):
         """
@@ -104,11 +114,17 @@ class Geometry:
 
         return rdmol, minEid
 
-    def save_coordinates(self, rdmol, minEid, rdAtIdx):
+    def saveCoordinatesFromRDMol(self, rdmol, minEid, rdAtIdx):
         # Save xyz coordinates on each atom in molecule ****
         for atom in self.molecule.atoms:
             point = rdmol.GetConformer(minEid).GetAtomPosition(atom.sortingLabel)
-            atom.coords = [point.x, point.y, point.z]
+            atom.coords = numpy.array([point.x, point.y, point.z])
+    
+    def saveCoordinatesFromQMData(self, qmdata):
+        """
+        Save geometry info from QMData (eg CCLibData)
+        """
+        raise NotImplementedError
 
 def loadThermoDataFile(filePath):
     """
@@ -163,6 +179,18 @@ class QMMolecule:
      * outputFileExtension
      * inputFileExtension
      * generateQMData() ...and whatever else is needed to make this method work.
+     
+    The attributes are:
+    
+    =================== ======================= ====================================
+    Attribute           Type                    Description
+    =================== ======================= ====================================
+    `molecule`          :class:`Molecule`       RMG Molecule object
+    `settings`          :class:`QMSettings`     Settings for QM calculations
+    `uniqueID`          ``str``                 A short ID such as an augmented InChI Key
+    `uniqueIDlong`      ``str``                 A long, truly unique ID such as an augmented InChI
+    =================== ======================= ====================================
+    
     """
     
     def __init__(self, molecule, settings):
@@ -190,13 +218,22 @@ class QMMolecule:
     def inputFilePath(self):
         """Get the input file name."""
         return self.getFilePath(self.inputFileExtension)
+    
+    @property
+    def scriptAttempts(self):
+        "The number of attempts with different script keywords"
+        return len(self.keywords)
+    
+    @property
+    def maxAttempts(self):
+        "The total number of attempts to try"
+        return 2 * len(self.keywords)
         
     def createGeometry(self):
         """
         Creates self.geometry with RDKit geometries
         """
-        multiplicity = sum([i.radicalElectrons for i in self.molecule.atoms]) + 1
-        self.geometry = Geometry(self.settings, self.uniqueID, self.molecule, multiplicity, uniqueIDlong=self.uniqueIDlong)
+        self.geometry = Geometry(self.settings, self.uniqueID, self.molecule, uniqueIDlong=self.uniqueIDlong)
         self.geometry.generateRDKitGeometries()
         return self.geometry
     
@@ -250,7 +287,7 @@ class QMMolecule:
             resultFile.write("thermoData = {0!r}\n".format(self.thermo))
             resultFile.write("pointGroup = {0!r}\n".format(self.pointGroup))
             resultFile.write("qmData = {0!r}\n".format(self.qmData))
-            resultFile.write('adjacencyList = """\n{0!s}"""\n'.format(self.molecule.toAdjacencyList(removeH=True)))
+            resultFile.write('adjacencyList = """\n{0!s}"""\n'.format(self.molecule.toAdjacencyList(removeH=False)))
 
     def loadThermoData(self):
         """
@@ -326,8 +363,10 @@ class QMMolecule:
         
         trans = rmgpy.statmech.IdealGasTranslation( mass=self.qmData.molecularMass )
         if self.pointGroup.linear:
+            # there should only be one rotational constant for a linear rotor
+            rotationalConstant = rmgpy.quantity.Frequency(max(self.qmData.rotationalConstants.value), self.qmData.rotationalConstants.units)
             rot = rmgpy.statmech.LinearRotor(
-                                         rotationalConstant = self.qmData.rotationalConstants,
+                                         rotationalConstant = rotationalConstant,
                                          symmetry = self.pointGroup.symmetryNumber,
                                         )
         else:

@@ -4,8 +4,13 @@ database(
     reactionLibraries = [],
     seedMechanisms = [],
     kineticsDepositories = ['training'],
-    kineticsFamilies = ['!Intra_Disproportionation'],
+    kineticsFamilies = 'default',
     kineticsEstimator = 'rate rules',
+)
+
+# Constraints on generated species
+generatedSpeciesConstraints(
+    maximumRadicalElectrons = 3,
 )
 
 # List of species
@@ -28,10 +33,7 @@ liquidReactor(
         "octane": (6.154e-3,'mol/cm^3'),
         "oxygen": (4.953e-6,'mol/cm^3')
     },
-    terminationConversion={
-        'octane': 0.9,
-    },
-    terminationTime=(1e6,'s'),
+    terminationTime=(5,'s'),
 )
 
 solvation(

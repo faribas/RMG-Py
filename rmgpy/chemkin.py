@@ -343,10 +343,14 @@ def _readKineticsReaction(line, speciesDict, Aunits, Eunits):
         elif product not in speciesDict:
             if re.match('[0-9.]+',product):
 <<<<<<< HEAD
+<<<<<<< HEAD
                 logging.warning("Looks like reaction {0!r} has fractional stoichiometry, which RMG cannot handle. Ignoring".format(lines[0]))
 =======
                 logging.warning("Looks like reaction {0!r} has fractional stoichiometry, which RMG cannot handle. Ignoring".format(line))
 >>>>>>> richard/importer
+=======
+                logging.warning("Looks like reaction {0!r} has fractional stoichiometry, which RMG cannot handle. Ignoring".format(line))
+>>>>>>> 99e9090e48fb9517decd08fc0dbb9a68bb417308
                 raise ChemkinError('Skip reaction!')
             raise ChemkinError('Unexpected product "{0}" in reaction {1}.'.format(product, reaction))
         else:
@@ -411,6 +415,7 @@ def _readKineticsLine(line, reaction, speciesDict, Eunits, kunits, klow_units, k
             T0 = (1,"K"),
         )
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             elif 'TROE' in line:
                 # Troe falloff parameters
@@ -485,6 +490,8 @@ def _readKineticsLine(line, reaction, speciesDict, Eunits, kunits, klow_units, k
                 else:
                     logging.info("Ignoring explicit reverse rate for reaction {0}".format(reaction))
 =======
+=======
+>>>>>>> 99e9090e48fb9517decd08fc0dbb9a68bb417308
     elif 'TROE' in line:
         # Troe falloff parameters
         tokens = tokens[1].split()
@@ -558,13 +565,17 @@ def _readKineticsLine(line, reaction, speciesDict, Eunits, kunits, klow_units, k
             reaction.reversible = False
         else:
             logging.info("Ignoring explicit reverse rate for reaction {0}".format(reaction))
+<<<<<<< HEAD
 >>>>>>> richard/importer
+=======
+>>>>>>> 99e9090e48fb9517decd08fc0dbb9a68bb417308
 
     else:
         # Assume a list of collider efficiencies
         try:
             for collider, efficiency in zip(case_preserved_tokens[0::2], case_preserved_tokens[1::2]):
                 try:
+<<<<<<< HEAD
 <<<<<<< HEAD
                     for collider, efficiency in zip(case_preserved_tokens[0::2], case_preserved_tokens[1::2]):
                         try:
@@ -583,11 +594,16 @@ def _readKineticsLine(line, reaction, speciesDict, Eunits, kunits, klow_units, k
                     error_msg += 'The following line was parsed incorrectly:\n{0}'.format(line)
                     error_msg += "\n(Case-preserved tokens: {0!r} )".format(case_preserved_tokens)
 =======
+=======
+>>>>>>> 99e9090e48fb9517decd08fc0dbb9a68bb417308
                     efficiency = float(efficiency.strip())
                 except ValueError:
                     error_msg = "{0!r} doesn't look like a collision efficiency for species {1} in line {2!r}".format(efficiency,collider.strip(),line)
                     logging.error(error_msg)
+<<<<<<< HEAD
 >>>>>>> richard/importer
+=======
+>>>>>>> 99e9090e48fb9517decd08fc0dbb9a68bb417308
                     raise ChemkinError(error_msg)
                 if collider.strip() in speciesDict:
                     kinetics['efficiencies'][speciesDict[collider.strip()].molecule[0]] = efficiency
@@ -849,14 +865,15 @@ def loadTransportFile(path, speciesDict):
 
 def loadChemkinFile(path, dictionaryPath=None, transportPath=None, readComments = True, thermoPath = None):
     """
-    Load a Chemkin input file to `path` on disk, returning lists of the species
-    and reactions in the Chemkin file.
+    Load a Chemkin input file located at `path` on disk to `path`, returning lists of the species
+    and reactions in the Chemkin file. The 'thermoPath' point to a separate thermo file, or, if 'None' is 
+    specified, the function will look for the thermo database within the chemkin mechanism file
     """
     
     speciesList = []; speciesDict = {}; speciesAliases = {}
     reactionList = []
 
-    # If the dictionary path is given, the read it and generate Molecule objects
+    # If the dictionary path is given, then read it and generate Molecule objects
     # You need to append an additional adjacency list for nonreactive species, such
     # as N2, or else the species objects will not store any structures for the final
     # HTML output.
@@ -1392,6 +1409,14 @@ def getSpeciesIdentifier(species):
             elif len(species.label) <= 15:
                 logging.warning('Species label is longer than 10 characters and may exceed chemkin string limit')
                 return species.label            
+            else:
+                logging.warning('Species label is longer than 15 characters and will break CHEMKIN 2.0')
+                return species.label
+        else:
+            # try the chemical formula if the species label is not present
+            if len(species.molecule) > 0:
+                # Try the chemical formula
+                return '{0}'.format(species.molecule[0].getFormula())
     else:
         
         # Index present - the index will be included in the identifier
@@ -1504,6 +1529,12 @@ def writeReactionString(reaction, javaLibrary = False):
     """
     kinetics = reaction.kinetics
     
+    if kinetics is None:
+        reaction_string = ' + '.join([getSpeciesIdentifier(reactant) for reactant in reaction.reactants])
+        reaction_string += ' => ' if not reaction.reversible else ' = '
+        reaction_string += ' + '.join([getSpeciesIdentifier(product) for product in reaction.products])
+        return reaction_string
+    
     if javaLibrary:
         thirdBody = ''
         if kinetics.isPressureDependent():
@@ -1564,8 +1595,6 @@ def writeKineticsEntry(reaction, speciesList, verbose = True, javaLibrary = Fals
     if isinstance(reaction.kinetics,
                   (_kinetics.MultiArrhenius, _kinetics.MultiPDepArrhenius)):
         if verbose:
-            if isinstance(reaction,LibraryReaction):
-                string += '! Library reaction: {0!s}\n'.format(reaction.library.label)
             if reaction.kinetics.comment:
                 for line in reaction.kinetics.comment.split("\n"):
                     string += "! {0}\n".format(line) 
@@ -1604,7 +1633,14 @@ def writeKineticsEntry(reaction, speciesList, verbose = True, javaLibrary = Fals
         elif isinstance(reaction, LibraryReaction):
             string += '! Library reaction: {0!s}\n'.format(reaction.library.label)
         elif isinstance(reaction, PDepReaction):
-            string += '! PDep reaction: {0!s}\n'.format(reaction.network)                         
+            string += '! PDep reaction: {0!s}\n'.format(reaction.network)          
+            if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+                # Print additional information about the pdep network's high-P limit reactions if in debug mode.
+                for rxn in reaction.network.pathReactions:
+                    if isinstance(rxn, LibraryReaction):
+                        string += '! High-P limit: {0} (Library reaction: {1!s})\n'.format(rxn, rxn.library.label)
+                    else:
+                        string += '! High-P limit: {0} (Template reaction: {1!s})\n'.format(rxn, rxn.family.label)   
     
         # Remaining lines of comments taken from reaction kinetics
         if reaction.kinetics.comment:
@@ -1760,8 +1796,11 @@ def saveSpeciesDictionary(path, species):
     """
     with open(path, 'w') as f:
         for spec in species:
-            f.write(spec.molecule[0].toAdjacencyList(label=getSpeciesIdentifier(spec), removeH=True))
-            f.write('\n')
+            try:
+                f.write(spec.molecule[0].toAdjacencyList(label=getSpeciesIdentifier(spec), removeH=False))
+                f.write('\n')
+            except:
+                raise ChemkinError('Ran into error saving dictionary for species {0}. Please check your files.'.format(getSpeciesIdentifier(spec)))
 
 def saveTransportFile(path, species):
     """
@@ -1784,10 +1823,9 @@ def saveTransportFile(path, species):
     (from the chemkin TRANSPORT manual)
     """
     with open(path, 'w') as f:
-        f.write("! {:15} {:8} {:9} {:9} {:9} {:9} {:9} {:9}\n".format('Species','Shape', 'LJ-depth', 'LJ-diam', 'DiplMom', 'Polzblty', 'RotRelaxNum','Data'))
-        f.write("! {:15} {:8} {:9} {:9} {:9} {:9} {:9} {:9}\n".format('Name','Index', 'epsilon/k_B', 'sigma', 'mu', 'alpha', 'Zrot','Source'))
-        for spec in species:
-            print spec.transportData
+        f.write("! {0:15} {1:8} {2:9} {3:9} {4:9} {5:9} {6:9} {7:9}\n".format('Species','Shape', 'LJ-depth', 'LJ-diam', 'DiplMom', 'Polzblty', 'RotRelaxNum','Data'))
+        f.write("! {0:15} {1:8} {2:9} {3:9} {4:9} {5:9} {6:9} {7:9}\n".format('Name','Index', 'epsilon/k_B', 'sigma', 'mu', 'alpha', 'Zrot','Source'))
+        for spec in species:            
             if (not spec.transportData or
                 len(spec.molecule) == 0):
                 missingData = True
@@ -1805,15 +1843,15 @@ def saveTransportFile(path, species):
                 shapeIndex = 2
             
             if missingData:
-                f.write('! {:19s} {!r}\n'.format(label, spec.transportData))
+                f.write('! {0:19s} {1!r}\n'.format(label, spec.transportData))
             else:
                 f.write('{0:19} {1:d}   {2:9.3f} {3:9.3f} {4:9.3f} {5:9.3f} {6:9.3f}    ! {7:s}\n'.format(
                     label,
                     shapeIndex,
                     spec.transportData.epsilon.value_si / constants.R,
                     spec.transportData.sigma.value_si * 1e10,
-                    spec.transportData.dipoleMoment.value_si * constants.c * 1e21,
-                    spec.transportData.polarizability.value_si * 1e30,
+                    (spec.transportData.dipoleMoment.value_si * constants.c * 1e21 if spec.transportData.dipoleMoment else 0),
+                    (spec.transportData.polarizability.value_si * 1e30 if spec.transportData.polarizability else 0),
                     (spec.Zrot.value_si if spec.Zrot else 0),
                     spec.transportData.comment,
                 ))

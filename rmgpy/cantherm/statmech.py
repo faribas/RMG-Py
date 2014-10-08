@@ -42,7 +42,8 @@ import logging
 import rmgpy.constants as constants
 from rmgpy.cantherm.output import prettify
 from rmgpy.cantherm.gaussian import GaussianLog
-from rmgpy.cantherm.molepro import MoleProLog
+from rmgpy.cantherm.molepro import MoleProLog 
+from rmgpy.cantherm.qchem import QchemLog 
 from rmgpy.species import TransitionState
 from rmgpy.statmech import *
 
@@ -196,6 +197,7 @@ class StatMechJob:
             'HinderedRotor': hinderedRotor,
             # File formats
             'GaussianLog': GaussianLog,
+            'QchemLog': QchemLog,
             'MoleProLog': MoleProLog,
             'ScanLog': ScanLog,
         }
@@ -249,10 +251,10 @@ class StatMechJob:
             except KeyError:
                 raise InputError('Model chemistry {0!r} not found in from dictionary of energy values in species file {1!r}.'.format(self.modelChemistry, path))
         if isinstance(energy, GaussianLog):
-            energyLog = energy; E0 = 'Gaussian'
+            energyLog = energy; E0 = None
             energyLog.path = os.path.join(directory, energyLog.path)
-        if isinstance(energy, MoleProLog):
-            energyLog = energy; E0 = 'MolePro'
+        elif isinstance(energy, QchemLog):
+            energyLog = energy; E0 = None
             energyLog.path = os.path.join(directory, energyLog.path)
         elif isinstance(energy, float):
             energyLog = None; E0 = energy
@@ -292,10 +294,8 @@ class StatMechJob:
         
         logging.debug('    Reading energy...')
         # The E0 that is read from the log file is without the ZPE and corresponds to E_elec
-        if E0 is 'Gaussian':
+        if E0 is None:
             E0 = energyLog.loadEnergy(self.frequencyScaleFactor)
-        elif E0 is 'MolePro':
-            E0 = energyLog.loadCCSDEnergy()
         else:
             E0 = E0 * constants.E_h * constants.Na         # Hartree/particle to J/mol
         E0 = applyEnergyCorrections(E0, self.modelChemistry, atoms, bonds if self.applyBondEnergyCorrections else {})
@@ -326,6 +326,11 @@ class StatMechJob:
                 
                 # Load the hindered rotor scan energies
                 if isinstance(scanLog, GaussianLog):
+                    scanLog.path = os.path.join(directory, scanLog.path)
+                    Vlist, angle = scanLog.loadScanEnergies()
+                    scanLogOutput = ScanLog(os.path.join(directory, '{0}_rotor_{1}.txt'.format(self.species.label, rotorCount+1)))
+                    scanLogOutput.save(angle, Vlist)
+                elif isinstance(scanLog, QchemLog):
                     scanLog.path = os.path.join(directory, scanLog.path)
                     Vlist, angle = scanLog.loadScanEnergies()
                     scanLogOutput = ScanLog(os.path.join(directory, '{0}_rotor_{1}.txt'.format(self.species.label, rotorCount+1)))
@@ -375,6 +380,13 @@ class StatMechJob:
             logging.debug('    Determining frequencies from reduced force constant matrix...')
             frequencies = numpy.array(projectRotors(conformer, F, rotors, linear, TS))
             
+            # The frequencies have changed after projection, hence we need to recompute the ZPE
+            # We might need to multiply the scaling factor to the frequencies 
+            ZPE = self.getZPEfromfrequencies(frequencies)
+            E0_withZPE = E0 + ZPE
+            # Reset the E0 of the conformer
+            conformer.E0 = (E0_withZPE*0.001,"kJ/mol")
+
         elif len(conformer.modes) > 2:
             frequencies = conformer.modes[2].frequencies.value_si
             rotors = numpy.array([])
@@ -385,8 +397,19 @@ class StatMechJob:
         for mode in conformer.modes:
             if isinstance(mode, HarmonicOscillator):
                 mode.frequencies = (frequencies * self.frequencyScaleFactor,"cm^-1")
-                
+        
         self.species.conformer = conformer
+        
+    def getZPEfromfrequencies(self, frequencies):
+                
+        ZPE = 0.0
+        
+        for freq in frequencies:
+            if freq > 0.0:
+                ZPE += 0.5 * constants.h * freq * 100.0 * constants.c * constants.Na
+                
+        return ZPE
+        
     
     def save(self, outputFile):
         """
@@ -397,7 +420,7 @@ class StatMechJob:
         logging.info('Saving statistical mechanics parameters for {0}...'.format(self.species.label))
         f = open(outputFile, 'a')
     
-        numbers = {1: 'H', 6: 'C', 7: 'N', 8: 'O', 14: 'Si', 15: 'P', 16: 'S', 17: 'Cl'}
+        numbers = {1: 'H', 6: 'C', 7: 'N', 8: 'O', 14: 'Si', 15: 'P', 16: 'S'}
         
         conformer = self.species.conformer
             
@@ -480,108 +503,119 @@ def applyEnergyCorrections(E0, modelChemistry, atoms, bonds):
     # Spin orbit correction (SOC) in Hartrees
     # Values taken from note 22 of http://jcp.aip.org/resource/1/jcpsa6/v109/i24/p10570_s1 and converted to hartrees
     # Values in millihartree are also available (with fewer significant figures) from http://jcp.aip.org/resource/1/jcpsa6/v106/i3/p1063_s1
-    SOC = {'H':0.0, 'N':0.0, 'O': -0.000355, 'C': -0.000135, 'S':  -0.000893, 'P': 0.0, 'Cl': -0.001338} 
+    SOC = {'H':0.0, 'N':0.0, 'O': -0.000355, 'C': -0.000135, 'S':  -0.000893, 'P': 0.0} 
     
     # Step 1: Reference all energies to a model chemistry-independent basis
     # by subtracting out that model chemistry's atomic energies
     # Note: If your model chemistry does not include spin orbit coupling, you should add the corrections to the energies here
     if modelChemistry == 'CBS-QB3':
-        # 0K Energy
-        atomEnergies = {'H':-0.499818 , 'N':-54.520543, 'O':-74.987624, 'C':-37.785385, 'P':-340.817186, 'S': -397.657360, 'Cl': -459.683605}
+        atomEnergies = {'H':-0.499818 + SOC['H'], 'N':-54.520543 + SOC['N'], 'O':-74.987624+ SOC['O'], 'C':-37.785385+ SOC['C'], 'P':-340.817186+ SOC['P'], 'S': -397.657360+ SOC['S']}
     elif modelChemistry == 'G3':
         atomEnergies = {'H':-0.5010030, 'N':-54.564343, 'O':-75.030991, 'C':-37.827717, 'P':-341.116432, 'S': -397.961110}
-
+    elif modelChemistry == 'M08SO/MG3S*': # * indicates that the grid size used in the [QChem} electronic 
+        #structure calculation utilized 75 radial points and 434 angular points 
+        #(i.e,, this is specified in the $rem section of the [qchem] input file as: XC_GRID 000075000434)
+        atomEnergies = {'H':-0.5017321350 + SOC['H'], 'N':-54.5574039365 + SOC['N'], 'O':-75.0382931348+ SOC['O'], 'C':-37.8245648740+ SOC['C'], 'P':-341.2444299005+ SOC['P'], 'S':-398.0940312227+ SOC['S'] }
     elif modelChemistry == 'Klip_1':
-        atomEnergies = {'H':-0.50003976 + SOC['H'], 'N':-54.53383153 + SOC['N'], 'O':-75.00935474 + SOC['O'], 'C':-37.79266591 + SOC['C']}
+        atomEnergies = {'H':-0.50003976 + SOC['H'], 'N':-54.53383153 + SOC['N'], 'O':-75.00935474+ SOC['O'], 'C':-37.79266591+ SOC['C']}
     elif modelChemistry == 'Klip_2':
         #Klip QCI(tz,qz)
-        atomEnergies = {'H':-0.50003976 + SOC['H'], 'N':-54.53169400 + SOC['N'], 'O':-75.00714902 + SOC['O'], 'C':-37.79060419 + SOC['C']}
+        atomEnergies = {'H':-0.50003976 + SOC['H'], 'N':-54.53169400 + SOC['N'], 'O':-75.00714902+ SOC['O'], 'C':-37.79060419+ SOC['C']}
     elif modelChemistry == 'Klip_3':
         #Klip QCI(dz,tz)
-        atomEnergies = {'H':-0.50005578 + SOC['H'], 'N':-54.53128140 + SOC['N'], 'O':-75.00356581 + SOC['O'], 'C':-37.79025175 + SOC['C']}
+        atomEnergies = {'H':-0.50005578 + SOC['H'], 'N':-54.53128140 + SOC['N'], 'O':-75.00356581+ SOC['O'], 'C':-37.79025175+ SOC['C']}
 
     elif modelChemistry == 'Klip_2_cc':
         #Klip CCSD(T)(tz,qz)
-        atomEnergies = {'H':-0.50003976 + SOC['H'], 'O':-75.00681155 + SOC['O'], 'C':-37.79029443 + SOC['C']}
+        atomEnergies = {'H':-0.50003976 + SOC['H'], 'O':-75.00681155+ SOC['O'], 'C':-37.79029443+ SOC['C']}
 
     elif modelChemistry == 'CCSD(T)-F12/cc-pVDZ-F12_H-TZ':
-        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.526406291655 + SOC['N'], 'O':-74.995458316117 + SOC['O'], 'C':-37.788203485235 + SOC['C']}
+        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.526406291655 + SOC['N'], 'O':-74.995458316117+ SOC['O'], 'C':-37.788203485235+ SOC['C']}
     elif modelChemistry == 'CCSD(T)-F12/cc-pVDZ-F12_H-QZ':
-        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.526406291655 + SOC['N'], 'O':-74.995458316117 + SOC['O'], 'C':-37.788203485235 + SOC['C']}
-
+        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.526406291655 + SOC['N'], 'O':-74.995458316117+ SOC['O'], 'C':-37.788203485235+ SOC['C']}
+    
+    # We are assuming that SOC is included in the Bond Energy Corrections  
     elif modelChemistry == 'CCSD(T)-F12/cc-pVDZ-F12':
-        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.526406291655 + SOC['N'], 'O':-74.995458316117 + SOC['O'], 'C':-37.788203485235 + SOC['C']}
+#        atomEnergies = {'H':-0.499811124128, 'N':-54.526406291655, 'O':-74.995458316117, 'C':-37.788203485235}
+        atomEnergies = {'H':-0.499811124128, 'N':-54.526406291655, 'O':-74.995458316117, 'C':-37.788203485235, 'S':-397.663040369707}
     elif modelChemistry == 'CCSD(T)-F12/cc-pVTZ-F12':
-        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.53000909621 + SOC['N'], 'O':-75.004127673424 + SOC['O'], 'C':-37.789862146471 + SOC['C']}
+        atomEnergies = {'H':-0.499946213243, 'N':-54.53000909621, 'O':-75.004127673424, 'C':-37.789862146471, 'S':-397.675447487865}
     elif modelChemistry == 'CCSD(T)-F12/cc-pVQZ-F12':
-        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.530515226371 + SOC['N'], 'O':-75.005600062003 + SOC['O'], 'C':-37.789961656228 + SOC['C']}
-        
+        atomEnergies = {'H':-0.499994558325, 'N':-54.530515226371, 'O':-75.005600062003, 'C':-37.789961656228, 'S':-397.676719774973}
     elif modelChemistry == 'CCSD(T)-F12/cc-pCVDZ-F12':
-        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.582137180344 + SOC['N'], 'O':-75.053045547421 + SOC['O'], 'C':-37.840869118707 + SOC['C']}
+        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.582137180344 + SOC['N'], 'O':-75.053045547421 + SOC['O'], 'C':-37.840869118707+ SOC['C']}
     elif modelChemistry == 'CCSD(T)-F12/cc-pCVTZ-F12':
-        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.588545831900 + SOC['N'], 'O':-75.065995072347 + SOC['O'], 'C':-37.844662139972 + SOC['C']}
+        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.588545831900 + SOC['N'], 'O':-75.065995072347 + SOC['O'], 'C':-37.844662139972+ SOC['C']}
     elif modelChemistry == 'CCSD(T)-F12/cc-pCVQZ-F12':
-        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.589137594139 + SOC['N'], 'O':-75.067412234737 + SOC['O'], 'C':-37.844893820561 + SOC['C']}
+        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.589137594139+ SOC['N'], 'O':-75.067412234737+ SOC['O'], 'C':-37.844893820561+ SOC['C']}
 
     elif modelChemistry == 'CCSD(T)-F12/aug-cc-pVDZ':
-        atomEnergies = {'H':-0.499459066131 + SOC['H'], 'N':-54.524279516472 + SOC['N'], 'O':-74.992097308083 + SOC['O'], 'C':-37.786694171716 + SOC['C']}
+        atomEnergies = {'H':-0.499459066131 + SOC['H'], 'N':-54.524279516472 + SOC['N'], 'O':-74.992097308083+ SOC['O'], 'C':-37.786694171716+ SOC['C']}
     elif modelChemistry == 'CCSD(T)-F12/aug-cc-pVTZ':
-        atomEnergies = {'H':-0.499844820798 + SOC['H'], 'N':-54.527419359906 + SOC['N'], 'O':-75.000001429806 + SOC['O'], 'C':-37.788504810868 + SOC['C']}
+        atomEnergies = {'H':-0.499844820798 + SOC['H'], 'N':-54.527419359906 + SOC['N'], 'O':-75.000001429806+ SOC['O'], 'C':-37.788504810868+ SOC['C']}
     elif modelChemistry == 'CCSD(T)-F12/aug-cc-pVQZ':
-        atomEnergies = {'H':-0.499949526073 + SOC['H'], 'N':-54.529569719016 + SOC['N'], 'O':-75.004026586610 + SOC['O'], 'C':-37.789387892348 + SOC['C']}
+        atomEnergies = {'H':-0.499949526073 + SOC['H'], 'N':-54.529569719016 + SOC['N'], 'O':-75.004026586610+ SOC['O'], 'C':-37.789387892348+ SOC['C']}
 
 
     elif modelChemistry == 'B-CCSD(T)-F12/cc-pVDZ-F12':
-        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.523269942190 + SOC['N'], 'O':-74.990725918500 + SOC['O'], 'C':-37.785409916465 + SOC['C']}
+        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.523269942190 + SOC['N'], 'O':-74.990725918500 + SOC['O'], 'C':-37.785409916465 + SOC['C'], 'S': -397.658155086033 + SOC['S']}
     elif modelChemistry == 'B-CCSD(T)-F12/cc-pVTZ-F12':
-        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.528135889213 + SOC['N'], 'O':-75.001094055506 + SOC['O'], 'C':-37.788233578503 + SOC['C']}
+        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.528135889213 + SOC['N'], 'O':-75.001094055506 + SOC['O'], 'C':-37.788233578503 + SOC['C'], 'S':-397.671745425929 + SOC['S']}
     elif modelChemistry == 'B-CCSD(T)-F12/cc-pVQZ-F12':
-        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.529425753163 + SOC['N'], 'O':-75.003820485005 + SOC['O'], 'C':-37.789006506290 + SOC['C']}
-        
+        atomEnergies = {'H':-0.499994558325 + SOC['H'], 'N':-54.529425753163 + SOC['N'], 'O':-75.003820485005 + SOC['O'], 'C':-37.789006506290 + SOC['C'], 'S':-397.674145126931 + SOC['S']}
     elif modelChemistry == 'B-CCSD(T)-F12/cc-pCVDZ-F12':
-        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.578602780288 + SOC['N'], 'O':-75.048064317367 + SOC['O'], 'C':-37.837592033417 + SOC['C']}
+        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.578602780288 + SOC['N'], 'O':-75.048064317367+ SOC['O'], 'C':-37.837592033417+ SOC['C']}
     elif modelChemistry == 'B-CCSD(T)-F12/cc-pCVTZ-F12':
-        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.586402551258 + SOC['N'], 'O':-75.062767632757 + SOC['O'], 'C':-37.842729156944 + SOC['C']}
+        atomEnergies = {'H':-0.499946213243 + SOC['H'], 'N':-54.586402551258 + SOC['N'], 'O':-75.062767632757+ SOC['O'], 'C':-37.842729156944+ SOC['C']}
     elif modelChemistry == 'B-CCSD(T)-F12/cc-pCVQZ-F12':
-        atomEnergies = {'H':-0.49999456 + SOC['H'], 'N':-54.587781507581 + SOC['N'], 'O':-75.065397706471 + SOC['O'], 'C':-37.843634971592 + SOC['C']}
+        atomEnergies = {'H':-0.49999456 + SOC['H'], 'N':-54.587781507581 + SOC['N'], 'O':-75.065397706471+ SOC['O'], 'C':-37.843634971592+ SOC['C']}
 
     elif modelChemistry == 'B-CCSD(T)-F12/aug-cc-pVDZ':
-        atomEnergies = {'H':-0.499459066131 + SOC['H'], 'N':-54.520475581942 + SOC['N'], 'O':-74.986992215049 + SOC['O'], 'C':-37.783294495799 + SOC['C']}
+        atomEnergies = {'H':-0.499459066131 + SOC['H'], 'N':-54.520475581942 + SOC['N'], 'O':-74.986992215049+ SOC['O'], 'C':-37.783294495799+ SOC['C']}
     elif modelChemistry == 'B-CCSD(T)-F12/aug-cc-pVTZ':
-        atomEnergies = {'H':-0.499844820798 + SOC['H'], 'N':-54.524927371700 + SOC['N'], 'O':-74.996328829705 + SOC['O'], 'C':-37.786320700792 + SOC['C']}
+        atomEnergies = {'H':-0.499844820798 + SOC['H'], 'N':-54.524927371700 + SOC['N'], 'O':-74.996328829705+ SOC['O'], 'C':-37.786320700792+ SOC['C']}
     elif modelChemistry == 'B-CCSD(T)-F12/aug-cc-pVQZ':
-        atomEnergies = {'H':-0.499949526073 + SOC['H'], 'N':-54.528189769291 + SOC['N'], 'O':-75.001879610563 + SOC['O'], 'C':-37.788165047059 + SOC['C']}
+        atomEnergies = {'H':-0.499949526073 + SOC['H'], 'N':-54.528189769291 + SOC['N'], 'O':-75.001879610563+ SOC['O'], 'C':-37.788165047059+ SOC['C']}
 
-
+    elif modelChemistry == 'DFT_G03_b3lyp':
+        atomEnergies = {'H':-0.502256981529 + SOC['H'], 'N':-54.6007233648 + SOC['N'], 'O':-75.0898777574+ SOC['O'], 'C':-37.8572666349+ SOC['C']}
     elif modelChemistry == 'DFT_ks_b3lyp':
-        atomEnergies = {'H':-0.49785866 + SOC['H'], 'N':-54.45608798 + SOC['N'], 'O':-74.93566254 + SOC['O'], 'C':-37.76119132 + SOC['C']}
+        atomEnergies = {'H':-0.49785866 + SOC['H'], 'N':-54.45608798 + SOC['N'], 'O':-74.93566254+ SOC['O'], 'C':-37.76119132+ SOC['C']}
     elif modelChemistry == 'DFT_uks_b3lyp':
-        atomEnergies = {'H':-0.49785866 + SOC['H'], 'N':-54.45729113 + SOC['N'], 'O':-74.93566254 + SOC['O'], 'C':-37.76119132 + SOC['C']}
+        atomEnergies = {'H':-0.49785866 + SOC['H'], 'N':-54.45729113 + SOC['N'], 'O':-74.93566254+ SOC['O'], 'C':-37.76119132+ SOC['C']}
 
     elif modelChemistry == 'MP2_rmp2_pVDZ':
-        atomEnergies = {'H':-0.49927840 + SOC['H'], 'N':-54.46141996 + SOC['N'], 'O':-74.89408254 + SOC['O'], 'C':-37.73792713 + SOC['C']}
+        atomEnergies = {'H':-0.49927840 + SOC['H'], 'N':-54.46141996 + SOC['N'], 'O':-74.89408254+ SOC['O'], 'C':-37.73792713+ SOC['C']}
     elif modelChemistry == 'MP2_rmp2_pVTZ':
-        atomEnergies = {'H':-0.49980981 + SOC['H'], 'N':-54.49615972 + SOC['N'], 'O':-74.95506980 + SOC['O'], 'C':-37.75833104 + SOC['C']}
+        atomEnergies = {'H':-0.49980981 + SOC['H'], 'N':-54.49615972 + SOC['N'], 'O':-74.95506980+ SOC['O'], 'C':-37.75833104+ SOC['C']}
     elif modelChemistry == 'MP2_rmp2_pVQZ':
-        atomEnergies = {'H':-0.49994557 + SOC['H'], 'N':-54.50715868 + SOC['N'], 'O':-74.97515364 + SOC['O'], 'C':-37.76533215 + SOC['C']}
+        atomEnergies = {'H':-0.49994557 + SOC['H'], 'N':-54.50715868 + SOC['N'], 'O':-74.97515364+ SOC['O'], 'C':-37.76533215+ SOC['C']}
 
-    elif modelChemistry == 'CCSD_DZ':
-        atomEnergies = {'H':-0.499811124 + SOC['H'], 'N':-54.52640629 + SOC['N'], 'O':-74.99545832 + SOC['O'], 'C':-37.78820349 + SOC['C']}
-    elif modelChemistry == 'CCSD_TZ':
-        atomEnergies = {'H':-0.499946213 + SOC['H'], 'N':-54.5300091 + SOC['N'], 'O':-75.00412767 + SOC['O'], 'C':-37.78986215 + SOC['C']}
-    elif modelChemistry == 'CCSD_QZ':
-        atomEnergies = {'H':-0.499994558 + SOC['H'], 'N':-54.53051523 + SOC['N'], 'O':-75.00560006 + SOC['O'], 'C':-37.78996166 + SOC['C']}
-    elif modelChemistry == 'CCSD_core_DZ':
-        atomEnergies = {'H':-0.499811124 + SOC['H'], 'N':-54.58213718 + SOC['N'], 'O':-75.05304555 + SOC['O'], 'C':-37.84086912 + SOC['C']}
+    elif modelChemistry == 'CCSD-F12/cc-pVDZ-F12':
+        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.524325513811 + SOC['N'], 'O':-74.992326577897+ SOC['O'], 'C':-37.786213495943+ SOC['C']}
+
+    elif modelChemistry == 'CCSD(T)-F12/cc-pVDZ-F12_noscale':
+        atomEnergies = {'H':-0.499811124128 + SOC['H'], 'N':-54.526026290887 + SOC['N'], 'O':-74.994751897699+ SOC['O'], 'C':-37.787881871511+ SOC['C']}
+
+    elif modelChemistry == 'G03_PBEPBE_6-311++g_d_p':
+        atomEnergies = {'H':-0.499812273282 + SOC['H'], 'N':-54.5289567564 + SOC['N'], 'O':-75.0033596764+ SOC['O'], 'C':-37.7937388736+ SOC['C']}
+
+    elif modelChemistry == 'FCI/cc-pVDZ':
+#        atomEnergies = {'C':-37.760717371923}
+        atomEnergies = {'C':-37.789527+ SOC['C']}
+    elif modelChemistry == 'FCI/cc-pVTZ':
+        atomEnergies = {'C':-37.781266669684+ SOC['C']}
+    elif modelChemistry == 'FCI/cc-pVQZ':
+        atomEnergies = {'C':-37.787052110598+ SOC['C']}
+        
     elif modelChemistry == 'BMK/cbsb7':
         atomEnergies = {'H':-0.498618853119+ SOC['H'], 'N':-54.5697851544+ SOC['N'], 'O':-75.0515210278+ SOC['O'], 'C':-37.8287310027+ SOC['C'], 'P':-341.167615941+ SOC['P'], 'S': -398.001619915+ SOC['S']}
-        
         
     else:
         logging.warning('Unknown model chemistry "{0}"; not applying energy corrections.'.format(modelChemistry))
         return E0
     for symbol, count in atoms.items():
-        if symbol in atomEnergies: E0 -= count * atomEnergies[symbol] * constants.E_h * constants.Na
+        if symbol in atomEnergies: E0 -= count * atomEnergies[symbol] * 4.35974394e-18 * constants.Na
         else:
             logging.warning('Ignored unknown atom type "{0}".'.format(symbol))
     
@@ -590,10 +624,10 @@ def applyEnergyCorrections(E0, modelChemistry, atoms, bonds):
     # See Gaussian thermo whitepaper at http://www.gaussian.com/g_whitepap/thermo.htm)
     # Note: these values are relatively old and some improvement may be possible by using newer values, particularly for carbon
     # However, care should be taken to ensure that they are compatible with the BAC values (if BACs are used)
-    atomHf = {'H': 51.63 , 'N': 112.53 ,'O': 58.99 ,'C': 169.98, 'S': 65.66, 'Cl': 28.59 }
+    atomHf = {'H': 51.63 , 'N': 112.53 ,'O': 58.99 ,'C': 169.98, 'S': 65.66 }
     # Thermal contribution to enthalpy Hss(298 K) - Hss(0 K) reported by Gaussian thermo whitepaper
     # This will be subtracted from the corresponding value in atomHf to produce an enthalpy used in calculating the enthalpy of formation at 298 K
-    atomThermal = {'H': 1.01 , 'N': 1.04, 'O': 1.04 ,'C': 0.25, 'S': 1.05, 'Cl': 1.10 }
+    atomThermal = {'H': 1.01 , 'N': 1.04, 'O': 1.04 ,'C': 0.25, 'S': 1.05 }
     # Total energy correction used to reach gas-phase reference state
     # Note: Spin orbit coupling no longer included in these energies, since some model chemistries include it automatically
     atomEnergies = {}
@@ -602,19 +636,31 @@ def applyEnergyCorrections(E0, modelChemistry, atoms, bonds):
     for symbol, count in atoms.items():
         if symbol in atomEnergies: E0 += count * atomEnergies[symbol] * 4184.
     
-    # Step 3: Bond additivity corrections
+    # Step 3: Bond energy corrections
     if modelChemistry == 'CCSD(T)-F12/cc-pVDZ-F12':
-        bondEnergies = { 'C-H': -0.56, 'C-C': -0.53, 'C=C': -1.90, 'C#C': -0.64,
-            'O-H': -0.34, 'C-O': -0.30, 'C=O': -0.92, 'O-O': 0.03, 'N-C': -0.49,
-            'N=C': -1.50, 'N#C': -3.54, 'N-O': 0.60, 'N_O': -0.17, 'N=O': -0.72,
-            'N-H': -0.75, 'N-N': -1.45, 'N=N': -1.98, 'N#N': -2.05,}
-    else:
-        # BAC corrections from Table IX in http://jcp.aip.org/resource/1/jcpsa6/v109/i24/p10570_s1 for CBS-Q method
-        # H-Cl correction from CBS-QB3 enthalpy difference with Gurvich 1989, HF298=-92.31 kJ
+        bondEnergies = { 'C-H': -0.46, 'C-C': -0.68, 'C=C': -1.90, 'C#C': -3.13,
+            'O-H': -0.51, 'C-O': -0.23, 'C=O': -0.69, 'O-O': -0.02, 'N-C': -0.67,
+            'N=C': -1.46, 'N#C': -2.79, 'N-O': 0.74, 'N_O': -0.23, 'N=O': -0.51,
+            'N-H': -0.69, 'N-N': -0.47, 'N=N': -1.54, 'N#N': -2.05,}
+    elif modelChemistry == 'CCSD(T)-F12/cc-pVTZ-F12':
+        bondEnergies = { 'C-H': -0.09, 'C-C': -0.27, 'C=C': -1.03, 'C#C': -1.79,
+            'O-H': -0.06, 'C-O': 0.14, 'C=O': -0.19, 'O-O': 0.16, 'N-C': -0.18,
+            'N=C': -0.41, 'N#C': -1.41, 'N-O': 0.87, 'N_O': -0.09, 'N=O': -0.23,
+            'N-H': -0.01, 'N-N': -0.21, 'N=N': -0.44, 'N#N': -0.76,}
+    elif modelChemistry == 'CCSD(T)-F12/cc-pVQZ-F12':
+        bondEnergies = { 'C-H': -0.08, 'C-C': -0.26, 'C=C': -1.01, 'C#C': -1.66,
+            'O-H':  0.07, 'C-O': 0.25, 'C=O': -0.03, 'O-O': 0.26, 'N-C': -0.20,
+            'N=C': -0.30, 'N#C': -1.33, 'N-O': 1.01, 'N_O': -0.03, 'N=O': -0.26,
+            'N-H':  0.06, 'N-N': -0.23, 'N=N': -0.37, 'N#N': -0.64,}
+    
+    # BAC corrections from Table IX in http://jcp.aip.org/resource/1/jcpsa6/v109/i24/p10570_s1 for CBS-Q method
+    # H-Cl correction from CBS-QB3 enthalpy difference with Gurvich 1989, HF298=-92.31 kJ
+    elif modelChemistry == 'CBS-QB3':
         bondEnergies = { 'C-H': -0.11, 'C-C': -0.3, 'C=C': -0.08, 'C#C': -0.64,
             'O-H': 0.02, 'C-O': 0.33, 'C=O': 0.55, 'N#N': -2.0, 'O=O': -0.2, 
-            'H-H': 1.1, 'C#N': -0.89, 'C-S': 0.43, 'S=O': -0.78, 'C-Cl': 1.29,
-            'N-H': -0.42, 'C-N': -0.13, 'S-H': 0.00, 'H-Cl': 1.16 }
+            'H-H': 1.1, 'C#N': -0.89, 'C-S': 0.43, 'S=O': -0.78, 'S-H': 0.0, }
+    else:
+        logging.warning('No bond energy correction found for  model chemistry: {0}'.format(modelChemistry))
 
     for symbol, count in bonds.items():
         if symbol in bondEnergies: E0 += count * bondEnergies[symbol] * 4184.
@@ -636,44 +682,106 @@ def projectRotors(conformer, F, rotors, linear, TS):
     Natoms = len(conformer.mass.value)
     Nvib = 3 * Natoms - (5 if linear else 6) - Nrotors - (1 if (TS) else 0)
     mass = conformer.mass.value_si
-    coordinates = conformer.coordinates.value_si
-    
+    coordinates = conformer.coordinates.getValue() 
+
+
+    # Put origin in center of mass
+    xm=0.0
+    ym=0.0
+    zm=0.0
+    totmass=0.0
+    for i in range(Natoms):
+        xm+=mass[i]*coordinates[i,0]
+        ym+=mass[i]*coordinates[i,1]
+        zm+=mass[i]*coordinates[i,2]
+        totmass+=mass[i]
+          
+    xm/=totmass
+    ym/=totmass
+    zm/=totmass
+
+    for i in range(Natoms):
+        coordinates[i,0]-=xm
+        coordinates[i,1]-=ym 
+        coordinates[i,2]-=zm
+    # Make vector with the root of the mass in amu for each atom
+    amass=numpy.sqrt(mass/constants.amu)
+
+    # Rotation matrix
+    I=conformer.getMomentOfInertiaTensor()
+    PMoI, Ixyz = numpy.linalg.eigh(I)
+ 
+    external=6
     if linear:
-        D = numpy.zeros((Natoms*3,5+Nrotors), numpy.float64)
-    else:
-        D = numpy.zeros((Natoms*3,6+Nrotors), numpy.float64)
+        external=5
+    
+    D = numpy.zeros((Natoms*3,external), numpy.float64)
+
+    P = numpy.zeros((Natoms,3), numpy.float64)
+
+    # Transform the coordinates to the principal axes
+    P = numpy.dot(coordinates,Ixyz)
 
     for i in range(Natoms):
         # Projection vectors for translation
-        D[3*i+0,0] = 1.0
-        D[3*i+1,1] = 1.0
-        D[3*i+2,2] = 1.0
-        # Projection vectors for [external] rotation
-        D[3*i:3*i+3,3] = numpy.array([0, -coordinates[i,2], coordinates[i,1]], numpy.float64)
-        D[3*i:3*i+3,4] = numpy.array([coordinates[i,2], 0, -coordinates[i,0]], numpy.float64)
+        D[3*i+0,0] = amass[i]
+        D[3*i+1,1] = amass[i]
+        D[3*i+2,2] = amass[i]
+
+    # Construction of the projection vectors for external rotation
+    for i in range(Natoms):
+        D[3*i,3] = (P[i,1]*Ixyz[0,2]-P[i,2]*Ixyz[0,1])*amass[i]
+        D[3*i+1,3] = (P[i,1]*Ixyz[1,2]-P[i,2]*Ixyz[1,1])*amass[i]
+        D[3*i+2,3] = (P[i,1]*Ixyz[2,2]-P[i,2]*Ixyz[2,1])*amass[i]
+        D[3*i,4] = (P[i,2]*Ixyz[0,0]-P[i,0]*Ixyz[0,2])*amass[i]
+        D[3*i+1,4] = (P[i,2]*Ixyz[1,0]-P[i,0]*Ixyz[1,2])*amass[i]
+        D[3*i+2,4] = (P[i,2]*Ixyz[2,0]-P[i,0]*Ixyz[2,2])*amass[i]
         if not linear:
-            D[3*i:3*i+3,5] = numpy.array([-coordinates[i,1], coordinates[i,0], 0], numpy.float64)
-    for i, rotor in enumerate(rotors):
-        scanLog, pivots, top, symmetry, fit = rotor
-        # Determine pivot atom
-        if pivots[0] in top: pivot = pivots[0]
-        elif pivots[1] in top: pivot = pivots[1]
-        else: raise Exception('Could not determine pivot atom.')
-        # Projection vectors for internal rotation
-        e12 = coordinates[pivots[0]-1,:] - coordinates[pivots[1]-1,:]
-        e12 /= numpy.linalg.norm(e12)
-        for atom in top:
-            e31 = coordinates[atom-1,:] - coordinates[pivot-1,:]
-            D[3*(atom-1):3*(atom-1)+3,-Nrotors+i] = numpy.cross(e31, e12)
+            D[3*i,5] = (P[i,0]*Ixyz[0,1]-P[i,1]*Ixyz[0,0])*amass[i]
+            D[3*i+1,5] = (P[i,0]*Ixyz[1,1]-P[i,1]*Ixyz[1,0])*amass[i]
+            D[3*i+2,5] = (P[i,0]*Ixyz[2,1]-P[i,1]*Ixyz[2,0])*amass[i]
 
     # Make sure projection matrix is orthonormal
     import scipy.linalg
-    D = scipy.linalg.orth(D)
 
-    # Project out the non-vibrational modes from the force constant matrix
-    P = numpy.dot(D, D.transpose())
     I = numpy.identity(Natoms*3, numpy.float64)
-    F = numpy.dot(I - P, numpy.dot(F, I - P))
+
+    P = numpy.zeros((Natoms*3,3*Natoms+external), numpy.float64)
+
+    P[:,0:external] = D[:,0:external]
+    P[:,external:external+3*Natoms] = I[:,0:3*Natoms]
+
+    for i in range(3*Natoms+external):
+        norm=0.0
+        for j in range(3*Natoms):
+            norm+=P[j,i]*P[j,i]
+        for j in range(3*Natoms):
+            if (norm>1E-15):
+                P[j,i]/=numpy.sqrt(norm)
+            else:
+                P[j,i]=0.0
+        for j in range(i+1,3*Natoms+external):
+            proj=0.0
+            for k in range(3*Natoms):
+                proj+=P[k,i]*P[k,j]
+            for k in range(3*Natoms):
+                P[k,j]-=proj*P[k,i]
+
+    # Order D, there will be vectors that are 0.0  
+    i=0
+    while i < 3*Natoms:
+        norm=0.0
+        for j in range(3*Natoms):
+            norm+=P[j,i]*P[j,i]
+        if (norm<0.5):
+            P[:,i:3*Natoms+external-1] = P[:,i+1:3*Natoms+external]
+        else:
+            i+=1
+
+    # T is the transformation vector from cartesian to internal coordinates
+    T = numpy.zeros((Natoms*3,3*Natoms-external), numpy.float64)
+
+    T[:,0:3*Natoms-external] = P[:,external:3*Natoms]
 
     # Generate mass-weighted force constant matrix
     # This converts the axes to mass-weighted Cartesian axes
@@ -685,10 +793,90 @@ def projectRotors(conformer, F, rotors, linear, TS):
                 for v in range(3):
                     Fm[3*i+u,3*j+v] /= math.sqrt(mass[i] * mass[j])
 
+    Fint = numpy.dot(T.T, numpy.dot(Fm,T))
+
+    # Get eigenvalues of internal force constant matrix, V = 3N-6 * 3N-6
+    eig, V = numpy.linalg.eigh(Fint)
+
+    logging.debug('Frequencies from internal Hessian')  
+    for i in range(3*Natoms-external):
+        logging.debug(numpy.sqrt(eig[i])/(2 * math.pi * constants.c * 100))
+
+    # Now we can start thinking about projecting out the internal rotations
+    Dint=numpy.zeros((3*Natoms,Nrotors), numpy.float64)
+
+    counter=0
+    for i, rotor in enumerate(rotors):
+        scanLog, pivots, top, symmetry, fit = rotor
+        # Determine pivot atom
+        if pivots[0] in top:
+            pivot1 = pivots[0]
+            pivot2 = pivots[1]
+        elif pivots[1] in top:
+            pivot1 = pivots[1]
+            pivot2 = pivots[0]
+        else: raise Exception('Could not determine pivot atom.')
+        # Projection vectors for internal rotation
+        e12 = coordinates[pivot1-1,:] - coordinates[pivot2-1,:]
+        for j in range(Natoms):
+            atom=j+1
+            if atom in top:
+                e31 = coordinates[atom-1,:] - coordinates[pivot1-1,:]
+                Dint[3*(atom-1):3*(atom-1)+3,counter] = numpy.cross(e31, e12)*amass[atom-1]
+            else:
+                e31 = coordinates[atom-1,:] - coordinates[pivot2-1,:]
+                Dint[3*(atom-1):3*(atom-1)+3,counter] = numpy.cross(e31, -e12)*amass[atom-1]
+        counter+=1
+
+    # Normal modes in mass weighted cartesian coordinates
+    Vmw = numpy.dot(T,V)
+    eigM = numpy.zeros((3*Natoms-external,3*Natoms-external), numpy.float64)
+
+    for i in range(3*Natoms-external):
+        eigM[i,i]=eig[i]
+ 
+    Fm=numpy.dot(Vmw,numpy.dot(eigM,Vmw.T))
+
+    # Internal rotations are not normal modes => project them on the normal modes and orthogonalize
+    # Dintproj =  (3N-6) x (3N) x (3N) x (Nrotors)
+    Dintproj=numpy.dot(Vmw.T,Dint)    
+
+    # Reconstruct Dint
+    for i in range(Nrotors):
+        for j in range (3*Natoms):
+            Dint[j,i]=0
+            for k in range(3*Natoms-external):
+                Dint[j,i]+=Dintproj[k,i]*Vmw[j,k]
+
+    # Ortho normalize
+    for i in range(Nrotors):
+        norm=0.0
+        for j in range(3*Natoms):
+            norm+=Dint[j,i]*Dint[j,i]
+        for j in range(3*Natoms):
+            Dint[j,i]/=numpy.sqrt(norm)
+        for j in range(i+1,Nrotors):
+            proj=0.0
+            for k in range (3*Natoms):
+                proj+=Dint[k,i]*Dint[k,j]
+            for k in range(3*Natoms):
+                Dint[k,j]-=proj*Dint[k,i]
+
+    Dintproj=numpy.dot(Vmw.T,Dint)
+    Proj = numpy.dot(Dint, Dint.T)
+    I = numpy.identity(Natoms*3, numpy.float64)
+    Proj = I - Proj 
+    Fm=numpy.dot(Proj, numpy.dot(Fm,Proj))
     # Get eigenvalues of mass-weighted force constant matrix
     eig, V = numpy.linalg.eigh(Fm)
     eig.sort()
 
     # Convert eigenvalues to vibrational frequencies in cm^-1
     # Only keep the modes that don't correspond to translation, rotation, or internal rotation
+
+    logging.debug('Frequencies from projected Hessian')
+    for i in range(3*Natoms):
+        logging.debug(numpy.sqrt(eig[i])/(2 * math.pi * constants.c * 100))
+        
     return numpy.sqrt(eig[-Nvib:]) / (2 * math.pi * constants.c * 100)
+

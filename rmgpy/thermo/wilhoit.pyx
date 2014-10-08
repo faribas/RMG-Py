@@ -549,8 +549,8 @@ cdef class Wilhoit(HeatCapacityModel):
             rmsStr = 'Weighted RMS error = %.3f*R; '%(rmsWei)+rmsStr
     
         # Print a warning if the RMS fit is worse that 0.25*R
-        if (rmsUnw > 0.25 or rmsWei > 0.25):
-            print("Poor Wilhoit-to-NASA fit quality: RMS error = {0:.3f}*R".format(rmsWei if weighting == 1 else rmsUnw))
+        #if (rmsUnw > 0.25 or rmsWei > 0.25):
+        #    print("Poor Wilhoit-to-NASA fit quality: RMS error = {0:.3f}*R".format(rmsWei if weighting == 1 else rmsUnw))
     
         # Restore to conventional units of K for Tint and units based on K rather than kK in NASA polynomial coefficients
         Tint *= 1000.
@@ -816,7 +816,7 @@ cpdef double Wilhoit_to_NASA_TintOpt_objFun(double Tint, Wilhoit wilhoit, double
     # this is unphysical (it's the integral of a *squared* error) so we
     # set it to zero to avoid later problems when we try find the square root.
     if result < 0:
-        print("Negative ISE of {0:g} reset to zero.".format(result))
+        #print("Negative ISE of {0:g} reset to zero.".format(result))
         result = 0
 
     return result

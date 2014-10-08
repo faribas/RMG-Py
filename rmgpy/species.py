@@ -49,6 +49,9 @@ import rmgpy.constants as constants
 import rmgpy.quantity as quantity
 from rmgpy.molecule import Molecule
 
+#: This dictionary is used to add multiplicity to species label
+_multiplicity_labels = {1:'S',2:'D',3:'T',4:'Q',5:'V',}
+                           
 ################################################################################
 
 class SpeciesError(Exception):
@@ -81,6 +84,7 @@ class Species(object):
     `Zrot`                  The rotational relaxation collision number
     `energyTransferModel`   The collisional energy transfer model to use
     `reactive`              ``True`` if the species participates in reactions, ``False`` if not
+    'props'                 A generic 'properties' dictionary to store user-defined flags
     ======================= ====================================================
 
     note::
@@ -91,7 +95,7 @@ class Species(object):
     def __init__(self, index=-1, label='', thermo=None, conformer=None, 
                  molecule=None, transportData=None, molecularWeight=None, 
                  dipoleMoment=None, polarizability=None, Zrot=None, 
-                 energyTransferModel=None, reactive=True):
+                 energyTransferModel=None, reactive=True, props=None):
         self.index = index
         self.label = label
         self.thermo = thermo
@@ -103,7 +107,18 @@ class Species(object):
         self.dipoleMoment = dipoleMoment
         self.polarizability = polarizability
         self.Zrot = Zrot
-        self.energyTransferModel = energyTransferModel
+        self.energyTransferModel = energyTransferModel        
+        self.props = props or {}
+        
+        # Check multiplicity of each molecule is the same
+        if molecule is not None and len(molecule)>1:
+            mult = molecule[0].multiplicity
+            for m in molecule[1:]:
+                if mult != m.multiplicity:
+                    raise SpeciesError('Multiplicities of molecules in species {species} do not match.'.format(species=label))
+
+        
+
 
     def __repr__(self):
         """
@@ -189,10 +204,10 @@ class Species(object):
                 if molecule.isIsomorphic(other):
                     return True
         elif isinstance(other, Species):
-            for molecule1 in self.molecule:
-                for molecule2 in other.molecule:
-                    if molecule1.isIsomorphic(molecule2):
-                        return True
+                for molecule1 in self.molecule:
+                    for molecule2 in other.molecule:
+                        if molecule1.isIsomorphic(molecule2):
+                            return True
         else:
             raise ValueError('Unexpected value "{0!r}" for other parameter; should be a Molecule or Species object.'.format(other))
         return False
@@ -231,7 +246,7 @@ class Species(object):
         """
         Return a string containing each of the molecules' adjacency lists.
         """
-        output = '\n\n'.join([m.toAdjacencyList(label=self.label, removeH=True) for m in self.molecule])
+        output = '\n\n'.join([m.toAdjacencyList(label=self.label, removeH=False) for m in self.molecule])
         return output
 
     def hasStatMech(self):
@@ -285,7 +300,7 @@ class Species(object):
         if self.hasThermo():
             H = self.thermo.getEnthalpy(T)
         elif self.hasStatMech():
-            H = self.conformer.getEnthalpy(T) + self.conformer._E0.value_si
+            H = self.conformer.getEnthalpy(T) + self.conformer.E0.value_si
         else:
             raise Exception('Unable to calculate enthalpy for species {0!r}: no thermo or statmech data available.'.format(self.label))
         return H
@@ -315,7 +330,7 @@ class Species(object):
         if self.hasThermo():
             G = self.thermo.getFreeEnergy(T)
         elif self.hasStatMech():
-            G = self.conformer.getFreeEnergy(T) + self.conformer._E0.value_si
+            G = self.conformer.getFreeEnergy(T) + self.conformer.E0.value_si
         else:
             raise Exception('Unable to calculate free energy for species {0!r}: no thermo or statmech data available.'.format(self.label))
         return G

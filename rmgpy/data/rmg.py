@@ -62,8 +62,13 @@ class RMGDatabase:
         
         # Store the newly created database in the module.
         global database
-        assert database is None, "Should only make one instance of RMGDatabase because it's stored as a module-level variable."
-        database = self
+#        assert database is None, "Should only make one instance of RMGDatabase because it's stored as a module-level variable."
+        if database is None:
+            database = self
+        else:
+            import logging
+            logging.warning("Should only make one instance of RMGDatabase because it's stored as a module-level variable!")
+            logging.warning("Unexpected behaviour may result!")
 
     def load(self,
              path,
@@ -134,17 +139,20 @@ class RMGDatabase:
         `path` points to the top-level folder of the RMG kinetics database.
         """
         kineticsLibraries = []
-        if reactionLibraries is not None and seedMechanisms is not None:
-            kineticsLibraries.extend(seedMechanisms)
-            kineticsLibraries.extend(reactionLibraries)
-        elif reactionLibraries is not None and seedMechanisms is None:
-            kineticsLibraries.extend(reactionLibraries)
-        elif reactionLibraries is None and seedMechanisms is not None:
-            kineticsLibraries.extend(seedMechanisms)
-        else:
+        libraryOrder = []
+        if seedMechanisms is None and reactionLibraries is None:
             kineticsLibraries = None
-            
+        if seedMechanisms is not None:
+            for library in seedMechanisms:
+                kineticsLibraries.append(library)
+                libraryOrder.append((library,'Seed'))
+        if reactionLibraries is not None:
+            for library in reactionLibraries:
+                kineticsLibraries.append(library)
+                libraryOrder.append((library,'Reaction Library'))
+        
         self.kinetics = KineticsDatabase()
+        self.kinetics.libraryOrder = libraryOrder
         self.kinetics.load(path,
                            families=kineticsFamilies,
                            libraries=kineticsLibraries,
@@ -175,8 +183,8 @@ class RMGDatabase:
         self.thermo = ThermoDatabase()
         self.thermo.loadOld(path)
         self.transport = TransportDatabase()
-        self.transport.loadOld(path)
-        self.forbiddenStructures = ForbiddenStructures()
+        #self.transport.loadOld(path)   #  Currently no loadOld import function available for transport groups
+        self.forbiddenStructures = ForbiddenStructures() 
         self.forbiddenStructures.loadOld(os.path.join(path, 'ForbiddenStructures.txt'))
         self.kinetics = KineticsDatabase()
         self.kinetics.loadOld(path)
@@ -190,9 +198,11 @@ class RMGDatabase:
         if not os.path.exists(path): os.makedirs(path)
         self.forbiddenStructures.save(os.path.join(path, 'forbiddenStructures.py'))
         self.thermo.save(os.path.join(path, 'thermo'))
-        self.transport.save(os.path.join(path, 'transport'))
+#         self.transport.save(os.path.join(path, 'transport')) #Currently no function for saving transport groups
         self.kinetics.save(os.path.join(path, 'kinetics'))
         self.statmech.save(os.path.join(path, 'statmech'))
+        self.solvation.save(os.path.join(path, 'solvation'))
+        self.transport.save(os.path.join(path, 'transport'))
 
     def saveOld(self, path):
         """

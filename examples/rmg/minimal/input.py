@@ -4,7 +4,7 @@ database(
     reactionLibraries = [],
     seedMechanisms = [],
     kineticsDepositories = ['training'],
-    kineticsFamilies = ['!Intra_Disproportionation'],
+    kineticsFamilies = 'default',
     kineticsEstimator = 'rate rules',
 )
 
@@ -28,10 +28,6 @@ simpleReactor(
     terminationTime=(1e6,'s'),
 )
 
-solvation(
-	solvent='water'
-)
-
 simulator(
     atol=1e-16,
     rtol=1e-8,
@@ -49,4 +45,6 @@ options(
     saveRestartPeriod=None,
     drawMolecules=False,
     generatePlots=False,
+    saveEdgeSpecies=True,
+    saveConcentrationProfiles=True,
 )

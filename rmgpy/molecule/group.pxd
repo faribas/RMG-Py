@@ -33,9 +33,9 @@ cdef class GroupAtom(Vertex):
 
     cdef public list atomType
     cdef public list radicalElectrons
-    cdef public list spinMultiplicity
     cdef public list charge
     cdef public str label
+    cdef public list lonePairs
 
     cpdef Vertex copy(self)
 
@@ -48,6 +48,10 @@ cdef class GroupAtom(Vertex):
     cpdef __gainRadical(self, short radical)
 
     cpdef __loseRadical(self, short radical)
+    
+    cpdef __gainPair(self, short radical)
+
+    cpdef __losePair(self, short radical)
 
     cpdef applyAction(self, list action)
 
@@ -75,9 +79,12 @@ cdef class GroupBond(Edge):
 
 cdef class Group(Graph):
 
+    cdef public list multiplicity
+
     # These read-only attribues act as a "fingerprint" for accelerating
     # subgraph isomorphism checks
     cdef public short carbonCount
+    cdef public short nitrogenCount
     cdef public short oxygenCount
     cdef public short sulfurCount
     cdef public short radicalCount
@@ -123,3 +130,5 @@ cdef class Group(Graph):
     cpdef bint isSubgraphIsomorphic(self, Graph other, dict initialMap=?) except -2
 
     cpdef list findSubgraphIsomorphisms(self, Graph other, dict initialMap=?)
+    
+    cpdef bint isIdentical(self, Graph other)

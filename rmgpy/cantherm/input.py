@@ -43,6 +43,7 @@ from rmgpy.kinetics import *
 from rmgpy.pdep import *
 from rmgpy.pdep.collision import *
 from rmgpy.molecule import Molecule
+from rmgpy.transport import TransportData
 
 from rmgpy.cantherm.gaussian import GaussianLog
 from rmgpy.cantherm.molepro import MoleProLog
@@ -112,7 +113,7 @@ def species(label, *args, **kwargs):
         if structure: spec.molecule = [structure]
         spec.conformer = Conformer(E0=E0, modes=modes, spinMultiplicity=spinMultiplicity, opticalIsomers=opticalIsomers)  
         spec.molecularWeight = molecularWeight
-        spec.lennardJones = collisionModel
+        spec.transportData = collisionModel
         spec.energyTransferModel = energyTransferModel
         spec.thermo = thermo
         
@@ -160,9 +161,11 @@ def transitionState(label, *args, **kwargs):
 
 def reaction(label, reactants, products, transitionState, kinetics=None, tunneling=''):
     global reactionDict, speciesDict, transitionStateDict
-    label = 'reaction'+transitionState
+    #label = 'reaction'+transitionState
     if label in reactionDict:
-        raise ValueError('Multiple occurrences of reaction with label {0!r}.'.format(label))
+        label = label+transitionState
+        if label in reactionDict:
+            raise ValueError('Multiple occurrences of reaction with label {0!r}.'.format(label))
     logging.info('Loading reaction {0}...'.format(label))
     reactants = sorted([speciesDict[spec] for spec in reactants])
     products = sorted([speciesDict[spec] for spec in products])
@@ -177,6 +180,7 @@ def reaction(label, reactants, products, transitionState, kinetics=None, tunneli
         raise ValueError('Unknown tunneling model {0!r}.'.format(tunneling))
     rxn = Reaction(label=label, reactants=reactants, products=products, transitionState=transitionState, kinetics=kinetics)
     reactionDict[label] = rxn
+    
     return rxn
 
 def network(label, isomers=None, reactants=None, products=None, pathReactions=None, bathGas=None):
@@ -248,13 +252,13 @@ def network(label, isomers=None, reactants=None, products=None, pathReactions=No
     )
     networkDict[label] = network
 
-def kinetics(label):
+def kinetics(label,Tmin=None, Tmax=None,Tlist=None, Tcount=0):
     global jobList, reactionDict
     try:
         rxn = reactionDict[label]
     except KeyError:
         raise ValueError('Unknown reaction label {0!r} for kinetics() job.'.format(label))
-    job = KineticsJob(reaction=rxn)
+    job = KineticsJob(reaction=rxn,Tmin=Tmin, Tmax=Tmax,Tcount = Tcount,Tlist=Tlist)
     jobList.append(job)
 
 def statmech(label):
@@ -325,7 +329,7 @@ def loadInputFile(path):
         'False': False,
         'range': range,
         # Collision
-        'LennardJones': LennardJones,
+        'TransportData': TransportData,
         'SingleExponentialDown': SingleExponentialDown,
         # Kinetics
         'Arrhenius': Arrhenius,

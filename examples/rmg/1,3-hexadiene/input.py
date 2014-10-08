@@ -3,9 +3,14 @@ database(
     thermoLibraries = ['primaryThermoLibrary', 'GRI-Mech3.0'],
     reactionLibraries = [],
     seedMechanisms = [],
-    kineticsDepositories = ['training'], #  'all', 'default'==['training'], [], 
-    kineticsFamilies = ['!Intra_Disproportionation'],
+    kineticsDepositories = ['training'], 
+    kineticsFamilies = 'default',
     kineticsEstimator = 'rate rules',
+)
+
+# Constraints on generated species
+generatedSpeciesConstraints(
+    maximumRadicalElectrons = 2,
 )
 
 # List of species
@@ -24,8 +29,8 @@ species(
     reactive=True,
     structure=adjacencyList(
         """
-        1 H 0 {2,S}
-        2 H 0 {1,S}
+        1 H u0 p0 {2,S}
+        2 H u0 p0 {1,S}
         """),
 )
 species(
@@ -64,7 +69,8 @@ model(
 
 quantumMechanics(
     software='mopac',
-    fileStore='QMfiles', # relative to where you run it? defaults to inside the output folder.
+    method='pm3',
+    # fileStore='QMfiles', # relative to where you run it from. Defaults to inside the output folder if not defined.
     scratchDirectory = None, # not currently used
     onlyCyclics = True,
     maxRadicalNumber = 0,

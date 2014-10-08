@@ -40,7 +40,8 @@ import logging
 import numpy
 from copy import copy, deepcopy
 
-from base import Database, Entry, makeLogicNode
+from copy import deepcopy
+from base import Database, Entry, makeLogicNode, DatabaseError
 
 import rmgpy.constants as constants
 from rmgpy.molecule import Molecule, Atom, Bond, Group
@@ -49,10 +50,82 @@ from rmgpy.molecule import Molecule, Atom, Bond, Group
 
 def saveEntry(f, entry):
     """
-    Write a Pythonic string representation of the given `entry` in the thermo
+    Write a Pythonic string representation of the given `entry` in the solvation
     database to the file object `f`.
     """
-    raise NotImplementedError()
+    f.write('entry(\n')
+    f.write('    index = {0:d},\n'.format(entry.index))
+    f.write('    label = "{0}",\n'.format(entry.label))
+    
+    if isinstance(entry.item, Molecule):
+        if Molecule(SMILES=entry.item.toSMILES()).isIsomorphic(entry.item):
+            # The SMILES representation accurately describes the molecule, so we can save it that way.
+            f.write('    molecule = "{0}",\n'.format(entry.item.toSMILES()))
+        else:
+            f.write('    molecule = \n')
+            f.write('"""\n')
+            f.write(entry.item.toAdjacencyList(removeH=False))
+            f.write('""",\n')
+    elif isinstance(entry.item, Group):
+        f.write('    group = \n')
+        f.write('"""\n')
+        f.write(entry.item.toAdjacencyList())
+        f.write('""",\n')
+    elif entry.item is not None:
+        f.write('    group = "{0}",\n'.format(entry.item))
+    
+    if isinstance(entry.data, SoluteData):
+        f.write('    solute = SoluteData(\n')
+        f.write('        S = {0!r},\n'.format(entry.data.S))
+        f.write('        B = {0!r},\n'.format(entry.data.B))
+        f.write('        E = {0!r},\n'.format(entry.data.E))
+        f.write('        L = {0!r},\n'.format(entry.data.L))
+        f.write('        A = {0!r},\n'.format(entry.data.A))
+        if entry.data.V is not None: f.write('        V = {0!r},\n'.format(entry.data.V))
+        f.write('    ),\n')
+    elif isinstance(entry.data, SolventData):
+        f.write('    solvent = SolventData(\n')
+        f.write('        s_g = {0!r},\n'.format(entry.data.s_g))
+        f.write('        b_g = {0!r},\n'.format(entry.data.b_g))
+        f.write('        e_g = {0!r},\n'.format(entry.data.e_g))
+        f.write('        l_g = {0!r},\n'.format(entry.data.l_g))
+        f.write('        a_g = {0!r},\n'.format(entry.data.a_g))
+        f.write('        c_g = {0!r},\n'.format(entry.data.c_g))
+        f.write('        s_h = {0!r},\n'.format(entry.data.s_h))
+        f.write('        b_h = {0!r},\n'.format(entry.data.b_h))
+        f.write('        e_h = {0!r},\n'.format(entry.data.e_h))
+        f.write('        l_h = {0!r},\n'.format(entry.data.l_h))
+        f.write('        a_h = {0!r},\n'.format(entry.data.a_h))
+        f.write('        c_h = {0!r},\n'.format(entry.data.c_h))
+        f.write('        A = {0!r},\n'.format(entry.data.A))
+        f.write('        B = {0!r},\n'.format(entry.data.B))
+        f.write('        C = {0!r},\n'.format(entry.data.C))
+        f.write('        D = {0!r},\n'.format(entry.data.D))
+        f.write('        E = {0!r},\n'.format(entry.data.E))
+        f.write('        alpha = {0!r},\n'.format(entry.data.alpha))
+        f.write('        beta = {0!r},\n'.format(entry.data.beta))
+        f.write('        eps = {0!r},\n'.format(entry.data.eps))
+        f.write('    ),\n')
+    elif entry.data is None:
+        f.write('    solute = None,\n')
+    else:
+        raise DatabaseError("Not sure how to save {0!r}".format(entry.data))
+    
+    f.write('    shortDesc = u"""')
+    try:
+        f.write(entry.shortDesc.encode('utf-8'))
+    except:
+        f.write(entry.shortDesc.strip().encode('ascii', 'ignore')+ "\n")
+    f.write('""",\n')
+    f.write('    longDesc = \n')
+    f.write('u"""\n')
+    try:
+        f.write(entry.longDesc.strip().encode('utf-8') + "\n")    
+    except:
+        f.write(entry.longDesc.strip().encode('ascii', 'ignore')+ "\n")
+    f.write('""",\n')
+
+    f.write(')\n\n')
 
 def generateOldLibraryEntry(data):
     """
@@ -100,7 +173,7 @@ class SolventData():
         # This is the dielectric constant
         self.eps = eps
     
-    def getIntrinsicCorrection(self):
+    def getHAbsCorrection(self):
         """
         If solvation is on, this will give the log10 of the ratio of the intrinsic rate
         constants log10(k_sol/k_gas) for H-abstraction rxns
@@ -117,6 +190,7 @@ class SolventData():
 class SolvationCorrection():
     """
     Stores corrections for enthalpy, entropy, and Gibbs free energy when a species is solvated.
+    Enthalpy and Gibbs free energy is in J/mol; entropy is in J/mol/K
     """
     def __init__(self, enthalpy=None, gibbs=None, entropy=None):
         self.enthalpy = enthalpy
@@ -144,7 +218,7 @@ class SoluteData():
         found from the McGowan volume.
         """
         k_b = 1.3806488e-23 # m2*kg/s2/K
-        radius = ((75*self.V/3.14159)**(1/3))/100 # in meters
+        radius = math.pow((75*self.V/3.14159),(1.0/3.0))/100 # in meters
         D = k_b*T/6/3.14159/solventViscosity/radius # m2/s
         return D
             
@@ -169,35 +243,11 @@ class SoluteData():
             elif (atom.element.number == 7): # nitrogen, do this way if we don't have an isElement method
                 thisV = 14.39
             elif atom.isOxygen():
-                thisV = thisV + 12.43
-            #else if (element.equals("F"))
-                #thisV = thisV + 10.48;
+                thisV = 12.43
             elif atom.isHydrogen():
-                thisV = thisV + 8.71
-           #  else if (element.equals("Si"))
-#                 thisV = thisV + 26.83;
-#             else if (element.equals("P"))
-#                 thisV = thisV + 24.87;
-#             else if (element.equals("S"))
-#                 thisV = thisV + 22.91;
-#             else if (element.equals("Cl"))
-#                 thisV = thisV + 20.95;
-#             else if (element.equals("B"))
-#                 thisV = thisV + 18.32;
-#             else if (element.equals("Ge"))
-#                 thisV = thisV + 31.02;
-#             else if (element.equals("As"))
-#                 thisV = thisV + 29.42;
-#             else if (element.equals("Se"))
-#                 thisV = thisV + 27.81;
-#             else if (element.equals("Br"))
-#                 thisV = thisV + 26.21;
-#             else if (element.equals("Sn"))
-#                 thisV = thisV + 39.35;
-#             else if (element.equals("Te"))
-#                 thisV = thisV + 36.14;
-#             else if (element.equals("I"))
-#                 thisV = thisV + 34.53;
+                thisV = 8.71
+            elif (atom.element.number == 16):
+                thisV = 22.91
             else:
                 raise Exception()
             Vtot = Vtot + thisV
@@ -228,7 +278,6 @@ class SolventLibrary(Database):
                   referenceType='',
                   shortDesc='',
                   longDesc='',
-                  history=None
                   ):
         self.entries[label] = Entry(
             index = index,
@@ -238,7 +287,6 @@ class SolventLibrary(Database):
             referenceType = referenceType,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
 
     def load(self, path):
@@ -276,22 +324,32 @@ class SoluteLibrary(Database):
                   referenceType='',
                   shortDesc='',
                   longDesc='',
-                  history=None
                   ):
+        try:
+            mol = Molecule(SMILES=molecule)
+        except:
+            try:
+                mol = Molecule().fromAdjacencyList(molecule)
+            except:
+                logging.error("Can't understand '{0}' in solute library '{1}'".format(molecule,self.name))
+                raise
+
         self.entries[label] = Entry(
             index = index,
             label = label,
-            item = Molecule(SMILES=molecule),
+            item = mol,
             data = solute,
             reference = reference,
             referenceType = referenceType,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
     
     def load(self, path):
-        pass
+        """
+        Load the solute library from the given path
+        """
+        Database.load(self, path, local_context={'SoluteData': SoluteData}, global_context={})
 
     def saveEntry(self, f, entry):
         """
@@ -332,7 +390,6 @@ class SoluteGroups(Database):
                   referenceType='',
                   shortDesc='',
                   longDesc='',
-                  history=None
                   ):
         if group[0:3].upper() == 'OR{' or group[0:4].upper() == 'AND{' or group[0:7].upper() == 'NOT OR{' or group[0:8].upper() == 'NOT AND{':
             item = makeLogicNode(group)
@@ -347,7 +404,6 @@ class SoluteGroups(Database):
             referenceType = referenceType,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
     
     def saveEntry(self, f, entry):
@@ -375,12 +431,13 @@ class SoluteGroups(Database):
 
 class SolvationDatabase(object):
     """
-    A class for working with the RMG solute database.
+    A class for working with the RMG solvation database.
     """
 
     def __init__(self):
-        self.solventLibrary = SolventLibrary()
-        self.soluteLibrary = SoluteLibrary()
+        self.libraries = {}
+        self.libraries['solvent'] = SolventLibrary()
+        self.libraries['solute'] = SoluteLibrary()
         self.groups = {}
         self.local_context = {
             'SoluteData': SoluteData,
@@ -390,18 +447,18 @@ class SolvationDatabase(object):
 
     def __reduce__(self):
         """
-        A helper function used when pickling a SoluteDatabase object.
+        A helper function used when pickling a SolvationDatabase object.
         """
         d = {
             'libraries': self.libraries,
             'groups': self.groups,
             'libraryOrder': self.libraryOrder,
             }
-        return (SoluteDatabase, (), d)
+        return (SolvationDatabase, (), d)
 
     def __setstate__(self, d):
         """
-        A helper function used when unpickling a SoluteDatabase object.
+        A helper function used when unpickling a SolvationDatabase object.
         """
         self.libraries = d['libraries']
         self.groups = d['groups']
@@ -412,16 +469,20 @@ class SolvationDatabase(object):
         Load the solvation database from the given `path` on disk, where `path`
         points to the top-level folder of the solvation database.
         
-        Load the solvent and solute (not used) libraries, then the solute groups.
+        Load the solvent and solute libraries, then the solute groups.
         """
         
-        self.solventLibrary.load(os.path.join(path,'libraries','solvent.py'))
-        self.soluteLibrary.load(os.path.join(path,'libraries','solute.py'))
+        self.libraries['solvent'].load(os.path.join(path,'libraries','solvent.py'))
+        self.libraries['solute'].load(os.path.join(path,'libraries','solute.py'))
          
         self.loadGroups(os.path.join(path, 'groups'))
         
     def getSolventData(self, solvent_name):
-        return self.solventLibrary.getSolventData(solvent_name)
+        try:
+            solventData = self.libraries['solvent'].getSolventData(solvent_name)
+        except:
+            raise DatabaseError('Solvent {0!r} not found in database'.format(solvent_name))
+        return solventData
         
         
     def loadGroups(self, path):
@@ -453,9 +514,9 @@ class SolvationDatabase(object):
         points to the top-level folder of the solute libraries.
         """
         if not os.path.exists(path): os.mkdir(path)
-        for library in self.libraries.values():
-            library.save(os.path.join(path, '{0}.py'.format(library.label)))
-
+        self.libraries['solvent'].save(os.path.join(path,'solvent.py'))
+        self.libraries['solute'].save(os.path.join(path,'solute.py'))
+        
     def saveGroups(self, path):
         """
         Save the solute groups to the given `path` on disk, where `path`
@@ -531,9 +592,11 @@ class SolvationDatabase(object):
         soluteData = None
         
         # Check the library first
-        soluteData = self.getSoluteDataFromLibrary(species, self.soluteLibrary)
-        if soluteData is not None: 
-            soluteData[0].comment = 'solute'
+        soluteData = self.getSoluteDataFromLibrary(species, self.libraries['solute'])
+        if soluteData is not None:
+            assert len(soluteData)==3, "soluteData should be a tuple (soluteData, library, entry)"
+            soluteData[0].comment += "Data from solute library"
+            soluteData = soluteData[0]
         else:
             # Solute not found in any loaded libraries, so estimate
             soluteData = self.getSoluteDataFromGroups(species)
@@ -546,10 +609,24 @@ class SolvationDatabase(object):
         """
         Return all possible sets of Abraham solute descriptors for a given
         :class:`Species` object `species`. The hits from the library come
-        first, then the group additivity  estimate. This method is useful 
-         for a generic search job.
+        first, then the group additivity  estimate. This method is useful
+        for a generic search job. Right now, there should either be 1 or 
+        2 sets of descriptors, depending on whether or not we have a 
+        library entry.
         """
-        raise NotImplementedError()
+        soluteDataList = []
+        
+        # Data from solute library
+        data = self.getSoluteDataFromLibrary(species, self.libraries['solute'])
+        if data is not None: 
+            assert len(data) == 3, "soluteData should be a tuple (soluteData, library, entry)"
+            data[0].comment += "Data from solute library"
+            soluteDataList.append(data)
+        # Estimate from group additivity
+        # Make it a tuple
+        data = (self.getSoluteDataFromGroups(species), None, None)
+        soluteDataList.append(data)
+        return soluteDataList
 
     def getSoluteDataFromLibrary(self, species, library):
         """
@@ -649,6 +726,8 @@ class SolvationDatabase(object):
             saturatedStruct.updateConnectivityValues()
             saturatedStruct.sortVertices()
             saturatedStruct.updateAtomTypes()
+            saturatedStruct.updateLonePairs()
+            saturatedStruct.multiplicity = 1
 
             # Get solute descriptor estimates for saturated form of structure
             soluteData = self.estimateSoluteViaGroupAdditivity(saturatedStruct)
@@ -739,24 +818,35 @@ class SolvationDatabase(object):
 
     
     def calcH(self, soluteData, solventData):
-        # Use Mintz parameters for solvents
+        """
+        Returns the enthalpy of solvation, at 298K, in J/mol
+        """
+        # Use Mintz parameters for solvents. Multiply by 1000 to go from kJ->J to maintain consistency
         delH = 1000*((soluteData.S*solventData.s_h)+(soluteData.B*solventData.b_h)+(soluteData.E*solventData.e_h)+(soluteData.L*solventData.l_h)+(soluteData.A*solventData.a_h)+solventData.c_h)  
         return delH
     
     def calcG(self, soluteData, solventData):
-        # Use Abraham parameters for solvents
+        """
+        Returns the Gibbs free energy of solvation, at 298K, in J/mol
+        """
+        # Use Abraham parameters for solvents to get log K
         logK = (soluteData.S*solventData.s_g)+(soluteData.B*solventData.b_g)+(soluteData.E*solventData.e_g)+(soluteData.L*solventData.l_g)+(soluteData.A*solventData.a_g)+solventData.c_g
+        # Convert to delG with units of J/mol
         delG = -8.314*298*2.303*logK
         return delG
         
     def calcS(self, delG, delH):
+        """
+        Returns the entropy of solvation, at 298K, in J/mol/K
+        """
         delS = (delH-delG)/298
         return delS
     
     def getSolvationCorrection(self, soluteData, solventData):
         """ 
         Given a soluteData and solventData object, calculates the enthalpy, entropy,
-        and Gibbs free energy of solvation at 298 K
+        and Gibbs free energy of solvation at 298 K. Returns a SolvationCorrection
+        object
         """
         correction = SolvationCorrection(0.0, 0.0, 0.0)
         correction.enthalpy = self.calcH(soluteData, solventData)

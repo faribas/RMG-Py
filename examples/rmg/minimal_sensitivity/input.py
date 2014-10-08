@@ -4,8 +4,13 @@ database(
     reactionLibraries = [],
     seedMechanisms = [],
     kineticsDepositories = ['training'],
-    kineticsFamilies = ['!Intra_Disproportionation'],
+    kineticsFamilies = ['!Intra_Disproportionation','!Substitution_O'],
     kineticsEstimator = 'rate rules',
+)
+
+# Constraints on generated species
+generatedSpeciesConstraints(
+    maximumRadicalElectrons = 2,
 )
 
 # List of species

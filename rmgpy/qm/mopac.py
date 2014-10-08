@@ -4,6 +4,7 @@ import external.cclib as cclib
 import logging
 from subprocess import Popen, PIPE
 
+from rmgpy.molecule import Molecule
 from qmdata import CCLibData
 from molecule import QMMolecule
 
@@ -81,11 +82,11 @@ class Mopac:
         2) NOT finding any of the keywords that are denote a calculation failure
         3) finding all the keywords that denote a calculation success.
         4) finding a match between the InChI of the given molecule and the InchI found in the calculation files
+        5) checking that the optimized geometry, when connected by single bonds, is isomorphic with self.molecule (converted to single bonds)
         
-        If any of the above criteria is not matched, False will be returned and the procedures to start a new calculation 
-        will be initiated.
+        If any of the above criteria is not matched, False will be returned.
+        If all succeed, then it will return True.
         """
-        
         if not os.path.exists(self.outputFilePath):
             logging.debug("Output file {0} does not (yet) exist.".format(self.outputFilePath))
             return False
@@ -99,16 +100,13 @@ class Mopac:
         with open(self.outputFilePath) as outputFile:
             for line in outputFile:
                 line = line.strip()
-                
                 for element in self.failureKeys: #search for failure keywords
                     if element in line:
                         logging.error("MOPAC output file contains the following error: {0}".format(element) )
                         return False
-                    
                 for element in self.successKeys: #search for success keywords
                     if element in line:
                         successKeysFound[element] = True
-               
                 if "InChI=" in line:
                     logFileInChI = line #output files should take up to 240 characters of the name in the input file
                     InChIFound = True
@@ -129,14 +127,21 @@ class Mopac:
             logging.error("No InChI was found in the MOPAC output file {0}".format(self.outputFilePath))
             return False
         
-        if InChIMatch:
-            logging.info("Successful MOPAC quantum result found in {0}".format(self.outputFilePath))
-            # " + self.molfile.name + " ("+self.molfile.InChIAug+") has been found. This log file will be used.")
-            return True
+        if not InChIMatch:
+            #InChIs do not match (most likely due to limited name length mirrored in log file (240 characters), but possibly due to a collision)
+            return self.checkForInChiKeyCollision(logFileInChI) # Not yet implemented!
         
-        #InChIs do not match (most likely due to limited name length mirrored in log file (240 characters), but possibly due to a collision)
-        return self.checkForInChiKeyCollision(logFileInChI) # Not yet implemented!
+        # Compare the optimized geometry to the original molecule
+        qmData = self.parse()
+        cclibMol = Molecule()
+        cclibMol.fromXYZ(qmData.atomicNumbers, qmData.atomCoords.value)
+        testMol = self.molecule.toSingleBonds()
+        if not cclibMol.isIsomorphic(testMol):
+            logging.info("Incorrect connectivity for optimized geometry in file {0}".format(self.outputFilePath))
+            return False
 
+        logging.info("Successful MOPAC quantum result found in {0}".format(self.outputFilePath))
+        return True
 
     def parse(self):
         """
@@ -155,6 +160,15 @@ class MopacMol(QMMolecule, Mopac):
     
     Inherits from both :class:`QMMolecule` and :class:`Mopac`.
     """
+
+    #: Keywords that will be added at the top and bottom of the qm input file
+    keywords = [
+                {'top':"precise nosym", 'bottom':"oldgeo thermo nosym precise "},
+                {'top':"precise nosym gnorm=0.0 nonr", 'bottom':"oldgeo thermo nosym precise "},
+                {'top':"precise nosym gnorm=0.0", 'bottom':"oldgeo thermo nosym precise "},
+                {'top':"precise nosym gnorm=0.0 bfgs", 'bottom':"oldgeo thermo nosym precise "},
+                {'top':"precise nosym recalc=10 dmax=0.10 nonr cycles=2000 t=2000", 'bottom':"oldgeo thermo nosym precise "},
+                ]
 
     def writeInputFile(self, attempt):
         """
@@ -200,6 +214,10 @@ class MopacMol(QMMolecule, Mopac):
         """
         Calculate the QM data and return a QMData object, or None if it fails.
         """
+        for atom in self.molecule.vertices:
+            if atom.atomType.label in ('N5s', 'N5d', 'N5dd', 'N5t', 'N5b'):
+                return None
+
         if self.verifyOutputFile():
             logging.info("Found a successful output file already; using that.")
             source = "QM MOPAC result file found from previous run."
@@ -221,28 +239,15 @@ class MopacMol(QMMolecule, Mopac):
         return result # a CCLibData object
 
 
-class MopacMolPM3(MopacMol):
-
-    #: Keywords that will be added at the top and bottom of the qm input file
-    keywords = [
-                {'top':"precise nosym", 'bottom':"oldgeo thermo nosym precise "},
-                {'top':"precise nosym gnorm=0.0 nonr", 'bottom':"oldgeo thermo nosym precise "},
-                {'top':"precise nosym gnorm=0.0", 'bottom':"oldgeo thermo nosym precise "},
-                {'top':"precise nosym gnorm=0.0 bfgs", 'bottom':"oldgeo thermo nosym precise "},
-                {'top':"precise nosym recalc=10 dmax=0.10 nonr cycles=2000 t=2000", 'bottom':"oldgeo thermo nosym precise "},
-                ]
-
-    @property
-    def scriptAttempts(self):
-        "The number of attempts with different script keywords"
-        return len(self.keywords)
-        
-    @property
-    def maxAttempts(self):
-        "The total number of attempts to try"
-        return 2 * len(self.keywords)
-
-
+class MopacMolPMn(MopacMol):
+    """
+    Mopac PMn calculations for molecules (n undefined here)
+    
+    This is a parent class for MOPAC PMn calculations.
+    Inherit it, and define the pm_method, then redefine 
+    anything you wish to do differently.
+    """
+    pm_method = '(should be defined by sub class)'
     def inputFileKeywords(self, attempt):
         """
         Return the top, bottom, and polar keywords for attempt number `attempt`.
@@ -254,19 +259,49 @@ class MopacMolPM3(MopacMol):
         if attempt > self.scriptAttempts:
             attempt -= self.scriptAttempts
         
-        multiplicity_keys = self.multiplicityKeywords[self.geometry.multiplicity]
+        multiplicity_keys = self.multiplicityKeywords[self.geometry.molecule.multiplicity]
 
-        top_keys = "pm3 {0} {1}".format(
-                multiplicity_keys,
-                self.keywords[attempt-1]['top'],
+        top_keys = "{method} {mult} {top}".format(
+                method = self.pm_method,
+                mult = multiplicity_keys,
+                top = self.keywords[attempt-1]['top'],
                 )
-        bottom_keys = "{0} pm3 {1}".format(
-                self.keywords[attempt-1]['bottom'],
-                multiplicity_keys,
+        bottom_keys = "{bottom} {method} {mult}".format(
+                method = self.pm_method,
+                bottom = self.keywords[attempt-1]['bottom'],
+                mult = multiplicity_keys,
                 )
-        polar_keys = "oldgeo {0} nosym precise pm3 {1}".format(
-                'polar' if self.geometry.multiplicity == 1 else 'static',
-                multiplicity_keys,
+        polar_keys = "oldgeo {polar} nosym precise {method} {mult}".format(
+                method = self.pm_method,
+                polar = ('polar' if self.geometry.molecule.multiplicity == 1 else 'static'),
+                mult = multiplicity_keys,
                 )
 
         return top_keys, bottom_keys, polar_keys
+
+class MopacMolPM3(MopacMolPMn):
+    """
+    Mopac PM3 calculations for molecules
+    
+    This is a class of its own in case you wish to do anything differently,
+    but for now it's the same as all the MOPAC PMn calculations, only pm3
+    """
+    pm_method = 'pm3'
+
+class MopacMolPM6(MopacMolPMn):
+    """
+    Mopac PM6 calculations for molecules
+    
+    This is a class of its own in case you wish to do anything differently,
+    but for now it's the same as all the MOPAC PMn calculations, only pm6
+    """
+    pm_method = 'pm6'
+
+class MopacMolPM7(MopacMolPMn):
+    """
+    Mopac PM7 calculations for molecules
+    
+    This is a class of its own in case you wish to do anything differently,
+    but for now it's the same as all the MOPAC PMn calculations, only pm7
+    """
+    pm_method = 'pm7'

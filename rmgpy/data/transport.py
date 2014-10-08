@@ -39,7 +39,7 @@ import logging
 import numpy
 from copy import copy, deepcopy
 
-from base import Database, Entry, makeLogicNode
+from base import Database, Entry, makeLogicNode, DatabaseError
 
 import rmgpy.constants as constants
 from rmgpy.molecule import Molecule, Atom, Bond, Group
@@ -58,7 +58,7 @@ def saveEntry(f, entry):
     if isinstance(entry.item, Molecule):
         f.write('    molecule = \n')
         f.write('"""\n')
-        f.write(entry.item.toAdjacencyList(removeH=True))
+        f.write(entry.item.toAdjacencyList(removeH=False))
         f.write('""",\n')
     elif isinstance(entry.item, Group):
         f.write('    group = \n')
@@ -68,6 +68,48 @@ def saveEntry(f, entry):
     else:
         f.write('    group = "{0}",\n'.format(entry.item))
         
+    if isinstance(entry.data, CriticalPointGroupContribution):
+        f.write('    transportGroup = CriticalPointGroupContribution(\n')
+        f.write('        Tc = {0!r},\n'.format(entry.data.Tc))
+        f.write('        Pc = {0!r},\n'.format(entry.data.Pc))
+        f.write('        Vc = {0!r},\n'.format(entry.data.Vc))
+        f.write('        Tb = {0!r},\n'.format(entry.data.Tb))
+        f.write('        structureIndex = {0!r},\n'.format(entry.data.structureIndex))
+        f.write('    ),\n')
+    elif entry.data is None:
+        f.write('    transportGroup = None,\n')
+    elif isinstance(entry.data, TransportData):
+        f.write('    transport = TransportData(\n')
+        f.write('        shapeIndex = {0!r},\n'.format(entry.data.shapeIndex))
+        f.write('        epsilon = {0!r},\n'.format(entry.data.epsilon))
+        f.write('        sigma = {0!r},\n'.format(entry.data.sigma))
+        f.write('        dipoleMoment = {0!r},\n'.format(entry.data.dipoleMoment))
+        f.write('        polarizability = {0!r},\n'.format(entry.data.polarizability))
+        f.write('        rotrelaxcollnum = {0!r},\n'.format(entry.data.rotrelaxcollnum))
+        f.write('    ),\n')
+    else:
+        raise DatabaseError("Not sure how to save {0!r}".format(entry.data))
+
+    f.write('    shortDesc = u"""')
+    try:
+        f.write(entry.shortDesc.encode('utf-8'))
+    except:
+        f.write(entry.shortDesc.strip().encode('ascii', 'ignore'))
+    f.write('""",\n')
+    if entry.longDesc:
+        f.write('    longDesc = \n')
+        f.write('u"""\n')
+        try:
+            f.write(entry.longDesc.strip().encode('utf-8') + "\n")
+        except:
+            f.write(entry.longDesc.strip().encode('ascii', 'ignore')+ "\n")
+        f.write('""",\n')
+    else:
+        f.write('    longDesc = u"""""",\n')
+
+    f.write(')\n\n')
+
+
 def generateOldLibraryEntry(data):
     """
     Return a list of values used to save entries to the old-style RMG
@@ -99,18 +141,19 @@ class TransportLibrary(Database):
                   referenceType='',
                   shortDesc='',
                   longDesc='',
-                  history=None
                   ):
+        
+        item = Molecule().fromAdjacencyList(molecule)
+        
         self.entries[label] = Entry(
             index = index,
             label = label,
-            item = Molecule().fromAdjacencyList(molecule),
+            item = item,
             data = transport,
             reference = reference,
             referenceType = referenceType,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
     def saveEntry(self, f, entry):
         """
@@ -149,7 +192,6 @@ class TransportGroups(Database):
                   referenceType='',
                   shortDesc='',
                   longDesc='',
-                  history=None
                   ):
         if group[0:3].upper() == 'OR{' or group[0:4].upper() == 'AND{' or group[0:7].upper() == 'NOT OR{' or group[0:8].upper() == 'NOT AND{':
             item = makeLogicNode(group)
@@ -164,7 +206,6 @@ class TransportGroups(Database):
             referenceType = referenceType,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
     
     def saveEntry(self, f, entry):
@@ -257,6 +298,34 @@ class TransportDatabase(object):
         self.groups = {}
         self.groups['ring'] = TransportGroups(label='ring').load(os.path.join(path, 'ring.py'), self.local_context, self.global_context)
         self.groups['nonring'] = TransportGroups(label='nonring').load(os.path.join(path, 'nonring.py'), self.local_context, self.global_context)
+        
+    def save(self, path):
+        """
+        Save the transport database to the given `path` on disk, where `path`
+        points to the top-level folder of the transport database.
+        """
+        path = os.path.abspath(path)
+        if not os.path.exists(path): os.mkdir(path)
+        self.saveLibraries(os.path.join(path, 'libraries'))
+        self.saveGroups(os.path.join(path, 'groups'))
+
+    def saveLibraries(self, path):
+        """
+        Save the trasnport libraries to the given `path` on disk, where `path`
+        points to the top-level folder of the transport libraries.
+        """
+        if not os.path.exists(path): os.mkdir(path)
+        for library in self.libraries.values():
+            library.save(os.path.join(path, '{0}.py'.format(library.label)))
+
+    def saveGroups(self, path):
+        """
+        Save the transport groups to the given `path` on disk, where `path`
+        points to the top-level folder of the transport groups.
+        """
+        if not os.path.exists(path): os.mkdir(path)
+        self.groups['nonring'].save(os.path.join(path, 'nonring.py'))
+        self.groups['ring'].save(os.path.join(path, 'ring.py'))
 
 
     def getTransportProperties(self, species):
@@ -274,10 +343,12 @@ class TransportDatabase(object):
                 transport[0].comment = label
                 break
         else:
-            #Transport not found in any loaded libraries, so estimate
-            transport = self.getTransportPropertiesViaGroupEstimates(species)
-        #data, library, entry = transport
-        #return data
+            try:                
+                #Transport not found in any loaded libraries, so estimate
+                transport = self.getTransportPropertiesViaGroupEstimates(species)
+            except:
+                transport = self.getTransportPropertiesViaLennardJonesParameters(species)
+
         return transport
     
     def getAllTransportProperties(self, species):
@@ -368,7 +439,6 @@ class TransportDatabase(object):
         # For transport estimation we need the atoms to already be sorted because we
         # iterate over them; if the order changes during the iteration then we
         # will probably not visit the right atoms, and so will get the transport wrong
-        molecule.sortVertices()
 
         if sum([atom.radicalElectrons for atom in molecule.atoms]) > 0: # radical species
 
@@ -433,12 +503,9 @@ class TransportDatabase(object):
                         if molecule.isVertexInCycle(atom):
                             self.__addCriticalPointContribution(groupData, self.groups['ring'], molecule, {'*':atom})
                         else:
-                            self.__addCriticalPointContribution(groupData, self.groups['nonring'], molecule, {'*':atom})                      
+                            self.__addCriticalPointContribution(groupData, self.groups['nonring'], molecule, {'*':atom})
                     except KeyError:
-                        logging.error("Couldn't find in any transport database:")
-                        logging.error(molecule)
-                        logging.error(molecule.toAdjacencyList())
-                        raise
+                        raise           
                     
         Tb = 198.18 + groupData.Tb
         Vc = 17.5 + groupData.Vc
@@ -493,6 +560,47 @@ class TransportDatabase(object):
         groupData.structureIndex += data.structureIndex
         
         return groupData
+    
+    def getTransportPropertiesViaLennardJonesParameters(self,species):
+        """
+        Serves as last resort if every other method to estimate Transport Properties fails.
+        
+        Generate the Lennard-Jones parameters for the species.
+        """
+        count = sum([1 for atom in species.molecule[0].vertices if atom.isNonHydrogen()])
+
+        if count == 1:
+            sigma = (3.758e-10,"m")
+            epsilon = (148.6,"K")
+        elif count == 2:
+            sigma = (4.443e-10,"m")
+            epsilon = (110.7,"K")
+        elif count == 3:
+            sigma = (5.118e-10,"m")
+            epsilon = (237.1,"K")
+        elif count == 4:
+            sigma = (4.687e-10,"m")
+            epsilon = (531.4,"K")
+        elif count == 5:
+            sigma = (5.784e-10,"m")
+            epsilon = (341.1,"K")
+        else:
+            sigma = (5.949e-10,"m")
+            epsilon = (399.3,"K")
+        
+        shapeIndex = 1 if species.molecule[0].isLinear() else 2
+            
+        transport = TransportData(
+            shapeIndex = shapeIndex,  # 1 if linear, else 2
+            epsilon = epsilon,
+            sigma = sigma,
+            dipoleMoment = (0, 'C*m'),
+            polarizability = (0, 'angstroms^3'),
+            rotrelaxcollnum = 0,  # rotational relaxation collision number at 298 K
+            comment = 'Epsilon & sigma estimated with fixed Lennard Jones Parameters. This is the fallback method! Try improving transport databases!'
+            )
+        
+        return (transport, None, None)
 
 class CriticalPoint:
     """

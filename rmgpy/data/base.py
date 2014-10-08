@@ -38,7 +38,11 @@ import os
 import logging
 import re
 import codecs
-
+try:
+    from collections import OrderedDict
+except ImportError:
+    logging.warning("Upgrade to Python 2.7 or later to ensure your database entries are read and written in the same order each time!")
+    OrderedDict = dict
 from rmgpy.molecule import Molecule, Group, InvalidAdjacencyListError
 
 from reference import Reference, Article, Book, Thesis
@@ -77,7 +81,6 @@ class Entry:
     `shortDesc`         A brief (one-line) description of the data
     `longDesc`          A long, verbose description of the data
     `rank`              An integer indicating the degree of confidence in the entry data, or ``None`` if not used
-    `history`           A list of tuples containing the date/time of change, author, type of change, and a brief description of the change
     =================== ========================================================
 
     """
@@ -94,7 +97,6 @@ class Entry:
                  shortDesc='',
                  longDesc='',
                  rank=None,
-                 history=None
                  ):
         self.index = index
         self.label = label
@@ -107,7 +109,6 @@ class Entry:
         self.shortDesc = shortDesc
         self.longDesc = longDesc
         self.rank = rank
-        self.history = history or []
 
     def __str__(self):
         return self.label
@@ -155,15 +156,13 @@ class Database:
                  name='',
                  shortDesc='',
                  longDesc='',
-                 recommended=False
                  ):
-        self.entries = entries or {}
+        self.entries = OrderedDict(entries or {})
         self.top = top or []
         self.label = label
         self.name = name
         self.shortDesc = shortDesc
         self.longDesc = longDesc
-        self.recommended = recommended
 
     def load(self, path, local_context=None, global_context=None):
         """
@@ -184,7 +183,7 @@ class Database:
         from rdkit import Chem
 
         # Clear any previously-loaded data
-        self.entries = {}
+        self.entries = OrderedDict()
         self.top = []
 
         # Set up global and local context
@@ -199,7 +198,6 @@ class Database:
         local_context['name'] = self.name
         local_context['shortDesc'] = self.shortDesc
         local_context['longDesc'] = self.longDesc
-        local_context['recommended'] = False
         # add in anything from the Class level dictionary.
         for key, value in Database.local_context.iteritems():
             local_context[key]=value
@@ -217,7 +215,6 @@ class Database:
         self.name = local_context['name']
         self.shortDesc = local_context['shortDesc']
         self.longDesc = local_context['longDesc'].strip()
-        self.recommended = local_context['recommended']
         
         # Return the loaded database (to allow for Database().load() syntax)
         return self
@@ -245,10 +242,67 @@ class Database:
                             entries.append(self.entries[child])
                 index += 1
         else:
-            # Otherwise save the entries sorted by index
+            # Otherwise save the entries sorted by index, if defined
             entries = self.entries.values()
-            entries.sort(key=lambda x: (x.index, x.label))
+            entries.sort(key=lambda x: (x.index))
         return entries
+    
+    def getSpecies(self, path):
+        """
+        Load the dictionary containing all of the species in a kinetics library or depository.
+        """
+        from rmgpy.species import Species
+        speciesDict = {}
+        with open(path, 'r') as f:
+            adjlist = ''
+            for line in f:
+                if line.strip() == '' and adjlist.strip() != '':
+                    # Finish this adjacency list
+                    species = Species().fromAdjacencyList(adjlist)
+                    species.generateResonanceIsomers()
+                    label = species.label
+                    if label in speciesDict:
+                        raise DatabaseError('Species label "{0}" used for multiple species in {1}.'.format(label, str(self)))
+                    speciesDict[label] = species
+                    adjlist = ''
+                else:
+                    adjlist += line
+        
+        return speciesDict
+    
+    def saveDictionary(self, path):
+        """
+        Extract species from all entries associated with a kinetics library or depository and save them 
+        to the path given.
+        """
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError:
+            pass
+        # Extract species from all the entries
+        speciesDict = {}
+        entries = self.entries.values()
+        for entry in entries:
+            for reactant in entry.item.reactants:
+                if reactant.label not in speciesDict:
+                    speciesDict[reactant.label] = reactant
+                elif not reactant.isIsomorphic(speciesDict[reactant.label]):
+                    print reactant.molecule[0].toAdjacencyList()
+                    print speciesDict[reactant.label].molecule[0].toAdjacencyList()
+                    speciesDict[reactant.label] = reactant
+                    raise DatabaseError('Species label "{0}" used for multiple species in {1}.'.format(reactant.label, str(self)))
+            for product in entry.item.products:
+                if product.label not in speciesDict:
+                    speciesDict[product.label] = product
+                elif not product.isIsomorphic(speciesDict[product.label]):
+                    print product.molecule[0].toAdjacencyList()
+                    print speciesDict[product.label].molecule[0].toAdjacencyList()
+                    raise DatabaseError('Species label "{0}" used for multiple species in {1}.'.format(product.label, str(self)))
+            
+        with open(path, 'w') as f:
+            for label in speciesDict.keys():
+                f.write(speciesDict[label].molecule[0].toAdjacencyList(label=label, removeH=False))
+                f.write('\n')
 
     def save(self, path):
         """
@@ -256,6 +310,10 @@ class Database:
         optional `entryName` parameter specifies the identifier used for each
         data entry.
         """
+        try:
+            os.makedirs(os.path.dirname(path))
+        except OSError:
+            pass
         entries = self.getEntriesToSave()
 
         f = codecs.open(path, 'w', 'utf-8')
@@ -266,7 +324,6 @@ class Database:
         f.write('longDesc = u"""\n')
         f.write(self.longDesc.strip() + '\n')
         f.write('"""\n')
-        f.write('recommended = {0}\n\n'.format(self.recommended))
         
         for entry in entries:
             self.saveEntry(f, entry)
@@ -373,7 +430,7 @@ class Database:
                 elif pattern:
                     self.entries[label].item = Group().fromAdjacencyList(record)
                 else:
-                    self.entries[label].item = Molecule().fromAdjacencyList(record)
+                    self.entries[label].item = Molecule().fromAdjacencyList(record,saturateH=True)
         except InvalidAdjacencyListError, e:
             logging.error('Error while loading old-style dictionary "{0}"'.format(path))
             logging.error('Error occurred while parsing adjacency list "{0}"'.format(label))
@@ -432,18 +489,6 @@ class Database:
                 # Add node to list of parents for subsequent iteration
                 parents.append(label)
 
-        # Sort children by decreasing size; the algorithm returns the first
-        # match of each children, so this makes it less likely to miss a
-        # more detailed functional group
-        # First determine if we can do the sort (that is, all children have
-        # one Molecule or Group)
-        for label, entry in self.entries.iteritems():
-            canSort = True
-            for child in entry.children:
-                if not isinstance(child.item, Molecule) and not isinstance(child.item, Group):
-                    canSort = False
-            if canSort:
-                entry.children.sort(lambda x, y: cmp(len(x.item.atoms), len(y.item.atoms)))
 
     def loadOldTree(self, path):
         """
@@ -511,7 +556,7 @@ class Database:
         
         flib = None
         try:
-            flib = codecs.open(path, 'r', 'utf-8')
+            flib = codecs.open(path, 'r', 'utf-8', errors='replace')
             for line in flib:
                 line = removeCommentFromLine(line).strip()
                 if len(line) > 0:
@@ -644,7 +689,7 @@ class Database:
             for entry in entries:
                 f.write(entry.label + '\n')
                 if isinstance(entry.item, Molecule):
-                    f.write(entry.item.toAdjacencyList(removeH=True) + '\n')
+                    f.write(entry.item.toAdjacencyList(removeH=False) + '\n')
                 elif isinstance(entry.item, Group):
                     f.write(entry.item.toAdjacencyList().replace('{2S,2T}','2') + '\n')
                 elif isinstance(entry.item, LogicOr):
@@ -663,7 +708,7 @@ class Database:
             for entry in entriesNotInTree:
                 f.write(comment(entry.label + '\n'))
                 if isinstance(entry.item, Molecule):
-                    f.write(comment(entry.item.toAdjacencyList(removeH=True) + '\n'))
+                    f.write(comment(entry.item.toAdjacencyList(removeH=False) + '\n'))
                 elif isinstance(entry.item, Group):
                     f.write(comment(entry.item.toAdjacencyList().replace('{2S,2T}','2') + '\n'))
                 elif isinstance(entry.item, LogicOr):
@@ -785,59 +830,41 @@ class Database:
             descendants.append(child)
             descendants.extend(self.descendants(child))
         return descendants
-
-    def isWellFormed(self):
+    
+    def matchNodeToNode(self, node, nodeOther):
+        """ 
+        Return `True` if `node` and `nodeOther` are identical.  Otherwise, return `False`.
+        Both `node` and `nodeOther` must be Entry types with items containing Group or LogicNode types.
         """
-        Return :data:`True` if the database is well-formed. A well-formed
-        database has an entry in the dictionary for every entry in the tree, and
-        an entry in the tree for every entry in the library. If no tree is
-        present (e.g. the primary libraries), then every entry in the library
-        must have an entry in the dictionary. Finally, each entry in the
-        library must have the same number of nodes as the number of top-level
-        nodes in the tree, if the tree is present; this is for databases with
-        multiple trees, e.g. the kinetics databases.
+        if isinstance(node.item, Group) and isinstance(nodeOther.item, Group):
+            return self.matchNodeToStructure(node,nodeOther.item, atoms=nodeOther.item.getLabeledAtoms()) and self.matchNodeToStructure(nodeOther,node.item,atoms=node.item.getLabeledAtoms())
+        elif isinstance(node.item,LogicOr) and isinstance(nodeOther.item,LogicOr):
+            return node.item.matchLogicOr(nodeOther.item)
+        else:
+            # Assume nonmatching
+            return False
+        
+    def matchNodeToChild(self, parentNode, childNode):        
+        """ 
+        Return `True` if `parentNode` is a parent of `childNode`.  Otherwise, return `False`.
+        Both `parentNode` and `childNode` must be Entry types with items containing Group or LogicNode types.
+        If `parentNode` and `childNode` are identical, the function will also return `False`.
         """
-
-        wellFormed = True
-
-        # Make list of all nodes in library
-        libraryNodes = []
-        for nodes in self.library:
-            libraryNodes.extend(nodes.split(';'))
-        libraryNodes = list(set(libraryNodes))
-
-
-        for node in libraryNodes:
-
-            # All nodes in library must be in dictionary
-            try:
-                if node not in self.entries:
-                    raise DatabaseError('Node "{0}" in library is not present in dictionary.'.format(node))
-            except DatabaseError, e:
-                wellFormed = False
-                logging.error(str(e))
-
-            # If a tree is present, all nodes in library should be in tree
-            # (Technically the database is still well-formed, but let's warn
-            # the user anyway
-            if len(self.tree.parent) > 0:
-                try:
-                    if node not in self.tree.parent:
-                        raise DatabaseError('Node "{0}" in library is not present in tree.'.format(node))
-                except DatabaseError, e:
-                    logging.warning(str(e))
-
-        # If a tree is present, all nodes in tree must be in dictionary
-        if self.tree is not None:
-            for node in self.tree.parent:
-                try:
-                    if node not in self.entries:
-                        raise DatabaseError('Node "{0}" in tree is not present in dictionary.'.format(node))
-                except DatabaseError, e:
-                    wellFormed = False
-                    logging.error(str(e))
-
-        return wellFormed
+        
+        if isinstance(parentNode.item, Group) and isinstance(childNode.item, Group):
+            if self.matchNodeToStructure(parentNode,childNode.item, atoms=childNode.item.getLabeledAtoms()) is True:
+                if self.matchNodeToStructure(childNode,parentNode.item, atoms=parentNode.item.getLabeledAtoms()) is False:
+                    return True                
+            return False
+        
+        #If the parentNode is a Group and the childNode is a LogicOr there is nothing to check,
+        #so it gets an automatic pass. However, we do need to check that everything down this
+        #family line is consistent, which is done in the databaseTest unitTest
+        elif isinstance(parentNode.item, Group) and isinstance(childNode.item, LogicOr):
+            return True
+        
+        elif isinstance(parentNode.item,LogicOr):
+            return childNode.label in parentNode.item.components
 
     def matchNodeToStructure(self, node, structure, atoms):
         """
@@ -849,6 +876,15 @@ class Database:
         include extra labels, and so we only require that every labeled atom in
         the functional group represented by `node` has an equivalent labeled
         atom in `structure`.
+        
+        Matching to structure is more strict than to node.  All labels in structure must 
+        be found in node.  However the reverse is not true.
+        
+        Usage: node = either an Entry or a key in the self.entries dictionary which has
+                      a Group or LogicNode as its Entry.item
+               structure = a Group or a Molecule
+               atoms = dictionary of {label: atom} in the structure.  A possible dictionary
+                       is the one produced by structure.getLabeledAtoms()
         """
         if isinstance(node, str): node = self.entries[node]
         group = node.item
@@ -869,7 +905,8 @@ class Database:
                 # Make sure labels actually point to atoms.
                 if center is None or atom is None:
                     return False
-                if isinstance(center, list): center = center[0]
+                if isinstance(center, list):
+                    center = center[0]
                 # Semantic check #1: atoms with same label are equivalent
                 elif not atom.isSpecificCaseOf(center):
                     return False
@@ -922,7 +959,7 @@ class Database:
                 return None
         elif not self.matchNodeToStructure(root, structure, atoms):
             return None
-
+        
         next = []
         for child in root.children:
             if self.matchNodeToStructure(child, structure, atoms):
@@ -936,7 +973,7 @@ class Database:
             else:
                 return root
         else:
-            logging.warning('For {0}, a node {1} with overlapping children {2} was encountered in tree with top level nodes {3}. Assuming the first match is the better one.'.format(structure, root, next, self.top))
+            #logging.warning('For {0}, a node {1} with overlapping children {2} was encountered in tree with top level nodes {3}. Assuming the first match is the better one.'.format(structure, root, next, self.top))
             return self.descendTree(structure, atoms, next[0])
 
 ################################################################################
@@ -987,6 +1024,18 @@ class LogicOr(LogicNode):
                 return True != self.invert
         return False != self.invert
 
+    def matchLogicOr(self, other):
+        """
+        Is other the same LogicOr group as self?
+        """
+        if len(self.components)!=len(other.components):
+            return False
+        else:
+            for node in self.components:
+                if node not in other.components:
+                    return False
+        return True
+        
     def getPossibleStructures(self, entries):
         """
         Return a list of the possible structures below this node.
@@ -1146,6 +1195,14 @@ class ForbiddenStructures(Database):
                 initialMap[moleculeLabeledAtoms[label]] = entryLabeledAtoms[label]
             if molecule.isMappingValid(entry.item, initialMap) and molecule.isSubgraphIsomorphic(entry.item, initialMap):
                 return True
+            
+        # Until we have more thermodynamic data of molecular ions we will forbid them
+        molecule_charge = 0
+        for atom in molecule.atoms:
+            molecule_charge += atom.charge
+        if molecule_charge != 0:
+            return True
+        
         return False
     
     def loadOld(self, path):
@@ -1161,7 +1218,7 @@ class ForbiddenStructures(Database):
         """
         self.saveOldDictionary(path)
 
-    def loadEntry(self, label, molecule=None, group=None, shortDesc='', longDesc='', history=None):
+    def loadEntry(self, label, molecule=None, group=None, shortDesc='', longDesc=''):
         """
         Load an entry from the forbidden structures database. This method is
         automatically called during loading of the forbidden structures 
@@ -1185,7 +1242,6 @@ class ForbiddenStructures(Database):
             item = item,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
     
     def saveEntry(self, f, entry, name='entry'):
@@ -1197,11 +1253,10 @@ class ForbiddenStructures(Database):
         
         f.write('{0}(\n'.format(name))
         f.write('    label = "{0}",\n'.format(entry.label))
-
         if isinstance(entry.item, Molecule):
             f.write('    molecule = \n')
             f.write('"""\n')
-            f.write(entry.item.toAdjacencyList(removeH=True))
+            f.write(entry.item.toAdjacencyList(removeH=False))
             f.write('""",\n')
         elif isinstance(entry.item, Group):
             f.write('    group = \n')

@@ -60,6 +60,7 @@ BIMOLECULAR_KINETICS_FAMILIES = [
     'SubstitutionS',
     'R_Addition_CSm',
     '1,3_Insertion_RSR',
+    'lone_electron_pair_bond',
 ]
 
 # The names of all of the RMG reaction families that are unimolecular
@@ -69,7 +70,6 @@ UNIMOLECULAR_KINETICS_FAMILIES = [
     'intra_OH_migration',
     'HO2_Elimination_from_PeroxyRadical',
     'Cyclic_Ether_Formation',
-    'Enol_keto_tautomerism',
     'Intra_R_Add_Exocyclic',
     'Intra_R_Add_Endocyclic',
     '1,2-Birad_to_alkene',
@@ -81,6 +81,11 @@ UNIMOLECULAR_KINETICS_FAMILIES = [
     'intra_substitutionCS_isomerization',
     'intra_substitutionS_cyclization',
     'intra_substitutionS_isomerization',
+    'intra_NO2_ONO_conversion',
+    '1,4_Cyclic_birad_scission',
+    '1,4_Linear_birad_scission',
+    'Intra_Diels_alder',
+    'ketoenol'
 ]
 
 ################################################################################
@@ -129,35 +134,28 @@ def saveEntry(f, entry):
         f.write('    label = "{0}",\n'.format(entry.label))
 
     if isinstance(entry.item, Reaction):
-        for i, reactant in enumerate(entry.item.reactants):
-            if isinstance(reactant, Molecule):
-                f.write('    reactant{0:d} = \n'.format(i+1))
-                f.write('"""\n')
-                f.write(reactant.toAdjacencyList(removeH=True))
-                f.write('""",\n')
-            elif isinstance(reactant, Species):
-                f.write('    reactant{0:d} = \n'.format(i+1))
-                f.write('"""\n')
-                f.write(reactant.molecule[0].toAdjacencyList(label=reactant.label, removeH=True))
-                f.write('""",\n')
-            elif isinstance(reactant, Group):
-                f.write('    group{0:d} = \n'.format(i+1))
-                f.write('"""\n')
-                f.write(reactant.toAdjacencyList())
-                f.write('""",\n')
-            elif isinstance(reactant, LogicNode):
-                f.write('    group{0:d} = "{1}",\n'.format(i+1, reactant))
-        for i, product in enumerate(entry.item.products):
-            if isinstance(product, Molecule):
-                f.write('    product{0:d} = \n'.format(i+1))
-                f.write('"""\n')
-                f.write(product.toAdjacencyList(removeH=True))
-                f.write('""",\n')
-            elif isinstance(reactant, Species):
-                f.write('    product{0:d} = \n'.format(i+1))
-                f.write('"""\n')
-                f.write(product.molecule[0].toAdjacencyList(label=product.label, removeH=True))
-                f.write('""",\n')
+#        for i, reactant in enumerate(entry.item.reactants):
+#            if isinstance(reactant, Molecule):
+#                f.write('    reactant{0:d} = \n'.format(i+1))
+#                f.write('"""\n')
+#                f.write(reactant.toAdjacencyList(removeH=False))
+#                f.write('""",\n')
+#            elif isinstance(reactant, Species):
+#                f.write('    reactant{0:d} = \n'.format(i+1))
+#                f.write('"""\n')
+#                f.write(reactant.molecule[0].toAdjacencyList(label=reactant.label, removeH=False))
+#                f.write('""",\n')
+#        for i, product in enumerate(entry.item.products):
+#            if isinstance(product, Molecule):
+#                f.write('    product{0:d} = \n'.format(i+1))
+#                f.write('"""\n')
+#                f.write(product.toAdjacencyList(removeH=False))
+#                f.write('""",\n')
+#            elif isinstance(reactant, Species):
+#                f.write('    product{0:d} = \n'.format(i+1))
+#                f.write('"""\n')
+#                f.write(product.molecule[0].toAdjacencyList(label=product.label, removeH=False))
+#                f.write('""",\n')
         if not isinstance(entry.item.reactants[0], Group) and not isinstance(entry.item.reactants[0], LogicNode):
             f.write('    degeneracy = {0:d},\n'.format(entry.item.degeneracy))
         if entry.item.duplicate: 
@@ -198,12 +196,12 @@ def saveEntry(f, entry):
         for line in lines[1:-1]:
             f.write('    {0}\n'.format(line))
         f.write('    ),\n'.format(lines[0]))
-    else:
-        f.write('    reference = None,\n')
     
-    f.write('    referenceType = "{0}",\n'.format(entry.referenceType))
+    if entry.referenceType != "":
+        f.write('    referenceType = "{0}",\n'.format(entry.referenceType))
     if entry.rank is not None:
         f.write('    rank = {0},\n'.format(entry.rank))
+<<<<<<< HEAD
     f.write('    shortDesc = u"""')
     f.write(entry.shortDesc)
     f.write('""",\n')
@@ -211,5 +209,24 @@ def saveEntry(f, entry):
     f.write('u"""\n')
     f.write(entry.longDesc.strip() + "\n")
     f.write('""",\n')
+=======
+        
+    if entry.shortDesc.strip() !='':
+        f.write('    shortDesc = u"""')
+        try:
+            f.write(entry.shortDesc.encode('utf-8'))
+        except:
+            f.write(entry.shortDesc.strip().encode('ascii', 'ignore')+ "\n")
+        f.write('""",\n')
+    
+    if entry.longDesc.strip() !='':
+        f.write('    longDesc = \n')
+        f.write('u"""\n')
+        try:
+            f.write(entry.longDesc.strip().encode('utf-8') + "\n")
+        except:
+            f.write(entry.longDesc.strip().encode('ascii', 'ignore')+ "\n")
+        f.write('""",\n')
+>>>>>>> 99e9090e48fb9517decd08fc0dbb9a68bb417308
 
     f.write(')\n\n')

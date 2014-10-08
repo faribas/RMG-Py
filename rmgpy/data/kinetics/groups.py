@@ -81,7 +81,7 @@ class KineticsGroups(Database):
     def __repr__(self):
         return '<KineticsGroups "{0}">'.format(self.label)
 
-    def loadEntry(self, index, label, group, kinetics, reference=None, referenceType='', shortDesc='', longDesc='', history=None):
+    def loadEntry(self, index, label, group, kinetics, reference=None, referenceType='', shortDesc='', longDesc=''):
         if group[0:3].upper() == 'OR{' or group[0:4].upper() == 'AND{' or group[0:7].upper() == 'NOT OR{' or group[0:8].upper() == 'NOT AND{':
             item = makeLogicNode(group)
         else:
@@ -95,7 +95,6 @@ class KineticsGroups(Database):
             referenceType = referenceType,
             shortDesc = shortDesc,
             longDesc = longDesc.strip(),
-            history = history or [],
         )
 
     def getReactionTemplate(self, reaction):
@@ -160,15 +159,17 @@ class KineticsGroups(Database):
         # template is a list of the actual matched nodes
         # forwardTemplate is a list of the top level nodes that should be matched
         if len(template) != len(forwardTemplate):
-            #logging.warning('Unable to find matching template for reaction {0} in reaction family {1}'.format(str(reaction), str(self)) )
-            #logging.warning(" Trying to match " + str(forwardTemplate))
-            #logging.warning(" Matched "+str(template))
-            #print str(self), template, forwardTemplate
-            #for reactant in reaction.reactants:
-            #    print reactant.toAdjacencyList() + '\n'
-            #for product in reaction.products:
-            #    print product.toAdjacencyList() + '\n'
-            raise UndeterminableKineticsError(reaction)
+#            print 'len(template):', len(template)
+#            print 'len(forwardTemplate):', len(forwardTemplate)
+            msg = 'Unable to find matching template for reaction {0} in reaction family {1}.'.format(str(reaction), str(self)) 
+            msg += 'Trying to match {0} but matched {1}'.format(str(forwardTemplate),str(template))
+#            print 'reactants'
+#            for reactant in reaction.reactants:
+#                print reactant.toAdjacencyList() + '\n'
+#            print 'products'
+#            for product in reaction.products:
+#                print product.toAdjacencyList() + '\n'
+            raise UndeterminableKineticsError(reaction, message=msg)
 
         return template
 

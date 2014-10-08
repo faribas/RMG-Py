@@ -120,14 +120,14 @@ class TestTransportData(unittest.TestCase):
         M = P / constants.R / T
         mu = 1.0
         omega = self.transport.getCollisionFrequency(T, M, mu)
-        self.assertAlmostEqual(omega / 3.13010e10, 1.0, 4)
-
+        self.assertAlmostEqual(omega / 1.17737e10, 1.0, 4)
+ 
     def test_pickle(self):
         """
         Test that a TransportData object can be pickled and unpickled with no loss of information.
         """
         import cPickle
-        transport = cPickle.loads(cPickle.dumps(self.transport))
+        transport = cPickle.loads(cPickle.dumps(self.transport,-1))
         self.assertAlmostEqual(self.transport.shapeIndex, transport.shapeIndex, 4)
         self.assertAlmostEqual(self.transport.epsilon.value_si, transport.epsilon.value_si, 4)
         self.assertAlmostEqual(self.transport.sigma.value_si, transport.sigma.value_si, 4)
@@ -208,7 +208,7 @@ class TestCriticalPointGroupContribution(unittest.TestCase):
         Test that a CriticalPointGroupContribution object can be pickled and unpickled with no loss of information.
         """
         import cPickle
-        criticalPointContribution = cPickle.loads(cPickle.dumps(self.criticalPointContribution))
+        criticalPointContribution = cPickle.loads(cPickle.dumps(self.criticalPointContribution,-1))
         self.assertAlmostEqual(self.criticalPointContribution.Tc, criticalPointContribution.Tc, 4)
         self.assertAlmostEqual(self.criticalPointContribution.Pc, criticalPointContribution.Pc, 4)
         self.assertAlmostEqual(self.criticalPointContribution.Vc, criticalPointContribution.Vc, 4)
@@ -249,9 +249,11 @@ class TestTransportDatabase(unittest.TestCase):
         self.testCases = [
             ['acetone', 'CC(=O)C', Length(5.36421, 'angstroms'), Energy(3.20446, 'kJ/mol'), "Epsilon & sigma estimated with Tc=500.53 K, Pc=47.11 bar (from Joback method)"],
             ['cyclopenta-1,2-diene', 'C1=C=CCC1', None, None, None],  # not sure what to expect, we just want to make sure it doesn't crash
+            ['benzene', 'c1ccccc1', None, None, None],
             ]
         for name, smiles, sigma, epsilon, comment in self.testCases:
-            species = Species(molecule=[Molecule(SMILES=smiles)])
+            molecule=Molecule(SMILES=smiles)
+            species = Species(molecule=[molecule])
             transportData, blank, blank2 = self.transportdb.getTransportPropertiesViaGroupEstimates(species)
             # check Joback worked.
             # If we don't know what to expect, don't check (just make sure we didn't crash)
@@ -262,6 +264,26 @@ class TestTransportDatabase(unittest.TestCase):
             if epsilon:
                 self.assertAlmostEqual(transportData.epsilon.value_si, epsilon.value_si, 1)
 
+    def testJobackOnBenzeneBonds(self):
+        "Test Joback doesn't crash on Cb desription of beneze"
+        adjlist = """
+                    1  C u0 p0 {2,D} {6,S} {7,S}
+                    2  C u0 p0 {1,D} {3,S} {8,S}
+                    3  C u0 p0 {2,S} {4,D} {9,S}
+                    4  C u0 p0 {3,D} {5,S} {10,S}
+                    5  C u0 p0 {4,S} {6,D} {11,S}
+                    6  C u0 p0 {1,S} {5,D} {12,S}
+                    7  H u0 p0 {1,S}
+                    8  H u0 p0 {2,S}
+                    9  H u0 p0 {3,S}
+                    10 H u0 p0 {4,S}
+                    11 H u0 p0 {5,S}
+                    12 H u0 p0 {6,S}
+                    """
+        m = Molecule().fromAdjacencyList(adjlist)
+        species = Species(molecule=[m])
+        transportData, blank, blank2 = self.transportdb.getTransportPropertiesViaGroupEstimates(species)
+        self.assertIsNotNone(transportData)
 
 if __name__ == '__main__':
     unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))
