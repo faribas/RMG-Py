@@ -64,6 +64,9 @@ class Mopac:
         process = Popen([self.executablePath, self.inputFilePath])
         process.communicate()# necessary to wait for executable termination!
     
+        #Wait for OS to flush the buffer to disk. There should be a better way
+        import time
+        time.sleep(1)
         return self.verifyOutputFile()
         
     def verifyOutputFile(self):
@@ -113,7 +116,8 @@ class Mopac:
                         InChIMatch = True
                     else:
                         logging.warning("InChI in log file ({0}) didn't match that in geometry ({1}).".format(logFileInChI, self.uniqueIDlong))                    
-                        if self.uniqueIDlong.startswith(logFileInChI):
+                        # Use only up to first 80 characters to match due to MOPAC bug which deletes 81st character of InChI string
+                        if self.uniqueIDlong.startswith(logFileInChI[:80]):
                             logging.warning("but the beginning matches so it's probably just a truncation problem.")
                             InChIMatch = True
         # Check that ALL 'success' keywords were found in the file.

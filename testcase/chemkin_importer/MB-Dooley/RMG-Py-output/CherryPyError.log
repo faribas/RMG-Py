@@ -1,0 +1,24 @@
+[26/Jul/2013:11:23:59] ENGINE Bus STARTING
+[26/Jul/2013:11:23:59] ENGINE Started monitor thread '_TimeoutMonitor'.
+[26/Jul/2013:11:23:59] ENGINE Serving on 0.0.0.0:8081
+[26/Jul/2013:11:23:59] ENGINE Bus STARTED
+[27/May/2014:11:05:08] ENGINE Bus STARTING
+[27/May/2014:11:05:08] ENGINE Started monitor thread '_TimeoutMonitor'.
+[27/May/2014:11:05:08] ENGINE Serving on 0.0.0.0:8081
+[27/May/2014:11:05:08] ENGINE Bus STARTED
+[27/May/2014:11:05:09] ENGINE Bus STOPPING
+[27/May/2014:11:05:14] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('0.0.0.0', 8081)) shut down
+[27/May/2014:11:05:14] ENGINE Stopped thread '_TimeoutMonitor'.
+[27/May/2014:11:05:14] ENGINE Bus STOPPED
+[27/May/2014:11:05:14] ENGINE Bus EXITING
+[27/May/2014:11:05:14] ENGINE Bus EXITED
+[27/May/2014:11:07:30] ENGINE Bus STARTING
+[27/May/2014:11:07:30] ENGINE Started monitor thread '_TimeoutMonitor'.
+[27/May/2014:11:07:30] ENGINE Serving on 0.0.0.0:8081
+[27/May/2014:11:07:30] ENGINE Bus STARTED
+[27/May/2014:11:07:31] ENGINE Bus STOPPING
+[27/May/2014:11:07:36] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('0.0.0.0', 8081)) shut down
+[27/May/2014:11:07:36] ENGINE Stopped thread '_TimeoutMonitor'.
+[27/May/2014:11:07:36] ENGINE Bus STOPPED
+[27/May/2014:11:07:36] ENGINE Bus EXITING
+[27/May/2014:11:07:36] ENGINE Bus EXITED

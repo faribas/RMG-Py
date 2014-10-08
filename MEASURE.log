@@ -1,0 +1,11 @@
+MEASURE execution initiated at Thu Apr 18 10:00:28 2013
+
+###############################################################
+# Master Equation Automatic Solver for Unimolecular REactions #
+# (MEASURE)                                                   #
+# Release: 0.1.0 (7 July 2010)                                #
+# Author: Joshua W. Allen (jwallen@mit.edu)                   #
+# Website: http://jwallen.github.com/MEASURE                  #
+###############################################################
+
+Reading input file "network1538_2.py"...

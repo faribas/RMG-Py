@@ -1,0 +1,1872 @@
+CanTherm execution initiated at Thu Apr  4 16:31:22 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species C11H3J(22137)...
+Loading species C4(10323)...
+Loading species C7H3J(20683)...
+Loading species C4(10322)...
+Loading species C4JJ(10324)...
+Loading species C7H2JJ(24851)...
+Loading species C4HJ(3161)...
+Loading species C9H2JJ(24852)...
+Loading species C2H(33)...
+Loading species C11H2JJ(24853)...
+Loading species H(5)...
+Loading species C11H2JJ(24854)...
+Loading species C11H3J(24855)...
+Loading species C11H3J(24856)...
+Loading species C11H3J(24857)...
+Loading species C11H3J(24858)...
+Loading species C11H3J(24859)...
+Loading species C11H3J(24860)...
+Loading species C11H3J(24861)...
+Loading species C11H3J(24862)...
+Loading species C11H3J(24863)...
+Loading species C11H3J(24864)...
+Loading species bath_gas...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading transition state TS7...
+Loading transition state TS8...
+Loading transition state TS9...
+Loading transition state TS10...
+Loading transition state TS11...
+Loading transition state TS12...
+Loading transition state TS13...
+Loading transition state TS14...
+Loading transition state TS15...
+Loading transition state TS16...
+Loading transition state TS17...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+Loading reaction reaction5...
+Loading reaction reaction6...
+Loading reaction reaction7...
+Loading reaction reaction8...
+Loading reaction reaction9...
+Loading reaction reaction10...
+Loading reaction reaction11...
+Loading reaction reaction12...
+Loading reaction reaction13...
+Loading reaction reaction14...
+Loading reaction reaction15...
+Loading reaction reaction16...
+Loading reaction reaction17...
+Loading network network...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+network network information
+---------------------------
+Isomers:
+    C11H3J(22137)                                         1179.54 kJ/mol
+Reactant channels:
+    C4(10323) + C7H3J(20683)                               1451.6 kJ/mol
+    C7H3J(20683) + C4(10322)                              1198.07 kJ/mol
+    C7H3J(20683) + C4JJ(10324)                            1538.44 kJ/mol
+    C7H2JJ(24851) + C4HJ(3161)                            1662.53 kJ/mol
+    C9H2JJ(24852) + C2H(33)                               1876.27 kJ/mol
+    C11H2JJ(24853) + H(5)                                 1734.69 kJ/mol
+    H(5) + C11H2JJ(24854)                                 1551.87 kJ/mol
+Product channels:
+    C11H3J(24863)                                         1030.02 kJ/mol
+    C11H3J(24855)                                          1426.2 kJ/mol
+    C11H3J(24856)                                         1095.86 kJ/mol
+    C11H3J(24860)                                         1083.11 kJ/mol
+    C11H3J(24859)                                         1175.98 kJ/mol
+    C11H3J(24864)                                         1432.98 kJ/mol
+    C11H3J(24857)                                         1278.69 kJ/mol
+    C11H3J(24862)                                         1040.77 kJ/mol
+    C11H3J(24861)                                         1236.85 kJ/mol
+    C11H3J(24858)                                         999.438 kJ/mol
+Path reactions:
+    C7H3J(20683) + C4(10322) <=> C11H3J(22137)            1219.78 kJ/mol
+    C7H3J(20683) + C4JJ(10324) <=> C11H3J(22137)          1538.44 kJ/mol
+    C11H3J(22137) <=> C11H3J(24863)                       1308.47 kJ/mol
+    C4(10323) + C7H3J(20683) <=> C11H3J(22137)            1473.31 kJ/mol
+    C11H2JJ(24853) + H(5) <=> C11H3J(22137)               1734.69 kJ/mol
+    H(5) + C11H2JJ(24854) <=> C11H3J(22137)               1555.97 kJ/mol
+    C7H2JJ(24851) + C4HJ(3161) <=> C11H3J(22137)          1662.53 kJ/mol
+    C9H2JJ(24852) + C2H(33) <=> C11H3J(22137)             1876.27 kJ/mol
+    C11H3J(24855) <=> C11H3J(22137)                       1570.53 kJ/mol
+    C11H3J(22137) <=> C11H3J(24856)                       1323.86 kJ/mol
+    C11H3J(22137) <=> C11H3J(24860)                       1293.26 kJ/mol
+    C11H3J(22137) <=> C11H3J(24859)                       1293.26 kJ/mol
+    C11H3J(24864) <=> C11H3J(22137)                       1561.91 kJ/mol
+    C11H3J(24857) <=> C11H3J(22137)                       1423.01 kJ/mol
+    C11H3J(22137) <=> C11H3J(24862)                       1293.26 kJ/mol
+    C11H3J(22137) <=> C11H3J(24861)                       1293.26 kJ/mol
+    C11H3J(22137) <=> C11H3J(24858)                       1293.26 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x102af6e60>...
+Using 403 grains from 999.44 to 2571.16 kJ/mol in steps of 3.91 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x102af6e60>...
+Using 251 grains from 999.44 to 1976.88 kJ/mol in steps of 3.91 kJ/mol to compute the k(T,P) values at 302.51 K
+Error: For path reaction C7H3J(20683) + C4(10322) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 588.656
+Error:       Actual kf(302.51 K) = 375.097
+Error:     Expected Keq(302.51 K) = 6.58735e-07
+Error:       Actual Keq(302.51 K) = 4.84883e-10
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C7H3J(20683) + C4(10322) <=> C11H3J(22137)".
+Error: For path reaction C11H3J(22137) <=> C11H3J(24863):
+Error:     Expected kf(302.51 K) = 3.70241e-12
+Error:       Actual kf(302.51 K) = 8.7102e-12
+Error:     Expected Keq(302.51 K) = 1.6684e+19
+Error:       Actual Keq(302.51 K) = 0
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 502 grains from 999.44 to 1976.88 kJ/mol in steps of 1.95 kJ/mol to compute the k(T,P) values at 302.51 K
+Error: For path reaction C7H3J(20683) + C4(10322) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 588.656
+Error:       Actual kf(302.51 K) = 257.372
+Error:     Expected Keq(302.51 K) = 6.58735e-07
+Error:       Actual Keq(302.51 K) = 4.87622e-10
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1004 grains from 999.44 to 1976.88 kJ/mol in steps of 0.97 kJ/mol to compute the k(T,P) values at 302.51 K
+Error: For path reaction C7H3J(20683) + C4(10322) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 588.656
+Error:       Actual kf(302.51 K) = 393.518
+Error:     Expected Keq(302.51 K) = 6.58735e-07
+Error:       Actual Keq(302.51 K) = 4.88663e-10
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C7H3J(20683) + C4(10322) <=> C11H3J(22137)".
+Error: For path reaction C4(10323) + C7H3J(20683) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 1177.31
+Error:       Actual kf(302.51 K) = 787.037
+Error:     Expected Keq(302.51 K) = 1.89797e+31
+Error:       Actual Keq(302.51 K) = 1.81042e+34
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C4(10323) + C7H3J(20683) <=> C11H3J(22137)".
+CanTherm execution initiated at Thu Apr  4 16:33:04 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species C11H3J(22137)...
+Loading species C4(10323)...
+Loading species C7H3J(20683)...
+Loading species C4(10322)...
+Loading species C4JJ(10324)...
+Loading species C7H2JJ(24851)...
+Loading species C4HJ(3161)...
+Loading species C9H2JJ(24852)...
+Loading species C2H(33)...
+Loading species C11H2JJ(24853)...
+Loading species H(5)...
+Loading species C11H2JJ(24854)...
+Loading species C11H3J(24855)...
+Loading species C11H3J(24856)...
+Loading species C11H3J(24857)...
+Loading species C11H3J(24858)...
+Loading species C11H3J(24859)...
+Loading species C11H3J(24860)...
+Loading species C11H3J(24861)...
+Loading species C11H3J(24862)...
+Loading species C11H3J(24863)...
+Loading species C11H3J(24864)...
+Loading species bath_gas...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading transition state TS7...
+Loading transition state TS8...
+Loading transition state TS9...
+Loading transition state TS10...
+Loading transition state TS11...
+Loading transition state TS12...
+Loading transition state TS13...
+Loading transition state TS14...
+Loading transition state TS15...
+Loading transition state TS16...
+Loading transition state TS17...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+Loading reaction reaction5...
+Loading reaction reaction6...
+Loading reaction reaction7...
+Loading reaction reaction8...
+Loading reaction reaction9...
+Loading reaction reaction10...
+Loading reaction reaction11...
+Loading reaction reaction12...
+Loading reaction reaction13...
+Loading reaction reaction14...
+Loading reaction reaction15...
+Loading reaction reaction16...
+Loading reaction reaction17...
+Loading network network...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+network network information
+---------------------------
+Isomers:
+    C11H3J(22137)                                         1179.54 kJ/mol
+Reactant channels:
+    C4(10323) + C7H3J(20683)                               1451.6 kJ/mol
+    C7H3J(20683) + C4(10322)                              1198.07 kJ/mol
+    C7H3J(20683) + C4JJ(10324)                            1538.44 kJ/mol
+    C7H2JJ(24851) + C4HJ(3161)                            1662.53 kJ/mol
+    C9H2JJ(24852) + C2H(33)                               1876.27 kJ/mol
+    C11H2JJ(24853) + H(5)                                 1734.69 kJ/mol
+    H(5) + C11H2JJ(24854)                                 1551.87 kJ/mol
+Product channels:
+    C11H3J(24863)                                         1030.02 kJ/mol
+    C11H3J(24855)                                          1426.2 kJ/mol
+    C11H3J(24856)                                         1095.86 kJ/mol
+    C11H3J(24860)                                         1083.11 kJ/mol
+    C11H3J(24859)                                         1175.98 kJ/mol
+    C11H3J(24864)                                         1432.98 kJ/mol
+    C11H3J(24857)                                         1278.69 kJ/mol
+    C11H3J(24862)                                         1040.77 kJ/mol
+    C11H3J(24861)                                         1236.85 kJ/mol
+    C11H3J(24858)                                         999.438 kJ/mol
+Path reactions:
+    C7H3J(20683) + C4(10322) <=> C11H3J(22137)            1219.78 kJ/mol
+    C7H3J(20683) + C4JJ(10324) <=> C11H3J(22137)          1538.44 kJ/mol
+    C11H3J(22137) <=> C11H3J(24863)                       1308.47 kJ/mol
+    C4(10323) + C7H3J(20683) <=> C11H3J(22137)            1473.31 kJ/mol
+    C11H2JJ(24853) + H(5) <=> C11H3J(22137)               1734.69 kJ/mol
+    H(5) + C11H2JJ(24854) <=> C11H3J(22137)               1555.97 kJ/mol
+    C7H2JJ(24851) + C4HJ(3161) <=> C11H3J(22137)          1662.53 kJ/mol
+    C9H2JJ(24852) + C2H(33) <=> C11H3J(22137)             1876.27 kJ/mol
+    C11H3J(24855) <=> C11H3J(22137)                       1570.53 kJ/mol
+    C11H3J(22137) <=> C11H3J(24856)                       1323.86 kJ/mol
+    C11H3J(22137) <=> C11H3J(24860)                       1293.26 kJ/mol
+    C11H3J(22137) <=> C11H3J(24859)                       1293.26 kJ/mol
+    C11H3J(24864) <=> C11H3J(22137)                       1561.91 kJ/mol
+    C11H3J(24857) <=> C11H3J(22137)                       1423.01 kJ/mol
+    C11H3J(22137) <=> C11H3J(24862)                       1293.26 kJ/mol
+    C11H3J(22137) <=> C11H3J(24861)                       1293.26 kJ/mol
+    C11H3J(22137) <=> C11H3J(24858)                       1293.26 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x10fa547e8>...
+Using 403 grains from 999.44 to 2571.16 kJ/mol in steps of 3.91 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x10fa547e8>...
+Using 251 grains from 999.44 to 1976.88 kJ/mol in steps of 3.91 kJ/mol to compute the k(T,P) values at 302.51 K
+Error: For path reaction C7H3J(20683) + C4(10322) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 588.656
+Error:       Actual kf(302.51 K) = 375.097
+Error:     Expected Keq(302.51 K) = 6.58735e-07
+Error:       Actual Keq(302.51 K) = 4.84883e-10
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C7H3J(20683) + C4(10322) <=> C11H3J(22137)".
+Error: For path reaction C11H3J(22137) <=> C11H3J(24863):
+Error:     Expected kf(302.51 K) = 3.70241e-12
+Error:       Actual kf(302.51 K) = 8.7102e-12
+Error:     Expected Keq(302.51 K) = 1.6684e+19
+Error:       Actual Keq(302.51 K) = 0
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 502 grains from 999.44 to 1976.88 kJ/mol in steps of 1.95 kJ/mol to compute the k(T,P) values at 302.51 K
+Error: For path reaction C7H3J(20683) + C4(10322) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 588.656
+Error:       Actual kf(302.51 K) = 257.372
+Error:     Expected Keq(302.51 K) = 6.58735e-07
+Error:       Actual Keq(302.51 K) = 4.87622e-10
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1004 grains from 999.44 to 1976.88 kJ/mol in steps of 0.97 kJ/mol to compute the k(T,P) values at 302.51 K
+Error: For path reaction C7H3J(20683) + C4(10322) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 588.656
+Error:       Actual kf(302.51 K) = 393.518
+Error:     Expected Keq(302.51 K) = 6.58735e-07
+Error:       Actual Keq(302.51 K) = 4.88663e-10
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C7H3J(20683) + C4(10322) <=> C11H3J(22137)".
+Error: For path reaction C4(10323) + C7H3J(20683) <=> C11H3J(22137):
+Error:     Expected kf(302.51 K) = 1177.31
+Error:       Actual kf(302.51 K) = 787.037
+Error:     Expected Keq(302.51 K) = 1.89797e+31
+Error:       Actual Keq(302.51 K) = 1.81042e+34
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C4(10323) + C7H3J(20683) <=> C11H3J(22137)".
+CanTherm execution initiated at Thu Apr 18 09:46:40 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species H2CCCH(54)...
+Loading species CC#[C](687)...
+Loading species H(11)...
+Loading species C3H2(38)...
+Loading species [CH2]C#[C](685)...
+Loading species C1C=[C]1(686)...
+Loading species C2(69)...
+Loading species CH3(22)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+CanTherm execution initiated at Thu Apr 18 09:50:52 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Error: The input file 'network1798_2.py' was invalid:
+CanTherm execution initiated at Thu Apr 18 09:51:41 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species H2CCCH(54)...
+Loading species CC#[C](687)...
+Loading species H(11)...
+Loading species C3H2(38)...
+Loading species [CH2]C#[C](685)...
+Loading species C1C=[C]1(686)...
+Loading species C2(69)...
+Loading species CH3(22)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+Loading reaction reaction5...
+Loading reaction reaction6...
+Loading network 1798...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+1798 network information
+------------------------
+Isomers:
+    H2CCCH(54)                                            338.572 kJ/mol
+    CC#[C](687)                                           509.217 kJ/mol
+Reactant channels:
+    H(11) + C3H2(38)                                      742.202 kJ/mol
+    H(11) + [CH2]C#[C](685)                               795.479 kJ/mol
+Product channels:
+    C1C=[C]1(686)                                          502.87 kJ/mol
+    C2(69) + CH3(22)                                      962.173 kJ/mol
+Path reactions:
+    H(11) + [CH2]C#[C](685) <=> H2CCCH(54)                795.478 kJ/mol
+    H2CCCH(54) <=> C1C=[C]1(686)                          564.508 kJ/mol
+    H2CCCH(54) <=> H(11) + C3H2(38)                       666.794 kJ/mol
+    C2(69) + CH3(22) <=> CC#[C](687)                      962.173 kJ/mol
+    CC#[C](687) <=> H2CCCH(54)                            629.437 kJ/mol
+    H(11) + [CH2]C#[C](685) <=> CC#[C](687)               795.478 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x103b9c248>...
+Using 465 grains from 338.57 to 2019.48 kJ/mol in steps of 3.62 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x103b9c248>...
+Using 200 grains from 338.57 to 1059.48 kJ/mol in steps of 3.62 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 1.8606e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.3422e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 338.57 to 1059.48 kJ/mol in steps of 1.81 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> C1C=[C]1(686):
+Error:     Expected kf(292.578 K) = 4.21595e-30
+Error:       Actual kf(292.578 K) = 3.30921e-30
+Error:     Expected Keq(292.578 K) = 1.55484e-29
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH(54) <=> C1C=[C]1(686)".
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.10047e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.39809e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.90 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.21485e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.43256e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.45 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.27003e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.45156e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 3200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.23 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.29702e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46153e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 6400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.11 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.39769e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46885e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 12800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.06 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.3604e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47034e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 25600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.03 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38579e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47219e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 51200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38749e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47284e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 102400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38281e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47303e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 204800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+CanTherm execution initiated at Thu Apr 18 09:53:33 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species H2CCCH(54)...
+Loading species CC#[C](687)...
+Loading species H(11)...
+Loading species C3H2(38)...
+Loading species [CH2]C#[C](685)...
+Loading species C1C=[C]1(686)...
+Loading species C2(69)...
+Loading species CH3(22)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+Loading reaction reaction5...
+Loading reaction reaction6...
+Loading network 1798...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+1798 network information
+------------------------
+Isomers:
+    H2CCCH(54)                                            338.572 kJ/mol
+    CC#[C](687)                                           509.217 kJ/mol
+Reactant channels:
+    H(11) + C3H2(38)                                      742.202 kJ/mol
+    H(11) + [CH2]C#[C](685)                               795.479 kJ/mol
+Product channels:
+    C1C=[C]1(686)                                          502.87 kJ/mol
+    C2(69) + CH3(22)                                      962.173 kJ/mol
+Path reactions:
+    H(11) + [CH2]C#[C](685) <=> H2CCCH(54)                795.478 kJ/mol
+    H2CCCH(54) <=> C1C=[C]1(686)                          564.508 kJ/mol
+    H2CCCH(54) <=> H(11) + C3H2(38)                       666.794 kJ/mol
+    C2(69) + CH3(22) <=> CC#[C](687)                      962.173 kJ/mol
+    CC#[C](687) <=> H2CCCH(54)                            629.437 kJ/mol
+    H(11) + [CH2]C#[C](685) <=> CC#[C](687)               795.478 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x10ceb0248>...
+Using 465 grains from 338.57 to 2019.48 kJ/mol in steps of 3.62 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x10ceb0248>...
+Using 200 grains from 338.57 to 1059.48 kJ/mol in steps of 3.62 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 1.8606e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.3422e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 338.57 to 1059.48 kJ/mol in steps of 1.81 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> C1C=[C]1(686):
+Error:     Expected kf(292.578 K) = 4.21595e-30
+Error:       Actual kf(292.578 K) = 3.30921e-30
+Error:     Expected Keq(292.578 K) = 1.55484e-29
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH(54) <=> C1C=[C]1(686)".
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.10047e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.39809e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.90 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.21485e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.43256e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.45 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.27003e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.45156e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 3200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.23 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.29702e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46153e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 6400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.11 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.39769e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46885e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 12800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.06 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.3604e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47034e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 25600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.03 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38579e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47219e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 51200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38749e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47284e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 102400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38281e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47303e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 204800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38323e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47319e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 409600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38344e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47327e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 819200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+CanTherm execution initiated at Thu Apr 18 10:01:06 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species C(C(=C)[CH2])C=C(684)...
+Loading species C1C[CH]CC1=C(1218)...
+Loading species H2CCCH2(37)...
+Loading species CH2CHCH2(40)...
+Loading species C1(CC(=C)C1)[CH2](1213)...
+Loading species H(11)...
+Loading species C(=C)([CH]C=C)[CH2](1214)...
+Loading species C(C(=[CH])[CH2])C=C(816)...
+Loading species C(C(=C)[CH2])C=[CH](1216)...
+Loading species C(C(=C)[CH2])[C]=C(1215)...
+Loading species C=[C][CH2](534)...
+Loading species C2H3(47)...
+Loading species C(=C)([CH2])[CH2](649)...
+Loading species C1C[C]1CC=C(1217)...
+Loading species C(C(=[CH])C)C=C(877)...
+Loading species C(=C)[CH]C(=C)C(1219)...
+Loading species C=C(C)C[C]=C(1220)...
+Loading species C(C=[CH])C(=C)C(1221)...
+Loading species C(C(=C)[CH2])[CH][CH2](1222)...
+Loading species C12(C(C1)CC2)[CH2](1837)...
+Loading species C1C(=C)CC=C1(1838)...
+Loading species C1CC=CC1=C(1839)...
+Loading species C1C(=C)[CH]C[CH]1(1840)...
+Loading species C1C(=C)C[CH][CH]1(1841)...
+Loading species C1C[CH][CH]C1=C(1842)...
+Loading species C1C[CH]CC1=[CH](1843)...
+Loading species C12CC[C](C1)C2(1844)...
+Loading species C(C[C]=C)C=C(683)...
+Loading species C1CC(=C)[CH]C1(1845)...
+Loading species C1CC(=[CH])CC1(1846)...
+Loading species C1C[CH]C[C]1[CH2](1847)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading transition state TS7...
+Loading transition state TS8...
+Loading transition state TS9...
+Loading transition state TS10...
+Loading transition state TS11...
+Loading transition state TS12...
+Loading transition state TS13...
+Loading transition state TS14...
+Loading transition state TS15...
+Loading transition state TS16...
+Loading transition state TS17...
+Loading transition state TS18...
+Loading transition state TS19...
+Loading transition state TS20...
+Loading transition state TS21...
+Loading transition state TS22...
+Loading transition state TS23...
+Loading transition state TS24...
+Loading transition state TS25...
+Loading transition state TS26...
+Loading transition state TS27...
+Loading reaction reaction2...
+Loading reaction reaction1...
+Loading reaction reaction4...
+Loading reaction reaction3...
+Loading reaction reaction6...
+Loading reaction reaction5...
+Loading reaction reaction7...
+Loading reaction reaction8...
+Loading reaction reaction9...
+Loading reaction reaction10...
+Loading reaction reaction11...
+Loading reaction reaction12...
+Loading reaction reaction13...
+Loading reaction reaction14...
+Loading reaction reaction15...
+Loading reaction reaction16...
+Loading reaction reaction17...
+Loading reaction reaction18...
+Loading reaction reaction19...
+Loading reaction reaction20...
+Loading reaction reaction21...
+Loading reaction reaction22...
+Loading reaction reaction23...
+Loading reaction reaction24...
+Loading reaction reaction25...
+Loading reaction reaction26...
+Loading reaction reaction27...
+Loading network 1538...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+1538 network information
+------------------------
+Isomers:
+    C(C(=C)[CH2])C=C(684)                                 201.194 kJ/mol
+    C1C[CH]CC1=C(1218)                                    184.069 kJ/mol
+Reactant channels:
+    H2CCCH2(37) + CH2CHCH2(40)                            332.861 kJ/mol
+Product channels:
+    C1C[CH][CH]C1=C(1842) + H(11)                         476.553 kJ/mol
+    C1C(=C)C[CH][CH]1(1841) + H(11)                       581.755 kJ/mol
+    C12CC[C](C1)C2(1844)                                  233.759 kJ/mol
+    C1C[CH]CC1=[CH](1843) + H(11)                          642.97 kJ/mol
+    C1CC(=C)[CH]C1(1845)                                  137.443 kJ/mol
+    C(C[C]=C)C=C(683)                                     301.542 kJ/mol
+    C1C[CH]C[C]1[CH2](1847)                               458.585 kJ/mol
+    C1CC(=[CH])CC1(1846)                                  245.284 kJ/mol
+    C1(CC(=C)C1)[CH2](1213)                               272.614 kJ/mol
+    H(11) + C(C(=[CH])[CH2])C=C(816)                      632.184 kJ/mol
+    C(C(=C)[CH2])C=[CH](1216) + H(11)                     660.095 kJ/mol
+    C=[C][CH2](534) + CH2CHCH2(40)                        552.392 kJ/mol
+    H(11) + C(=C)([CH]C=C)[CH2](1214)                     466.757 kJ/mol
+    C(C(=C)[CH2])[C]=C(1215) + H(11)                      650.841 kJ/mol
+    C2H3(47) + C(=C)([CH2])[CH2](649)                     557.027 kJ/mol
+    C1C[C]1CC=C(1217)                                     274.895 kJ/mol
+    C(C=[CH])C(=C)C(1221)                                 296.791 kJ/mol
+    C(C(=C)[CH2])[CH][CH2](1222)                          471.835 kJ/mol
+    C12(C(C1)CC2)[CH2](1837)                              306.981 kJ/mol
+    C1C(=C)CC=C1(1838) + H(11)                            329.204 kJ/mol
+    C(C(=[CH])C)C=C(877)                                  296.791 kJ/mol
+    C(=C)[CH]C(=C)C(1219)                                 136.896 kJ/mol
+    C=C(C)C[C]=C(1220)                                    287.537 kJ/mol
+    C1CC=CC1=C(1839) + H(11)                              310.791 kJ/mol
+    C1C(=C)[CH]C[CH]1(1840) + H(11)                       536.249 kJ/mol
+Path reactions:
+    C1C[CH][CH]C1=C(1842) + H(11) <=> C1C[CH]CC1=C(1218)      476.553 kJ/mol
+    C1C(=C)C[CH][CH]1(1841) + H(11) <=> C1C[CH]CC1=C(1218)      581.755 kJ/mol
+    C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)           313.008 kJ/mol
+    C1C[CH]CC1=[CH](1843) + H(11) <=> C1C[CH]CC1=C(1218)       642.97 kJ/mol
+    C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)           350.927 kJ/mol
+    C(C[C]=C)C=C(683) <=> C1C[CH]CC1=C(1218)              430.481 kJ/mol
+    C1C[CH]C[C]1[CH2](1847) <=> C1C[CH]CC1=C(1218)        458.585 kJ/mol
+    C1CC(=[CH])CC1(1846) <=> C1C[CH]CC1=C(1218)           365.504 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C1(CC(=C)C1)[CH2](1213)      397.214 kJ/mol
+    H(11) + C(C(=[CH])[CH2])C=C(816) <=> C(C(=C)[CH2])C=C(684)      632.184 kJ/mol
+    H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)      361.434 kJ/mol
+    C(C(=C)[CH2])C=[CH](1216) + H(11) <=> C(C(=C)[CH2])C=C(684)      660.095 kJ/mol
+    C=[C][CH2](534) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)      552.392 kJ/mol
+    H(11) + C(=C)([CH]C=C)[CH2](1214) <=> C(C(=C)[CH2])C=C(684)      466.757 kJ/mol
+    C(C(=C)[CH2])[C]=C(1215) + H(11) <=> C(C(=C)[CH2])C=C(684)       650.84 kJ/mol
+    C2H3(47) + C(=C)([CH2])[CH2](649) <=> C(C(=C)[CH2])C=C(684)      557.027 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C1C[C]1CC=C(1217)            427.13 kJ/mol
+    C(C=[CH])C(=C)C(1221) <=> C(C(=C)[CH2])C=C(684)       329.831 kJ/mol
+    C(C(=C)[CH2])[CH][CH2](1222) <=> C(C(=C)[CH2])C=C(684)      471.835 kJ/mol
+    C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837)       310.292 kJ/mol
+    C1C(=C)CC=C1(1838) + H(11) <=> C1C[CH]CC1=C(1218)      341.338 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C1C[CH]CC1=C(1218)          267.385 kJ/mol
+    C(C(=[CH])C)C=C(877) <=> C(C(=C)[CH2])C=C(684)        454.528 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C(=C)[CH]C(=C)C(1219)       324.204 kJ/mol
+    C=C(C)C[C]=C(1220) <=> C(C(=C)[CH2])C=C(684)          391.142 kJ/mol
+    C1CC=CC1=C(1839) + H(11) <=> C1C[CH]CC1=C(1218)       328.781 kJ/mol
+    C1C(=C)[CH]C[CH]1(1840) + H(11) <=> C1C[CH]CC1=C(1218)      536.249 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x109271488>...
+Using 507 grains from 136.90 to 1714.66 kJ/mol in steps of 3.12 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x109271488>...
+Using 200 grains from 136.90 to 757.40 kJ/mol in steps of 3.12 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(292.578 K) = 1.26112e-12
+Error:       Actual kf(292.578 K) = 8.99295e-13
+Error:     Expected Keq(292.578 K) = 8.21285e-18
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(292.578 K) = 1.59572e-17
+Error:       Actual kf(292.578 K) = 1.14514e-17
+Error:     Expected Keq(292.578 K) = 9.68163e+06
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(292.578 K) = 0.935383
+Error:       Actual kf(292.578 K) = 0.475597
+Error:     Expected Keq(292.578 K) = 2.34049e+15
+Error:       Actual Keq(292.578 K) = 3.18113e+15
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837):
+Error:     Expected kf(292.578 K) = 5.84259e-13
+Error:       Actual kf(292.578 K) = 3.68812e-13
+Error:     Expected Keq(292.578 K) = 1.27118e-24
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837)".
+Error: For path reaction C(C(=C)[CH2])C=C(684) <=> C1C[CH]CC1=C(1218):
+Error:     Expected kf(292.578 K) = 0.072267
+Error:       Actual kf(292.578 K) = 0.0496154
+Error:     Expected Keq(292.578 K) = 1820.82
+Error:       Actual Keq(292.578 K) = 642.667
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C(C(=C)[CH2])C=C(684) <=> C1C[CH]CC1=C(1218)".
+Using 200 grains from 136.90 to 764.62 kJ/mol in steps of 3.15 kJ/mol to compute the k(T,P) values at 314.289 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(314.289 K) = 5.23332e-11
+Error:       Actual kf(314.289 K) = 8.23029e-11
+Error:     Expected Keq(314.289 K) = 3.61692e-17
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(314.289 K) = 1.90811e-15
+Error:       Actual kf(314.289 K) = 3.58656e-15
+Error:     Expected Keq(314.289 K) = 2.57863e+06
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(314.289 K) = 2.23445
+Error:       Actual kf(314.289 K) = 1.02254
+Error:     Expected Keq(314.289 K) = 5.22632e+13
+Error:       Actual Keq(314.289 K) = 7.66995e+13
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 136.90 to 764.62 kJ/mol in steps of 1.57 kJ/mol to compute the k(T,P) values at 314.289 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(314.289 K) = 5.23332e-11
+Error:       Actual kf(314.289 K) = 7.63054e-11
+Error:     Expected Keq(314.289 K) = 3.61692e-17
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(314.289 K) = 1.90811e-15
+Error:       Actual kf(314.289 K) = 1.03575e-15
+Error:     Expected Keq(314.289 K) = 2.57863e+06
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(314.289 K) = 2.23445
+Error:       Actual kf(314.289 K) = 1.60561
+Error:     Expected Keq(314.289 K) = 5.22632e+13
+Error:       Actual Keq(314.289 K) = 8.35376e+13
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837):
+Error:     Expected kf(314.289 K) = 2.10512e-11
+Error:       Actual kf(314.289 K) = 6.52533e-12
+Error:     Expected Keq(314.289 K) = 4.59599e-23
+Error:       Actual Keq(314.289 K) = 0
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 800 grains from 136.90 to 764.62 kJ/mol in steps of 0.79 kJ/mol to compute the k(T,P) values at 314.289 K
+Using 200 grains from 136.90 to 781.23 kJ/mol in steps of 3.24 kJ/mol to compute the k(T,P) values at 364.231 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(364.231 K) = 5.18141e-08
+Error:       Actual kf(364.231 K) = 7.20207e-08
+Error:     Expected Keq(364.231 K) = 5.74883e-16
+Error:       Actual Keq(364.231 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(364.231 K) = 1.33001e-11
+Error:       Actual kf(364.231 K) = 1.04105e-11
+Error:     Expected Keq(364.231 K) = 225758
+Error:       Actual Keq(364.231 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(364.231 K) = 11.3097
+Error:       Actual kf(364.231 K) = 16.0278
+Error:     Expected Keq(364.231 K) = 4.72335e+10
+Error:       Actual Keq(364.231 K) = 9.09271e+10
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C(C(=C)[CH2])C=C(684) <=> C(=C)[CH]C(=C)C(1219):
+Error:     Expected kf(364.231 K) = 4.98955e-07
+Error:       Actual kf(364.231 K) = 6.50438e-07
+Error:     Expected Keq(364.231 K) = 2.58845e+08
+Error:       Actual Keq(364.231 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C(C(=C)[CH2])C=C(684) <=> C(=C)[CH]C(=C)C(1219)".
+Using 200 grains from 136.90 to 812.97 kJ/mol in steps of 3.40 kJ/mol to compute the k(T,P) values at 459.667 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(459.667 K) = 0.000440628
+Error:       Actual kf(459.667 K) = 0.000724533
+Error:     Expected Keq(459.667 K) = 2.29113e-14
+Error:       Actual Keq(459.667 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(459.667 K) = 1.43356e-06
+Error:       Actual kf(459.667 K) = 6.68305e-07
+Error:     Expected Keq(459.667 K) = 9682.51
+Error:       Actual Keq(459.667 K) = 0
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 136.90 to 812.97 kJ/mol in steps of 1.69 kJ/mol to compute the k(T,P) values at 459.667 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(459.667 K) = 0.000440628
+Error:       Actual kf(459.667 K) = 0.000345437
+Error:     Expected Keq(459.667 K) = 2.29113e-14
+Error:       Actual Keq(459.667 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(459.667 K) = 97.2897
+Error:       Actual kf(459.667 K) = 121.991
+Error:     Expected Keq(459.667 K) = 5.24459e+06
+Error:       Actual Keq(459.667 K) = 1.35946e+07
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837):
+Error:     Expected kf(459.667 K) = 9.07551e-05
+Error:       Actual kf(459.667 K) = 6.06953e-05
+Error:     Expected Keq(459.667 K) = 2.53301e-16
+Error:       Actual Keq(459.667 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837)".
+Using 200 grains from 136.90 to 873.49 kJ/mol in steps of 3.70 kJ/mol to compute the k(T,P) values at 641.642 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(641.642 K) = 8.49623
+Error:       Actual kf(641.642 K) = 10.9176
+Error:     Expected Keq(641.642 K) = 1.42721e-12
+Error:       Actual Keq(641.642 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(641.642 K) = 0.422892
+Error:       Actual kf(641.642 K) = 0.217915
+Error:     Expected Keq(641.642 K) = 352.895
+Error:       Actual Keq(641.642 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction C(C(=C)[CH2])C=C(684) <=> C1C[C]1CC=C(1217):
+Error:     Expected kf(641.642 K) = 9.43882e-08
+Error:       Actual kf(641.642 K) = 7.51318e-08
+Error:     Expected Keq(641.642 K) = 2.90491e-06
+Error:       Actual Keq(641.642 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C(C(=C)[CH2])C=C(684) <=> C1C[C]1CC=C(1217)".
+Using 207 grains from 136.90 to 998.80 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 1011.65 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(1011.65 K) = 52531.7
+Error:       Actual kf(1011.65 K) = 75620.6
+Error:     Expected Keq(1011.65 K) = 20.2347
+Error:       Actual Keq(1011.65 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Using 270 grains from 136.90 to 1262.39 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 1810.91 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(1810.91 K) = 4.83224e+08
+Error:       Actual kf(1810.91 K) = 6.30382e+08
+Error:     Expected Keq(1810.91 K) = 2.7866
+Error:       Actual Keq(1810.91 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Using 378 grains from 136.90 to 1714.26 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 3163.57 K
+Saving pressure dependence results for <rmgpy.pdep.network.Network instance at 0x109271488>...
+
+CanTherm execution terminated at Thu Apr 18 10:01:10 2013
+CanTherm execution initiated at Thu Apr 18 10:12:39 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species H2CCCH(54)...
+Loading species CC#[C](687)...
+Loading species H(11)...
+Loading species C3H2(38)...
+Loading species [CH2]C#[C](685)...
+Loading species C1C=[C]1(686)...
+Loading species C2(69)...
+Loading species CH3(22)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+Loading reaction reaction5...
+Loading reaction reaction6...
+Loading network 1798...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+1798 network information
+------------------------
+Isomers:
+    H2CCCH(54)                                            338.572 kJ/mol
+    CC#[C](687)                                           509.217 kJ/mol
+Reactant channels:
+    H(11) + C3H2(38)                                      742.202 kJ/mol
+    H(11) + [CH2]C#[C](685)                               795.479 kJ/mol
+Product channels:
+    C1C=[C]1(686)                                          502.87 kJ/mol
+    C2(69) + CH3(22)                                      962.173 kJ/mol
+Path reactions:
+    H(11) + [CH2]C#[C](685) <=> H2CCCH(54)                795.478 kJ/mol
+    H2CCCH(54) <=> C1C=[C]1(686)                          564.508 kJ/mol
+    H2CCCH(54) <=> H(11) + C3H2(38)                       666.794 kJ/mol
+    C2(69) + CH3(22) <=> CC#[C](687)                      962.173 kJ/mol
+    CC#[C](687) <=> H2CCCH(54)                            629.437 kJ/mol
+    H(11) + [CH2]C#[C](685) <=> CC#[C](687)               795.478 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x11201c248>...
+Using 465 grains from 338.57 to 2019.48 kJ/mol in steps of 3.62 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x11201c248>...
+Using 200 grains from 338.57 to 1059.48 kJ/mol in steps of 3.62 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 1.8606e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.3422e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 338.57 to 1059.48 kJ/mol in steps of 1.81 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> C1C=[C]1(686):
+Error:     Expected kf(292.578 K) = 4.21595e-30
+Error:       Actual kf(292.578 K) = 3.30921e-30
+Error:     Expected Keq(292.578 K) = 1.55484e-29
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH(54) <=> C1C=[C]1(686)".
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.10047e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.39809e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.90 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.21485e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.43256e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.45 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.27003e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.45156e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 3200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.23 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.29702e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46153e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 6400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.11 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.39769e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46885e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 12800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.06 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.3604e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47034e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 25600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.03 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38579e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47219e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 51200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38749e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47284e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 102400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+CanTherm execution initiated at Thu Apr 18 10:15:39 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species H2CCCH(54)...
+Loading species CC#[C](687)...
+Loading species H(11)...
+Loading species C3H2(38)...
+Loading species [CH2]C#[C](685)...
+Loading species C1C=[C]1(686)...
+Loading species C2(69)...
+Loading species CH3(22)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading reaction reaction1...
+Loading reaction reaction2...
+Loading reaction reaction3...
+Loading reaction reaction4...
+Loading reaction reaction5...
+Loading reaction reaction6...
+Loading network 1798...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+1798 network information
+------------------------
+Isomers:
+    H2CCCH(54)                                            338.572 kJ/mol
+    CC#[C](687)                                           509.217 kJ/mol
+Reactant channels:
+    H(11) + C3H2(38)                                      742.202 kJ/mol
+    H(11) + [CH2]C#[C](685)                               795.479 kJ/mol
+Product channels:
+    C1C=[C]1(686)                                          502.87 kJ/mol
+    C2(69) + CH3(22)                                      962.173 kJ/mol
+Path reactions:
+    H(11) + [CH2]C#[C](685) <=> H2CCCH(54)                795.478 kJ/mol
+    H2CCCH(54) <=> C1C=[C]1(686)                          564.508 kJ/mol
+    H2CCCH(54) <=> H(11) + C3H2(38)                       666.794 kJ/mol
+    C2(69) + CH3(22) <=> CC#[C](687)                      962.173 kJ/mol
+    CC#[C](687) <=> H2CCCH(54)                            629.437 kJ/mol
+    H(11) + [CH2]C#[C](685) <=> CC#[C](687)               795.478 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x108b905a8>...
+Using 465 grains from 338.57 to 2019.48 kJ/mol in steps of 3.62 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x108b905a8>...
+Using 200 grains from 338.57 to 1059.48 kJ/mol in steps of 3.62 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 1.8606e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.3422e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 338.57 to 1059.48 kJ/mol in steps of 1.81 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> C1C=[C]1(686):
+Error:     Expected kf(292.578 K) = 4.21595e-30
+Error:       Actual kf(292.578 K) = 3.30921e-30
+Error:     Expected Keq(292.578 K) = 1.55484e-29
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH(54) <=> C1C=[C]1(686)".
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.10047e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.39809e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.90 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.21485e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.43256e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.45 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.27003e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.45156e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 3200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.23 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.29702e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46153e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 6400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.11 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.39769e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.46885e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 12800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.06 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.3604e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47034e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 25600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.03 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38579e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47219e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 51200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38749e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47284e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 102400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.01 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38281e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47303e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 204800 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38323e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47319e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 409600 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38344e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47327e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 819200 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction H2CCCH(54) <=> H(11) + C3H2(38):
+Error:     Expected kf(292.578 K) = 1.31499e-46
+Error:       Actual kf(292.578 K) = 2.38355e-55
+Error:     Expected Keq(292.578 K) = 5.89882e-66
+Error:       Actual Keq(292.578 K) = 1.47332e-65
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 1638400 grains from 338.57 to 1059.48 kJ/mol in steps of 0.00 kJ/mol to compute the k(T,P) values at 292.578 K
+CanTherm execution initiated at Sat Apr 20 17:09:29 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species C(C(=C)[CH2])C=C(684)...
+Loading species C1C[CH]CC1=C(1218)...
+Loading species H2CCCH2(37)...
+Loading species CH2CHCH2(40)...
+Loading species C1(CC(=C)C1)[CH2](1213)...
+Loading species H(11)...
+Loading species C(=C)([CH]C=C)[CH2](1214)...
+Loading species C(C(=[CH])[CH2])C=C(816)...
+Loading species C(C(=C)[CH2])C=[CH](1216)...
+Loading species C(C(=C)[CH2])[C]=C(1215)...
+Loading species C=[C][CH2](534)...
+Loading species C2H3(47)...
+Loading species C(=C)([CH2])[CH2](649)...
+Loading species C1C[C]1CC=C(1217)...
+Loading species C(C(=[CH])C)C=C(877)...
+Loading species C(=C)[CH]C(=C)C(1219)...
+Loading species C=C(C)C[C]=C(1220)...
+Loading species C(C=[CH])C(=C)C(1221)...
+Loading species C(C(=C)[CH2])[CH][CH2](1222)...
+Loading species C12(C(C1)CC2)[CH2](1837)...
+Loading species C1C(=C)CC=C1(1838)...
+Loading species C1CC=CC1=C(1839)...
+Loading species C1C(=C)[CH]C[CH]1(1840)...
+Loading species C1C(=C)C[CH][CH]1(1841)...
+Loading species C1C[CH][CH]C1=C(1842)...
+Loading species C1C[CH]CC1=[CH](1843)...
+Loading species C12CC[C](C1)C2(1844)...
+Loading species C(C[C]=C)C=C(683)...
+Loading species C1CC(=C)[CH]C1(1845)...
+Loading species C1CC(=[CH])CC1(1846)...
+Loading species C1C[CH]C[C]1[CH2](1847)...
+Loading species N2(5)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading transition state TS7...
+Loading transition state TS8...
+Loading transition state TS9...
+Loading transition state TS10...
+Loading transition state TS11...
+Loading transition state TS12...
+Loading transition state TS13...
+Loading transition state TS14...
+Loading transition state TS15...
+Loading transition state TS16...
+Loading transition state TS17...
+Loading transition state TS18...
+Loading transition state TS19...
+Loading transition state TS20...
+Loading transition state TS21...
+Loading transition state TS22...
+Loading transition state TS23...
+Loading transition state TS24...
+Loading transition state TS25...
+Loading transition state TS26...
+Loading transition state TS27...
+Loading reaction reaction2...
+Loading reaction reaction1...
+Loading reaction reaction4...
+Loading reaction reaction3...
+Loading reaction reaction6...
+Loading reaction reaction5...
+Loading reaction reaction7...
+Loading reaction reaction8...
+Loading reaction reaction9...
+Loading reaction reaction10...
+Loading reaction reaction11...
+Loading reaction reaction12...
+Loading reaction reaction13...
+Loading reaction reaction14...
+Loading reaction reaction15...
+Loading reaction reaction16...
+Loading reaction reaction17...
+Loading reaction reaction18...
+Loading reaction reaction19...
+Loading reaction reaction20...
+Loading reaction reaction21...
+Loading reaction reaction22...
+Loading reaction reaction23...
+Loading reaction reaction24...
+Loading reaction reaction25...
+Loading reaction reaction26...
+Loading reaction reaction27...
+Loading network 1538...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+1538 network information
+------------------------
+Isomers:
+    C(C(=C)[CH2])C=C(684)                                 201.194 kJ/mol
+    C1C[CH]CC1=C(1218)                                    184.069 kJ/mol
+Reactant channels:
+    H2CCCH2(37) + CH2CHCH2(40)                            332.861 kJ/mol
+Product channels:
+    C1C[CH][CH]C1=C(1842) + H(11)                         476.553 kJ/mol
+    C1C(=C)C[CH][CH]1(1841) + H(11)                       581.755 kJ/mol
+    C12CC[C](C1)C2(1844)                                  233.759 kJ/mol
+    C1C[CH]CC1=[CH](1843) + H(11)                          642.97 kJ/mol
+    C1CC(=C)[CH]C1(1845)                                  137.443 kJ/mol
+    C(C[C]=C)C=C(683)                                     301.542 kJ/mol
+    C1C[CH]C[C]1[CH2](1847)                               458.585 kJ/mol
+    C1CC(=[CH])CC1(1846)                                  245.284 kJ/mol
+    C1(CC(=C)C1)[CH2](1213)                               272.614 kJ/mol
+    H(11) + C(C(=[CH])[CH2])C=C(816)                      632.184 kJ/mol
+    C(C(=C)[CH2])C=[CH](1216) + H(11)                     660.095 kJ/mol
+    C=[C][CH2](534) + CH2CHCH2(40)                        552.392 kJ/mol
+    H(11) + C(=C)([CH]C=C)[CH2](1214)                     466.757 kJ/mol
+    C(C(=C)[CH2])[C]=C(1215) + H(11)                      650.841 kJ/mol
+    C2H3(47) + C(=C)([CH2])[CH2](649)                     557.027 kJ/mol
+    C1C[C]1CC=C(1217)                                     274.895 kJ/mol
+    C(C=[CH])C(=C)C(1221)                                 296.791 kJ/mol
+    C(C(=C)[CH2])[CH][CH2](1222)                          471.835 kJ/mol
+    C12(C(C1)CC2)[CH2](1837)                              306.981 kJ/mol
+    C1C(=C)CC=C1(1838) + H(11)                            329.204 kJ/mol
+    C(C(=[CH])C)C=C(877)                                  296.791 kJ/mol
+    C(=C)[CH]C(=C)C(1219)                                 136.896 kJ/mol
+    C=C(C)C[C]=C(1220)                                    287.537 kJ/mol
+    C1CC=CC1=C(1839) + H(11)                              310.791 kJ/mol
+    C1C(=C)[CH]C[CH]1(1840) + H(11)                       536.249 kJ/mol
+Path reactions:
+    C1C[CH][CH]C1=C(1842) + H(11) <=> C1C[CH]CC1=C(1218)      476.553 kJ/mol
+    C1C(=C)C[CH][CH]1(1841) + H(11) <=> C1C[CH]CC1=C(1218)      581.755 kJ/mol
+    C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)           313.008 kJ/mol
+    C1C[CH]CC1=[CH](1843) + H(11) <=> C1C[CH]CC1=C(1218)       642.97 kJ/mol
+    C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)           350.927 kJ/mol
+    C(C[C]=C)C=C(683) <=> C1C[CH]CC1=C(1218)              430.481 kJ/mol
+    C1C[CH]C[C]1[CH2](1847) <=> C1C[CH]CC1=C(1218)        458.585 kJ/mol
+    C1CC(=[CH])CC1(1846) <=> C1C[CH]CC1=C(1218)           365.504 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C1(CC(=C)C1)[CH2](1213)      397.214 kJ/mol
+    H(11) + C(C(=[CH])[CH2])C=C(816) <=> C(C(=C)[CH2])C=C(684)      632.184 kJ/mol
+    H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)      361.434 kJ/mol
+    C(C(=C)[CH2])C=[CH](1216) + H(11) <=> C(C(=C)[CH2])C=C(684)      660.095 kJ/mol
+    C=[C][CH2](534) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)      552.392 kJ/mol
+    H(11) + C(=C)([CH]C=C)[CH2](1214) <=> C(C(=C)[CH2])C=C(684)      466.757 kJ/mol
+    C(C(=C)[CH2])[C]=C(1215) + H(11) <=> C(C(=C)[CH2])C=C(684)       650.84 kJ/mol
+    C2H3(47) + C(=C)([CH2])[CH2](649) <=> C(C(=C)[CH2])C=C(684)      557.027 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C1C[C]1CC=C(1217)            427.13 kJ/mol
+    C(C=[CH])C(=C)C(1221) <=> C(C(=C)[CH2])C=C(684)       329.831 kJ/mol
+    C(C(=C)[CH2])[CH][CH2](1222) <=> C(C(=C)[CH2])C=C(684)      471.835 kJ/mol
+    C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837)       310.292 kJ/mol
+    C1C(=C)CC=C1(1838) + H(11) <=> C1C[CH]CC1=C(1218)      341.338 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C1C[CH]CC1=C(1218)          267.385 kJ/mol
+    C(C(=[CH])C)C=C(877) <=> C(C(=C)[CH2])C=C(684)        454.528 kJ/mol
+    C(C(=C)[CH2])C=C(684) <=> C(=C)[CH]C(=C)C(1219)       324.204 kJ/mol
+    C=C(C)C[C]=C(1220) <=> C(C(=C)[CH2])C=C(684)          391.142 kJ/mol
+    C1CC=CC1=C(1839) + H(11) <=> C1C[CH]CC1=C(1218)       328.781 kJ/mol
+    C1C(=C)[CH]C[CH]1(1840) + H(11) <=> C1C[CH]CC1=C(1218)      536.249 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x10e6db488>...
+Using 507 grains from 136.90 to 1714.66 kJ/mol in steps of 3.12 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x10e6db488>...
+Using 200 grains from 136.90 to 757.40 kJ/mol in steps of 3.12 kJ/mol to compute the k(T,P) values at 292.578 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(292.578 K) = 1.26112e-12
+Error:       Actual kf(292.578 K) = 8.99295e-13
+Error:     Expected Keq(292.578 K) = 8.21285e-18
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(292.578 K) = 1.59572e-17
+Error:       Actual kf(292.578 K) = 1.14514e-17
+Error:     Expected Keq(292.578 K) = 9.68163e+06
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(292.578 K) = 0.935383
+Error:       Actual kf(292.578 K) = 0.475597
+Error:     Expected Keq(292.578 K) = 2.34049e+15
+Error:       Actual Keq(292.578 K) = 3.18113e+15
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837):
+Error:     Expected kf(292.578 K) = 5.84259e-13
+Error:       Actual kf(292.578 K) = 3.68812e-13
+Error:     Expected Keq(292.578 K) = 1.27118e-24
+Error:       Actual Keq(292.578 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837)".
+Error: For path reaction C(C(=C)[CH2])C=C(684) <=> C1C[CH]CC1=C(1218):
+Error:     Expected kf(292.578 K) = 0.072267
+Error:       Actual kf(292.578 K) = 0.0496154
+Error:     Expected Keq(292.578 K) = 1820.82
+Error:       Actual Keq(292.578 K) = 642.667
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C(C(=C)[CH2])C=C(684) <=> C1C[CH]CC1=C(1218)".
+Using 200 grains from 136.90 to 764.62 kJ/mol in steps of 3.15 kJ/mol to compute the k(T,P) values at 314.289 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(314.289 K) = 5.23332e-11
+Error:       Actual kf(314.289 K) = 8.23029e-11
+Error:     Expected Keq(314.289 K) = 3.61692e-17
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(314.289 K) = 1.90811e-15
+Error:       Actual kf(314.289 K) = 3.58656e-15
+Error:     Expected Keq(314.289 K) = 2.57863e+06
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(314.289 K) = 2.23445
+Error:       Actual kf(314.289 K) = 1.02254
+Error:     Expected Keq(314.289 K) = 5.22632e+13
+Error:       Actual Keq(314.289 K) = 7.66995e+13
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 136.90 to 764.62 kJ/mol in steps of 1.57 kJ/mol to compute the k(T,P) values at 314.289 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(314.289 K) = 5.23332e-11
+Error:       Actual kf(314.289 K) = 7.63054e-11
+Error:     Expected Keq(314.289 K) = 3.61692e-17
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(314.289 K) = 1.90811e-15
+Error:       Actual kf(314.289 K) = 1.03575e-15
+Error:     Expected Keq(314.289 K) = 2.57863e+06
+Error:       Actual Keq(314.289 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(314.289 K) = 2.23445
+Error:       Actual kf(314.289 K) = 1.60561
+Error:     Expected Keq(314.289 K) = 5.22632e+13
+Error:       Actual Keq(314.289 K) = 8.35376e+13
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837):
+Error:     Expected kf(314.289 K) = 2.10512e-11
+Error:       Actual kf(314.289 K) = 6.52533e-12
+Error:     Expected Keq(314.289 K) = 4.59599e-23
+Error:       Actual Keq(314.289 K) = 0
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 800 grains from 136.90 to 764.62 kJ/mol in steps of 0.79 kJ/mol to compute the k(T,P) values at 314.289 K
+Using 200 grains from 136.90 to 781.23 kJ/mol in steps of 3.24 kJ/mol to compute the k(T,P) values at 364.231 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(364.231 K) = 5.18141e-08
+Error:       Actual kf(364.231 K) = 7.20207e-08
+Error:     Expected Keq(364.231 K) = 5.74883e-16
+Error:       Actual Keq(364.231 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(364.231 K) = 1.33001e-11
+Error:       Actual kf(364.231 K) = 1.04105e-11
+Error:     Expected Keq(364.231 K) = 225758
+Error:       Actual Keq(364.231 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(364.231 K) = 11.3097
+Error:       Actual kf(364.231 K) = 16.0278
+Error:     Expected Keq(364.231 K) = 4.72335e+10
+Error:       Actual Keq(364.231 K) = 9.09271e+10
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C(C(=C)[CH2])C=C(684) <=> C(=C)[CH]C(=C)C(1219):
+Error:     Expected kf(364.231 K) = 4.98955e-07
+Error:       Actual kf(364.231 K) = 6.50438e-07
+Error:     Expected Keq(364.231 K) = 2.58845e+08
+Error:       Actual Keq(364.231 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C(C(=C)[CH2])C=C(684) <=> C(=C)[CH]C(=C)C(1219)".
+Using 200 grains from 136.90 to 812.97 kJ/mol in steps of 3.40 kJ/mol to compute the k(T,P) values at 459.667 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(459.667 K) = 0.000440628
+Error:       Actual kf(459.667 K) = 0.000724533
+Error:     Expected Keq(459.667 K) = 2.29113e-14
+Error:       Actual Keq(459.667 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(459.667 K) = 1.43356e-06
+Error:       Actual kf(459.667 K) = 6.68305e-07
+Error:     Expected Keq(459.667 K) = 9682.51
+Error:       Actual Keq(459.667 K) = 0
+Warning: Increasing number of grains, decreasing grain size and trying again.
+Using 400 grains from 136.90 to 812.97 kJ/mol in steps of 1.69 kJ/mol to compute the k(T,P) values at 459.667 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(459.667 K) = 0.000440628
+Error:       Actual kf(459.667 K) = 0.000345437
+Error:     Expected Keq(459.667 K) = 2.29113e-14
+Error:       Actual Keq(459.667 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684):
+Error:     Expected kf(459.667 K) = 97.2897
+Error:       Actual kf(459.667 K) = 121.991
+Error:     Expected Keq(459.667 K) = 5.24459e+06
+Error:       Actual Keq(459.667 K) = 1.35946e+07
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "H2CCCH2(37) + CH2CHCH2(40) <=> C(C(=C)[CH2])C=C(684)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837):
+Error:     Expected kf(459.667 K) = 9.07551e-05
+Error:       Actual kf(459.667 K) = 6.06953e-05
+Error:     Expected Keq(459.667 K) = 2.53301e-16
+Error:       Actual Keq(459.667 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12(C(C1)CC2)[CH2](1837)".
+Using 200 grains from 136.90 to 873.49 kJ/mol in steps of 3.70 kJ/mol to compute the k(T,P) values at 641.642 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844):
+Error:     Expected kf(641.642 K) = 8.49623
+Error:       Actual kf(641.642 K) = 10.9176
+Error:     Expected Keq(641.642 K) = 1.42721e-12
+Error:       Actual Keq(641.642 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C12CC[C](C1)C2(1844)".
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(641.642 K) = 0.422892
+Error:       Actual kf(641.642 K) = 0.217915
+Error:     Expected Keq(641.642 K) = 352.895
+Error:       Actual Keq(641.642 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Error: For path reaction C(C(=C)[CH2])C=C(684) <=> C1C[C]1CC=C(1217):
+Error:     Expected kf(641.642 K) = 9.43882e-08
+Error:       Actual kf(641.642 K) = 7.51318e-08
+Error:     Expected Keq(641.642 K) = 2.90491e-06
+Error:       Actual Keq(641.642 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C(C(=C)[CH2])C=C(684) <=> C1C[C]1CC=C(1217)".
+Using 207 grains from 136.90 to 998.80 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 1011.65 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(1011.65 K) = 52531.7
+Error:       Actual kf(1011.65 K) = 75620.6
+Error:     Expected Keq(1011.65 K) = 20.2347
+Error:       Actual Keq(1011.65 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Using 270 grains from 136.90 to 1262.39 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 1810.91 K
+Error: For path reaction C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845):
+Error:     Expected kf(1810.91 K) = 4.83224e+08
+Error:       Actual kf(1810.91 K) = 6.30382e+08
+Error:     Expected Keq(1810.91 K) = 2.7866
+Error:       Actual Keq(1810.91 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "C1C[CH]CC1=C(1218) <=> C1CC(=C)[CH]C1(1845)".
+Using 378 grains from 136.90 to 1714.26 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 3163.57 K
+Saving pressure dependence results for <rmgpy.pdep.network.Network instance at 0x10e6db488>...
+
+CanTherm execution terminated at Sat Apr 20 17:09:34 2013
+CanTherm execution initiated at Wed Sep  4 13:54:54 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species [CH2]CC(=O)OC(71)...
+Loading species COC1([O])CC1(153)...
+Loading species H(8)...
+Loading species C=CC(=O)OC(154)...
+Loading species Mofml(29)...
+Loading species C2H4(49)...
+Loading species [CH2]CC([O])=O(155)...
+Loading species CH3(19)...
+Loading species [CH2]CC(=O)O[CH2](156)...
+Loading species [CH2]C[C]=O(157)...
+Loading species CH3O(12)...
+Loading species [CH2][CH]C(=O)OC(158)...
+Loading species [CH2][CH2](140)...
+Loading species CO[C]1CCO1(159)...
+Loading species CH3OH(3)...
+Loading species [CH2]C=C=O(160)...
+Loading species C[CH]C(=O)OC(161)...
+Loading species [CH2]OC(=O)CC(162)...
+Loading species N2(2)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading transition state TS7...
+Loading transition state TS8...
+Loading transition state TS9...
+Loading transition state TS10...
+Loading transition state TS11...
+Loading transition state TS12...
+Loading reaction reactionTS1...
+Loading reaction reactionTS2...
+Loading reaction reactionTS3...
+Loading reaction reactionTS4...
+Loading reaction reactionTS5...
+Loading reaction reactionTS6...
+Loading reaction reactionTS7...
+Loading reaction reactionTS8...
+Loading reaction reactionTS9...
+Loading reaction reactionTS10...
+Loading reaction reactionTS11...
+Loading reaction reactionTS12...
+Loading network 53...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+53 network information
+----------------------
+Isomers:
+    [CH2]CC(=O)OC(71)                                    -246.658 kJ/mol
+Reactant channels:
+Product channels:
+    COC1([O])CC1(153)                                    -79.0233 kJ/mol
+    Mofml(29) + C2H4(49)                                 -129.277 kJ/mol
+    H(8) + C=CC(=O)OC(154)                               -116.883 kJ/mol
+    H(8) + [CH2]CC(=O)O[CH2](156)                         166.851 kJ/mol
+    [CH2]CC([O])=O(155) + CH3(19)                         87.3653 kJ/mol
+    H(8) + [CH2][CH]C(=O)OC(158)                          159.689 kJ/mol
+    [CH2]C[C]=O(157) + CH3O(12)                           167.493 kJ/mol
+    CO[C]1CCO1(159)                                      -99.0448 kJ/mol
+    Mofml(29) + [CH2][CH2](140)                           146.962 kJ/mol
+    C[CH]C(=O)OC(161)                                    -257.363 kJ/mol
+    CH3OH(3) + [CH2]C=C=O(160)                           -129.301 kJ/mol
+    [CH2]OC(=O)CC(162)                                     -250.2 kJ/mol
+Path reactions:
+    [CH2]CC(=O)OC(71) <=> COC1([O])CC1(153)              -79.0233 kJ/mol
+    Mofml(29) + C2H4(49) <=> [CH2]CC(=O)OC(71)           -101.829 kJ/mol
+    H(8) + C=CC(=O)OC(154) <=> [CH2]CC(=O)OC(71)          -98.892 kJ/mol
+    H(8) + [CH2]CC(=O)O[CH2](156) <=> [CH2]CC(=O)OC(71)      166.851 kJ/mol
+    [CH2]CC([O])=O(155) + CH3(19) <=> [CH2]CC(=O)OC(71)      87.3654 kJ/mol
+    H(8) + [CH2][CH]C(=O)OC(158) <=> [CH2]CC(=O)OC(71)      159.689 kJ/mol
+    [CH2]C[C]=O(157) + CH3O(12) <=> [CH2]CC(=O)OC(71)      167.493 kJ/mol
+    [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)                -99.0448 kJ/mol
+    Mofml(29) + [CH2][CH2](140) <=> [CH2]CC(=O)OC(71)      146.963 kJ/mol
+    [CH2]CC(=O)OC(71) <=> C[CH]C(=O)OC(161)              -129.925 kJ/mol
+    CH3OH(3) + [CH2]C=C=O(160) <=> [CH2]CC(=O)OC(71)      39.7332 kJ/mol
+    [CH2]OC(=O)CC(162) <=> [CH2]CC(=O)OC(71)             -200.996 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x10a802998>...
+Using 503 grains from -257.36 to 801.98 kJ/mol in steps of 2.11 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x10a802998>...
+Using 250 grains from -257.36 to 268.09 kJ/mol in steps of 2.11 kJ/mol to compute the k(T,P) values at 302.47 K
+Warning: For path reaction [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159):
+Warning:     Expected kf(302.47 K) = 2.19116e-15
+Warning:       Actual kf(302.47 K) = 3.5105e-15
+Warning:     Expected Keq(302.47 K) = 1.64775e-26
+Warning:       Actual Keq(302.47 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "[CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)".
+Using 250 grains from -257.36 to 274.96 kJ/mol in steps of 2.14 kJ/mol to compute the k(T,P) values at 323.145 K
+Warning: For path reaction [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159):
+Warning:     Expected kf(323.145 K) = 9.93919e-14
+Warning:       Actual kf(323.145 K) = 6.19685e-14
+Warning:     Expected Keq(323.145 K) = 6.28955e-25
+Warning:       Actual Keq(323.145 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "[CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)".
+Using 250 grains from -257.36 to 290.50 kJ/mol in steps of 2.20 kJ/mol to compute the k(T,P) values at 369.86 K
+Warning: For path reaction [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159):
+Warning:     Expected kf(369.86 K) = 1.15761e-10
+Warning:       Actual kf(369.86 K) = 7.81954e-11
+Warning:     Expected Keq(369.86 K) = 5.13901e-22
+Warning:       Actual Keq(369.86 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "[CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)".
+Using 250 grains from -257.36 to 319.14 kJ/mol in steps of 2.32 kJ/mol to compute the k(T,P) values at 455.987 K
+Using 250 grains from -257.36 to 370.25 kJ/mol in steps of 2.52 kJ/mol to compute the k(T,P) values at 609.649 K
+Using 250 grains from -257.36 to 461.91 kJ/mol in steps of 2.89 kJ/mol to compute the k(T,P) values at 885.262 K
+Using 250 grains from -257.36 to 617.69 kJ/mol in steps of 3.51 kJ/mol to compute the k(T,P) values at 1353.64 K
+Using 254 grains from -257.36 to 801.19 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 1896.74 K
+Saving pressure dependence results for <rmgpy.pdep.network.Network instance at 0x10a802998>...
+
+CanTherm execution terminated at Wed Sep  4 13:54:58 2013
+Memory used: 55.48 MB
+CanTherm execution initiated at Wed Sep  4 15:55:30 2013
+
+###############################################################
+#                                                             #
+#                          CanTherm                           #
+#                                                             #
+#   Version: 0.1.0 (14 May 2009)                              #
+#   Authors: RMG Developers (rmg_dev@mit.edu)                 #
+#   P.I.:    William H. Green (whgreen@mit.edu)               #
+#   Website: http://rmg.sourceforge.net/                      #
+#                                                             #
+###############################################################
+
+Loading species [CH2]CC(=O)OC(71)...
+Loading species COC1([O])CC1(153)...
+Loading species H(8)...
+Loading species C=CC(=O)OC(154)...
+Loading species Mofml(29)...
+Loading species C2H4(49)...
+Loading species CH3(19)...
+Loading species [CH2]CC([O])=O(155)...
+Loading species [CH2]CC(=O)O[CH2](156)...
+Loading species CH3O(12)...
+Loading species [CH2]C[C]=O(157)...
+Loading species [CH2][CH]C(=O)OC(158)...
+Loading species [CH2][CH2](140)...
+Loading species CO[C]1CCO1(159)...
+Loading species CH3OH(3)...
+Loading species [CH2]C=C=O(160)...
+Loading species C[CH]C(=O)OC(161)...
+Loading species [CH2]OC(=O)CC(162)...
+Loading species N2(2)...
+Loading transition state TS1...
+Loading transition state TS2...
+Loading transition state TS3...
+Loading transition state TS4...
+Loading transition state TS5...
+Loading transition state TS6...
+Loading transition state TS7...
+Loading transition state TS8...
+Loading transition state TS9...
+Loading transition state TS10...
+Loading transition state TS11...
+Loading transition state TS12...
+Loading reaction reactionTS1...
+Loading reaction reactionTS2...
+Loading reaction reactionTS3...
+Loading reaction reactionTS4...
+Loading reaction reactionTS5...
+Loading reaction reactionTS6...
+Loading reaction reactionTS7...
+Loading reaction reactionTS8...
+Loading reaction reactionTS9...
+Loading reaction reactionTS10...
+Loading reaction reactionTS11...
+Loading reaction reactionTS12...
+Loading network 53...
+Warning: No frequency scale factor specified in input file; assuming a value of unity.
+
+
+========================================================================
+53 network information
+----------------------
+Isomers:
+    [CH2]CC(=O)OC(71)                                    -246.658 kJ/mol
+Reactant channels:
+Product channels:
+    COC1([O])CC1(153)                                    -79.0233 kJ/mol
+    Mofml(29) + C2H4(49)                                 -129.277 kJ/mol
+    H(8) + C=CC(=O)OC(154)                               -116.883 kJ/mol
+    H(8) + [CH2]CC(=O)O[CH2](156)                         166.851 kJ/mol
+    CH3(19) + [CH2]CC([O])=O(155)                         87.3653 kJ/mol
+    H(8) + [CH2][CH]C(=O)OC(158)                          159.689 kJ/mol
+    CH3O(12) + [CH2]C[C]=O(157)                           167.493 kJ/mol
+    CO[C]1CCO1(159)                                      -99.0499 kJ/mol
+    Mofml(29) + [CH2][CH2](140)                           146.962 kJ/mol
+    C[CH]C(=O)OC(161)                                    -257.363 kJ/mol
+    CH3OH(3) + [CH2]C=C=O(160)                           -129.301 kJ/mol
+    [CH2]OC(=O)CC(162)                                     -250.2 kJ/mol
+Path reactions:
+    [CH2]CC(=O)OC(71) <=> COC1([O])CC1(153)              -79.0233 kJ/mol
+    Mofml(29) + C2H4(49) <=> [CH2]CC(=O)OC(71)           -101.829 kJ/mol
+    H(8) + C=CC(=O)OC(154) <=> [CH2]CC(=O)OC(71)          -98.892 kJ/mol
+    H(8) + [CH2]CC(=O)O[CH2](156) <=> [CH2]CC(=O)OC(71)      166.851 kJ/mol
+    CH3(19) + [CH2]CC([O])=O(155) <=> [CH2]CC(=O)OC(71)      87.3654 kJ/mol
+    H(8) + [CH2][CH]C(=O)OC(158) <=> [CH2]CC(=O)OC(71)      159.689 kJ/mol
+    CH3O(12) + [CH2]C[C]=O(157) <=> [CH2]CC(=O)OC(71)      167.493 kJ/mol
+    [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)                -99.0499 kJ/mol
+    Mofml(29) + [CH2][CH2](140) <=> [CH2]CC(=O)OC(71)      146.963 kJ/mol
+    [CH2]CC(=O)OC(71) <=> C[CH]C(=O)OC(161)              -129.925 kJ/mol
+    CH3OH(3) + [CH2]C=C=O(160) <=> [CH2]CC(=O)OC(71)      39.7332 kJ/mol
+    [CH2]OC(=O)CC(162) <=> [CH2]CC(=O)OC(71)             -200.996 kJ/mol
+========================================================================
+
+Calculating densities of states for <rmgpy.pdep.network.Network instance at 0x105caf998>...
+Using 503 grains from -257.36 to 801.98 kJ/mol in steps of 2.11 kJ/mol to compute densities of states
+Calculating phenomenological rate coefficients for <rmgpy.pdep.network.Network instance at 0x105caf998>...
+Using 250 grains from -257.36 to 268.09 kJ/mol in steps of 2.11 kJ/mol to compute the k(T,P) values at 302.47 K
+Warning: For path reaction [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159):
+Warning:     Expected kf(302.47 K) = 2.19552e-15
+Warning:       Actual kf(302.47 K) = 3.49914e-15
+Warning:     Expected Keq(302.47 K) = 1.7204e-26
+Warning:       Actual Keq(302.47 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "[CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)".
+Using 250 grains from -257.36 to 274.96 kJ/mol in steps of 2.14 kJ/mol to compute the k(T,P) values at 323.145 K
+Warning: For path reaction [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159):
+Warning:     Expected kf(323.145 K) = 9.95771e-14
+Warning:       Actual kf(323.145 K) = 6.19568e-14
+Warning:     Expected Keq(323.145 K) = 6.56675e-25
+Warning:       Actual Keq(323.145 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "[CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)".
+Using 250 grains from -257.36 to 290.50 kJ/mol in steps of 2.20 kJ/mol to compute the k(T,P) values at 369.86 K
+Warning: For path reaction [CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159):
+Warning:     Expected kf(369.86 K) = 1.1595e-10
+Warning:       Actual kf(369.86 K) = 7.8181e-11
+Warning:     Expected Keq(369.86 K) = 5.3655e-22
+Warning:       Actual Keq(369.86 K) = 0
+Warning: Significant corrections to k(E) to be consistent with high-pressure limit for path reaction "[CH2]CC(=O)OC(71) <=> CO[C]1CCO1(159)".
+Using 250 grains from -257.36 to 319.14 kJ/mol in steps of 2.32 kJ/mol to compute the k(T,P) values at 455.987 K
+Using 250 grains from -257.36 to 370.25 kJ/mol in steps of 2.52 kJ/mol to compute the k(T,P) values at 609.649 K
+Using 250 grains from -257.36 to 461.91 kJ/mol in steps of 2.89 kJ/mol to compute the k(T,P) values at 885.262 K
+Using 250 grains from -257.36 to 617.69 kJ/mol in steps of 3.51 kJ/mol to compute the k(T,P) values at 1353.64 K
+Using 254 grains from -257.36 to 801.19 kJ/mol in steps of 4.18 kJ/mol to compute the k(T,P) values at 1896.74 K
+Saving pressure dependence results for <rmgpy.pdep.network.Network instance at 0x105caf998>...
+
+CanTherm execution terminated at Wed Sep  4 15:55:33 2013
+Memory used: 55.14 MB

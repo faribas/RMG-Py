@@ -1,0 +1,26 @@
+[25/Jul/2013:17:32:41] ENGINE Bus STARTING
+[25/Jul/2013:17:32:41] ENGINE Started monitor thread '_TimeoutMonitor'.
+[25/Jul/2013:17:32:41] ENGINE Serving on 0.0.0.0:8080
+[25/Jul/2013:17:32:41] ENGINE Bus STARTED
+[25/Jul/2013:17:32:51] HTTP Traceback (most recent call last):
+  File "/Users/Fariba/.virtualenvs/rmgpy/lib/python2.7/site-packages/cherrypy/_cprequest.py", line 656, in respond
+    response.body = self.handler()
+  File "/Users/Fariba/.virtualenvs/rmgpy/lib/python2.7/site-packages/cherrypy/lib/encoding.py", line 188, in __call__
+    self.body = self.oldhandler(*args, **kwargs)
+  File "/Users/Fariba/.virtualenvs/rmgpy/lib/python2.7/site-packages/cherrypy/_cpdispatch.py", line 34, in __call__
+    return self.callable(*self.args, **self.kwargs)
+  File "/Users/fariba/Code/RMG-Py/importChemkin.py", line 1032, in identified_html
+    '</tr></table>' + self.html_tail)
+KeyError: 'baoj'
+
+[25/Jul/2013:17:32:51] HTTP Traceback (most recent call last):
+  File "/Users/Fariba/.virtualenvs/rmgpy/lib/python2.7/site-packages/cherrypy/_cprequest.py", line 656, in respond
+    response.body = self.handler()
+  File "/Users/Fariba/.virtualenvs/rmgpy/lib/python2.7/site-packages/cherrypy/lib/encoding.py", line 188, in __call__
+    self.body = self.oldhandler(*args, **kwargs)
+  File "/Users/Fariba/.virtualenvs/rmgpy/lib/python2.7/site-packages/cherrypy/_cpdispatch.py", line 34, in __call__
+    return self.callable(*self.args, **self.kwargs)
+  File "/Users/fariba/Code/RMG-Py/importChemkin.py", line 1032, in identified_html
+    '</tr></table>' + self.html_tail)
+KeyError: 'baoj'
+

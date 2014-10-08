@@ -1,0 +1,299 @@
+[27/May/2014:11:05:08] ENGINE Bus STARTING
+[27/May/2014:11:05:08] ENGINE Started monitor thread '_TimeoutMonitor'.
+[27/May/2014:11:05:08] ENGINE Serving on 0.0.0.0:8081
+[27/May/2014:11:05:08] ENGINE Bus STARTED
+Reading species list...
+Reading thermo file...
+Thermo file has default temperature range 300.0 to 1000.0 and 1000.0 to 5000.0
+Ignoring thermo data for HOCO.
+Ignoring thermo data for CH2O2H.
+Ignoring thermo data for CH2[S].
+Ignoring thermo data for CH3CHO2H.
+Ignoring thermo data for C3H6OOH1-3.
+Ignoring thermo data for C3H6OOH1-2.
+Ignoring thermo data for C3H6OOH2-1.
+Ignoring thermo data for HE.
+Ignoring thermo data for MB4OH3J.
+Ignoring thermo data for MB3OOH3J.
+Ignoring thermo data for MB4OOHMOO.
+Ignoring thermo data for MBMOOH4OO.
+Reading known species...
+I think BA4J is [CH2]CCC(=O)O based on its label
+I think BAOJ is CCCC(=O)[O] based on its label
+I think C2H3CO is C=C[C]=O based on its label
+I think C2H3OOH is OOC=C based on its label
+I think C2H5CO is CC[C]=O based on its label
+I think C2H5COCH3 is CCC(=O)C based on its label
+I think C3H5-A is [CH2][CH][CH2] based on its label
+I think C3H6CHO-1 is [CH2]CCC=O based on its label
+I think C3H6O1-3 is C1CCO1 based on its label
+I think C4H8-1 is CCC=C based on its label
+I think C4H8-2 is CC=CC based on its label
+I think C4H71-3 is C[CH]C=C based on its label
+I think C4H71-4 is [CH2]CC=C based on its label
+I think C4H72-2 is C[C]=CC based on its label
+I think CH2CH2CHO is [CH2]CC=O based on its label
+I think CH2CHOOHCOCH3 is [CH2]C(C(=O)C)OO based on its label
+I think CH2COOH is [CH2]C(=O)O based on its label
+I think CH3CHCHO is C[CH]C=O based on its label
+I think CH3COCH2O is CC(=O)C[O] based on its label
+I think CH3OCO is CO[C]=O based on its label
+I think IC3H5CO is CC(=C)[C]=O based on its label
+I think IC3H6CHO is O=CC([CH2])C based on its label
+I think IC3H7CHO is O=CC(C)C based on its label
+I think IC3H7O2 is [O]OC(C)C based on its label
+I think IC4H6OH is [CH2]C(=C)CO based on its label
+I think IC4H7 is CC(=C)[CH2] based on its label
+I think IC4H7O is CC(=C)C[O] based on its label
+I think IC4H9 is CC([CH2])C based on its label
+I think MB2J is CC[CH]C(=O)OC based on its label
+I think MB2O is CCC(C(=O)OC)[O] based on its label
+I think MB2OH3J is C[CH]C(C(=O)OC)O based on its label
+I think MB3J is C[CH]CC(=O)OC based on its label
+I think MB3O is COC(=O)CC([O])C based on its label
+I think MB3OH4J is COC(=O)CC(O)[CH2] based on its label
+I think MB4J is [CH2]CCC(=O)OC based on its label
+I think MB4J*O is COC(=O)CC[C]=O based on its label
+I think MB4O is COC(=O)CCC[O] based on its label
+I think MBMJ is CCCC(=O)O[CH2] based on its label
+I think MBMJ*O is CCCC(=O)O[C]=O based on its label
+I think ME2J is COC(=O)[CH2] based on its label
+I think ME2J*O is COC(=O)[C]=O based on its label
+I think MEMJ is [CH2]OC(=O)C based on its label
+I think MP2D3J is COC(=O)C=[CH] based on its label
+I think MP2DMJ is [CH2]OC(=O)C=C based on its label
+I think MP3J*O is COC(=O)C[C]=O based on its label
+I think NC3H7 is CC[CH2] based on its label
+I think NC3H7CO is CCC[C]=O based on its label
+I think SC4H9 is C[CH]CC based on its label
+I think TC3H6CHO is O=C[C](C)C based on its label
+I think C2H3 is [CH]=C based on its label
+I think CH2CHO is [CH2]C=O based on its label
+I think CH2O is C=O based on its label
+I think HCO is [CH]=O based on its label
+I think C2H3COCH3 is C=CC(C)=O based on its label
+I think CH2CO is C=C=O based on its label
+I think CH3CO is C[C]=O based on its label
+I think CH3O is C[O] based on its label
+I think CH2OCHO is [CH2]OC=O based on its label
+I think C4H6 is C=CC=C based on its label
+I think C3H6 is C=CC based on its label
+I think CH3CHOOCOCH3 is CC(=O)C(C)O[O] based on its label
+I think CH2OH is [CH2]O based on its label
+I think IC3H7 is C[CH]C based on its label
+I think IC3H7O2H is CC(C)OO based on its label
+I think IC3H5CHO is C=C(C)C=O based on its label
+I think MP2D is C=CC(=O)OC based on its label
+I think MB2D is CC=CC(=O)OC based on its label
+I think C2H5CHCO is CCC=C=O based on its label
+I think ME2*O is COC(=O)C=O based on its label
+I think C2H5CHO is CCC=O based on its label
+I think CH3CHO is CC=O based on its label
+I think MP3*O is COC(=O)CC=O based on its label
+I think MB3D is C=CCC(=O)OC based on its label
+I think MP3J is [CH2]CC(=O)OC based on its label
+I think MB4*O is COC(=O)CCC=O based on its label
+I think C2H2 is C#C based on its label
+I think MB is CCCC(=O)OC based on its label
+I think MBMO is CCCC(=O)OC[O] based on its label
+I think CH3OCHO is COC=O based on its label
+I think CH3COCH3 is CC(C)=O based on its label
+I think MP2D2J is C=[C]C(=O)OC based on its label
+I think IC3H6CO is CC(C)=C=O based on its label
+I think HCCO is [CH]=C=O based on its label
+I think IC3H7O is CC(C)[O] based on its label
+I think ME is COC(C)=O based on its label
+I think C4H10 is CCCC based on its label
+I think IC4H10 is CC(C)C based on its label
+I think C2H3CHO is C=CC=O based on its label
+I think CH3OCH2O is COC[O] based on its label
+I think MBM*O is CCCC(=O)OC=O based on its label
+I think HOCHO is O=CO based on its label
+I think CH3O2 is CO[O] based on its label
+I think HCCOH is C#CO based on its label
+I think MB3OO is COC(=O)CC(C)O[O] based on its label
+I think CH3OCH3 is COC based on its label
+I think HOCH2O is [O]CO based on its label
+I think C2H5OH is CCO based on its label
+I think MBMOO is CCCC(=O)OCO[O] based on its label
+I think C2H is [C]#C based on its label
+I think C3H2 is [CH]=C=[CH] based on its label
+I think MB4OO is COC(=O)CCCO[O] based on its label
+I think CH3CHCO is CC=C=O based on its label
+I think C3H3 is C#C[CH2] based on its label
+I think IC4H9O2 is CC(C)CO[O] based on its label
+I think CH3COCH2 is [CH2]C(C)=O based on its label
+I think C2H3CO2 is C=CC([O])=O based on its label
+I think C2H4O1-2 is C1CO1 based on its label
+I think IC4H8 is C=C(C)C based on its label
+I think IC4H7OH is C=C(C)CO based on its label
+I think OCHO is [O]C=O based on its label
+I think C2H3O1-2 is [CH]1CO1 based on its label
+I think MB2OO is CCC(O[O])C(=O)OC based on its label
+I think CH3COCH2O2 is CC(=O)CO[O] based on its label
+I think C2H5O2 is CCO[O] based on its label
+I think CH3O2H is COO based on its label
+I think C3H4-A is C=C=C based on its label
+I think C3H4-P is C#CC based on its label
+I think MB3OH4OO is COC(=O)CC(O)CO[O] based on its label
+I think CH3COCH2O2H is CC(=O)COO based on its label
+I think CH2 is triplet[CH2] based on its label
+I think CH2(S) is singlet[CH2] based on its label
+I think C3H6CHO-2 is C[CH]CC=O based on its label
+I think CH3CO2 is CC([O])=O based on its label
+I think IC4H9O2H is CC(C)COO based on its label
+I think C2H5O is CC[O] based on its label
+I think CH3OCH2 is [CH2]OC based on its label
+I think CH3CHCOCH3 is CC=C(C)[O] based on its label
+I think CH2CH2COCH3 is [CH2]CC(C)=O based on its label
+I think C3H5-S is [CH]=CC based on its label
+I think C3H5-T is C=[C]C based on its label
+I think TC4H9 is C[C](C)C based on its label
+I think C2H5COCH2 is [CH2]C(=O)CC based on its label
+Identified 132 species:
+   BA4J
+   BAOJ
+   C2H3CO
+   C2H3OOH
+   C2H5CO
+   C2H5COCH3
+   C3H5-A
+   C3H6CHO-1
+   C3H6O1-3
+   C4H8-1
+   C4H8-2
+   C4H71-3
+   C4H71-4
+   C4H72-2
+   CH2CH2CHO
+   CH2CHOOHCOCH3
+   CH2COOH
+   CH3CHCHO
+   CH3COCH2O
+   CH3OCO
+   IC3H5CO
+   IC3H6CHO
+   IC3H7CHO
+   IC3H7O2
+   IC4H6OH
+   IC4H7
+   IC4H7O
+   IC4H9
+   MB2J
+   MB2O
+   MB2OH3J
+   MB3J
+   MB3O
+   MB3OH4J
+   MB4J
+   MB4J*O
+   MB4O
+   MBMJ
+   MBMJ*O
+   ME2J
+   ME2J*O
+   MEMJ
+   MP2D3J
+   MP2DMJ
+   MP3J*O
+   NC3H7
+   NC3H7CO
+   SC4H9
+   TC3H6CHO
+   C2H3
+   CH2CHO
+   CH2O
+   HCO
+   C2H3COCH3
+   CH2CO
+   CH3CO
+   CH3O
+   CH2OCHO
+   C4H6
+   C3H6
+   CH3CHOOCOCH3
+   CH2OH
+   IC3H7
+   IC3H7O2H
+   IC3H5CHO
+   MP2D
+   MB2D
+   C2H5CHCO
+   ME2*O
+   C2H5CHO
+   CH3CHO
+   MP3*O
+   MB3D
+   MP3J
+   MB4*O
+   C2H2
+   MB
+   MBMO
+   CH3OCHO
+   CH3COCH3
+   MP2D2J
+   IC3H6CO
+   HCCO
+   IC3H7O
+   ME
+   C4H10
+   IC4H10
+   C2H3CHO
+   CH3OCH2O
+   MBM*O
+   HOCHO
+   CH3O2
+   HCCOH
+   MB3OO
+   CH3OCH3
+   HOCH2O
+   C2H5OH
+   MBMOO
+   C2H
+   C3H2
+   MB4OO
+   CH3CHCO
+   C3H3
+   IC4H9O2
+   CH3COCH2
+   C2H3CO2
+   C2H4O1-2
+   IC4H8
+   IC4H7OH
+   OCHO
+   C2H3O1-2
+   MB2OO
+   CH3COCH2O2
+   C2H5O2
+   CH3O2H
+   C3H4-A
+   C3H4-P
+   MB3OH4OO
+   CH3COCH2O2H
+   CH2
+   CH2(S)
+   C3H6CHO-2
+   CH3CO2
+   IC4H9O2H
+   C2H5O
+   CH3OCH2
+   CH3CHCOCH3
+   CH2CH2COCH3
+   C3H5-S
+   C3H5-T
+   TC4H9
+   C2H5COCH2
+Initializing RMG
+Loading RMG database...
+Loading thermodynamics library from CBS_QB3_1dHR.py in /Users/fariba/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from DFT_QCI_thermo.py in /Users/fariba/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from GRI-Mech3.0.py in /Users/fariba/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from KlippensteinH2O2.py in /Users/fariba/Code/RMG-database/input/thermo/libraries...
+Loading thermodynamics library from primaryThermoLibrary.py in /Users/fariba/Code/RMG-database/input/thermo/libraries...
+Error: Error while reading database '/Users/fariba/Code/RMG-database/input/thermo/libraries/primaryThermoLibrary.py'.
+[27/May/2014:11:05:09] ENGINE Bus STOPPING
+[27/May/2014:11:05:14] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('0.0.0.0', 8081)) shut down
+[27/May/2014:11:05:14] ENGINE Stopped thread '_TimeoutMonitor'.
+[27/May/2014:11:05:14] ENGINE Bus STOPPED
+[27/May/2014:11:05:14] ENGINE Bus EXITING
+[27/May/2014:11:05:14] ENGINE Bus EXITED

@@ -1,0 +1,1762 @@
+################################################################################
+#
+#	FAME input file
+#
+################################################################################
+
+# All syntax in this file is case-insensitive
+
+# The method to use to extract the phenomenological rate coefficients k(T, P)
+# 	Options: ModifiedStrongCollision, ReservoirState
+ModifiedStrongCollision
+
+# The temperatures at which to estimate k(T, P)
+# 	First item is the number of temperatures 
+#	Second item is the units; options are K, C, F, or R
+#	Next comes the minimum and maximum temperatures in the specified units
+#	Remaining items are the temperature values in the specified units
+8 K 300.0 2200.0
+302.5100057678381
+323.5458853750768
+371.2470882089061
+459.8227099749066
+619.9137753171276
+913.8637973670614
+1434.4587069448723
+2073.815361238068
+
+# The pressures at which to estimate k(T, P)
+# 	First item is the number of pressures 
+#	Second item is the units ; options are bar, atm, Pa, or torr
+#	Next comes the minimum and maximum pressures in the specified units
+#	Remaining items are the temperature values in the specified units
+5 Pa 1000.0 1.0E7
+1252.8150658894924
+6674.665337780328
+99999.99999999997
+1498202.4556942817
+7982024.061069267
+
+# The interpolation model to use to fit k(T, P)
+#	Option 1: No interpolation
+#		Example: None
+#	Option 2: Chebyshev polynomials
+#		Option must be accompanied by two numbers, indicating the number of
+#		terms in the Chebyshev polynomials for temperature and pressure, 
+#		respectively
+#		Example: Chebyshev 4 4
+#	Option 3: Pressure-dependent Arrhenius
+#		Example: PDepArrhenius
+Chebyshev 4 4
+
+# A method for determining the number of energy grains to use
+# Specify both the minimum number of grains and the maximum grain size
+# Allowed units for the grain size are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# Example:
+#		NumGrains 251
+#		GrainSize J/mol 4184
+NumGrains 251
+GrainSize J/mol 4184
+
+# Collisional transfer probability model
+# 	Option 1: Single exponential down
+#		Option must also be accompanied by three additional lines
+#        First line is units and value of alpha parameter; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+#        Second line is units and value of T0 parameter; allowed units are K
+#		Third line is value of n parameter (without units)
+SingleExpDown
+J/mol 1794.322834182
+K 300.0
+0.85
+
+# Bath gas parameters
+# 	Molecular weight ; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter ; allowed units are m or A
+# 	Lennard-Jones epsilon parameter ; allowed units are J or K
+u 39.95
+m 3.4180000000000005E-10
+J 1.7124399999999997E-21
+
+# The number of species in the network (minimum of 2)
+22
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(22137)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1179535.1841303054
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1179535.1841303054
+J/mol*K 285.4457684262362
+7 J/mol*K
+171.41847999999996
+211.66855999999999
+229.15768000000003
+259.61719999999997
+281.20664
+294.26072000000005
+314.97152
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 5.952294881658388E-10
+J 6.411905399649816E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+808.5968654194453
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+805.4843719690207
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24855)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1426201.5960300055
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1426201.5960300055
+J/mol*K 403.5150723638277
+7 J/mol*K
+154.22224
+190.372
+214.30448
+239.40847999999997
+267.85968
+285.85088
+316.64511999999996
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 5.952294881658388E-10
+J 6.411905399649816E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+924.8855971830408
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24856)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1095863.8821625877
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1095863.8821625877
+J/mol*K 283.2712276427242
+7 J/mol*K
+170.95823999999996
+212.33800000000002
+230.41288
+261.16528
+282.71288
+295.5577600000001
+319.8249600000001
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 5.952294881658388E-10
+J 6.411905399649816E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+180.0
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+731.8339036607018
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24857)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1278686.1669820743
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1278686.1669820743
+J/mol*K 286.7013800614133
+7 J/mol*K
+170.7072
+210.20415999999997
+227.77696
+258.52936
+280.66272
+294.00968000000006
+318.27688000000006
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 5.952294881658388E-10
+J 6.411905399649816E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+180.0
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+807.2095549819956
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24858)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 999437.8823396099
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 999437.8823396099
+J/mol*K 175.46914507658158
+7 J/mol*K
+129.9132
+168.74072000000004
+200.74832
+232.92328000000003
+280.41167999999993
+307.27296
+350.45184000000006
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 6.109659710739538E-10
+J 5.947658270883484E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+736.6538719615355
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+737.5212058091903
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24859)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1175983.6853978517
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1175983.6853978517
+J/mol*K 236.84781180810788
+7 J/mol*K
+141.50288
+185.18384
+211.62672
+245.09872000000001
+278.23600000000005
+297.69160000000005
+328.02560000000005
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 5.972224439447744E-10
+J 5.434525078793541E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+721.8956919731124
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+722.2040137922179
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24860)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1083108.5157692411
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1083108.5157692411
+J/mol*K 236.43041840857296
+7 J/mol*K
+140.41503999999998
+183.92864000000003
+210.4552
+244.1364
+277.56656
+297.23136000000005
+331.91672000000005
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 6.109659710739538E-10
+J 5.947658270883484E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+722.4565219264899
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+720.9754690714703
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24861)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1236852.1563154596
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1236852.1563154596
+J/mol*K 225.32750491597594
+7 J/mol*K
+157.740984
+192.38450400000002
+216.59312799999998
+243.019272
+275.13984
+293.81721600000003
+329.590416
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 6.212959600404584E-10
+J 6.157661725278519E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+180.0
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+745.409615025432
+180.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+2
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24862)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1040766.9687341773
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1040766.9687341773
+J/mol*K 124.29798135201085
+7 J/mol*K
+166.314
+215.76887999999997
+235.47552000000002
+272.96416
+295.64144000000005
+308.23528000000005
+327.64904
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 5.972224439447744E-10
+J 5.434525078793541E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+577.7070042070864
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+575.9171897328873
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24863)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1030015.2037950011
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1030015.2037950011
+J/mol*K 159.18913219326248
+7 J/mol*K
+162.71576000000002
+198.53080000000006
+223.09088
+250.66344000000004
+283.71703999999994
+303.17264
+337.85799999999995
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 6.06029357049327E-10
+J 5.5882997546254086E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+36 cm^-1
+2750.0
+2950.0
+3150.0
+900.0
+1000.0
+1100.0
+634.7309713142366
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+637.1546151234934
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H3J(24864)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1432975.7526932803
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1432975.7526932803
+J/mol*K 451.6990507225567
+7 J/mol*K
+173.97072
+205.39256
+221.45911999999998
+245.97736
+267.776
+281.91792000000004
+307.60768
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 135.0
+m 6.049811812559129E-10
+J 7.29078994246956E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+32 cm^-1
+2950.0
+3100.0
+1380.0
+975.0
+1025.0
+750.0
+770.0
+3400.0
+540.0
+610.0
+2055.0
+2100.0
+2130.0
+2160.0
+2190.0
+2220.0
+2250.0
+500.0
+510.0
+520.0
+530.0
+540.0
+550.0
+210.8066537714311
+210.8066537714311
+210.8066537714311
+210.8066537714311
+210.8066537714311
+210.8066537714311
+210.8066537714311
+210.8066537714311
+210.8066537714311
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+4 cm^-1
+300.0
+300.0
+300.0
+300.0
+4 cm^-1
+3262.5361950569377
+3262.5361950569377
+3262.5361950569377
+3262.5361950569377
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C4(10323)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 681916.7792680793
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 681916.7792680793
+J/mol*K 207.76854076732715
+7 J/mol*K
+45.98215999999999
+57.362640000000006
+65.52144
+72.63424
+80.83488
+86.27408000000001
+92.59192
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 48.0
+m 4.1617877124334604E-10
+J 3.625364477155529E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+6 cm^-1
+741.3991254836852
+742.5190445027931
+741.672676849503
+742.2391005910861
+742.0877325682271
+742.0021029839107
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+8
+
+# Species identifier (128 characters or less, no spaces)
+C7H3J(20683)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 769677.6800729696
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 769677.6800729696
+J/mol*K 347.56734278564534
+7 J/mol*K
+116.81728000000001
+135.47791999999998
+149.53616000000002
+160.49824
+177.35976000000002
+189.36783999999997
+208.154
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 87.0
+m 5.431657013095732E-10
+J 6.226585649576156E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+21 cm^-1
+750.0
+770.0
+3400.0
+2100.0
+2137.5
+2175.0
+2212.5
+2250.0
+500.0
+512.5
+525.0
+537.5
+550.0
+3000.0
+3100.0
+440.0
+815.0
+1455.0
+212.53568586749446
+212.45019066821476
+211.99818092833613
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+3 cm^-1
+50.0
+300.0
+300.0
+3 cm^-1
+3227.0973577371997
+3231.5828478969142
+3231.5828478969142
+# Symmetry number
+2
+
+# Species identifier (128 characters or less, no spaces)
+C4(10322)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 428389.83864542865
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 428389.83864542865
+J/mol*K 86.8448383670021
+7 J/mol*K
+59.24544
+67.94816
+73.6384
+77.65504
+83.68
+87.52928000000001
+93.21952
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 48.0
+m 4.1617877124334604E-10
+J 3.625364477155529E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+6 cm^-1
+509.4354101169798
+508.7743744357672
+509.08320417434834
+509.4030795450663
+509.7982097399806
+509.6027997524796
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+4
+
+# Species identifier (128 characters or less, no spaces)
+C4JJ(10324)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 768766.2552128644
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 768766.2552128644
+J/mol*K 116.5383474182697
+7 J/mol*K
+55.981919999999995
+67.94816
+69.53808
+82.17376
+86.60880000000002
+88.53344000000001
+92.21536
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 48.0
+m 4.458563475207515E-10
+J 4.280849921699825E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+6 cm^-1
+542.7806579620282
+542.8999069407511
+542.3822199825352
+543.6090203354731
+542.0079202707337
+543.0792274955694
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+2
+
+# Species identifier (128 characters or less, no spaces)
+C7H2JJ(24851)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 885816.6157139299
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 885816.6157139299
+J/mol*K 204.28911702747573
+7 J/mol*K
+98.49136000000001
+125.26895999999996
+135.43608
+161.16768
+177.52711999999997
+187.02480000000003
+201.91984
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 86.0
+m 5.240690302551413E-10
+J 5.3327176857173876E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+21 cm^-1
+2750.0
+3150.0
+900.0
+1100.0
+716.288291956108
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+710.251288525643
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+2
+
+# Species identifier (128 characters or less, no spaces)
+C4HJ(3161)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 776712.7154250889
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 776712.7154250889
+J/mol*K 264.65966226949337
+7 J/mol*K
+71.67192
+77.57136000000001
+81.62984000000002
+84.68415999999999
+89.83048
+93.76344000000002
+104.05608000000002
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 49.0
+m 5.18E-10
+J 4.92897405E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+9 cm^-1
+750.0
+770.0
+3400.0
+2100.0
+2250.0
+500.0
+550.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+1 cm^-1
+40.0
+1 cm^-1
+4934.907846650722
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C9H2JJ(24852)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1302537.0431860809
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1302537.0431860809
+J/mol*K 245.08979442620938
+7 J/mol*K
+139.66191999999998
+171.16743999999997
+182.84080000000003
+209.15815999999998
+224.84815999999998
+233.88560000000004
+251.75128
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 110.0
+m 5.532610902363974E-10
+J 5.567810682333E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+27 cm^-1
+2750.0
+3150.0
+900.0
+1100.0
+180.0
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+679.2350397075037
+180.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C2H(33)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 573729.5048726553
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 573729.5048726553
+J/mol*K 216.01818679957196
+7 J/mol*K
+43.26256
+44.51776
+45.56376
+46.6516
+48.952799999999996
+51.12848
+55.27064000000001
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 25.0
+m 4.1E-10
+J 2.88558985E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+4 cm^-1
+750.0
+770.0
+3400.0
+480.89947196525407
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H2JJ(24853)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1516731.9128749038
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1516731.9128749038
+J/mol*K 294.2740307182053
+7 J/mol*K
+169.28463999999997
+205.14151999999999
+219.66
+247.98567999999997
+266.68816
+277.65024000000005
+298.36104
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 134.0
+m 5.877748461050943E-10
+J 6.3601389190740254E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+33 cm^-1
+2750.0
+3150.0
+900.0
+1100.0
+803.2564572054936
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+805.5115466488306
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+H(5)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 217961.34350639084
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 217961.34350639084
+J/mol*K 114.45225971676923
+7 J/mol*K
+20.75264
+20.75264
+20.75264
+20.75264
+20.75264
+20.75264
+20.75264
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 1.0
+m 2.05E-10
+J 2.0019642499999998E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+0 cm^-1
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# Species identifier (128 characters or less, no spaces)
+C11H2JJ(24854)
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1333909.6363324388
+# Thermodynamics data:
+# 	Standard enthalpy of formation; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+# 	Standard entropy of formation; allowed units are permutations of energy (J, kJ, cal, or kcal) and temperature (K, C, F, or R)
+# 	Heat capacity at 300, 400, 500, 600, 800, 1000, and 1500 K
+J/mol 1333909.6363324388
+J/mol*K 290.8438781363735
+7 J/mol*K
+169.53567999999996
+207.27536
+222.29592000000002
+250.62159999999997
+268.73832
+279.1983200000001
+299.90912000000003
+# Species gas parameters
+# 	Molecular weight; allowed units are g/mol or u
+# 	Lennard-Jones sigma parameter; allowed units are m or A
+# 	Lennard-Jones epsilon parameter; allowed units are J or K
+u 134.0
+m 5.877748461050943E-10
+J 6.3601389190740254E-21
+# Harmonic oscillators; allowed units are Hz and cm^-1
+33 cm^-1
+2750.0
+3150.0
+900.0
+1100.0
+180.0
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+723.4464641412798
+180.0
+180.0
+180.0
+180.0
+180.0
+180.0
+# Rigid rotors; allowed units are Hz and cm^-1
+0 cm^-1
+# Hindered rotor frequencies and barriers
+0 cm^-1
+0 cm^-1
+# Symmetry number
+1
+
+# The number of isomers in the network (minimum of 2)
+1
+# The number of reactant channels in the network
+7
+# The number of product channels in the network
+10
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(22137)
+
+# The number and identifiers of each species in the isomer
+2 C4(10323) C7H3J(20683)
+
+# The number and identifiers of each species in the isomer
+2 C4(10322) C7H3J(20683)
+
+# The number and identifiers of each species in the isomer
+2 C4JJ(10324) C7H3J(20683)
+
+# The number and identifiers of each species in the isomer
+2 C7H2JJ(24851) C4HJ(3161)
+
+# The number and identifiers of each species in the isomer
+2 C9H2JJ(24852) C2H(33)
+
+# The number and identifiers of each species in the isomer
+2 C11H2JJ(24853) H(5)
+
+# The number and identifiers of each species in the isomer
+2 C11H2JJ(24854) H(5)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24855)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24856)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24857)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24858)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24859)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24860)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24861)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24862)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24863)
+
+# The number and identifiers of each species in the isomer
+1 C11H3J(24864)
+
+# The number of reactions in the network (minimum of 2)
+17
+
+# The reaction equation, in the form A + B --> C + D
+C4(10323) + C7H3J(20683) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+2 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1473305.7699632712
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 307726.4850534175
+J/mol 21711.310622222223
+0.5367583333333333
+
+# The reaction equation, in the form A + B --> C + D
+C4(10322) + C7H3J(20683) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+3 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1219778.8293406204
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 153863.24252670878
+J/mol 21711.310622222223
+0.5367583333333333
+
+# The reaction equation, in the form A + B --> C + D
+C4JJ(10324) + C7H3J(20683) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+4 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1538443.935285834
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 1.0000000000000002E7
+J/mol 0.0
+0.0
+
+# The reaction equation, in the form A + B --> C + D
+C7H2JJ(24851) + C4HJ(3161) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+5 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1662529.3311390188
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 1.0000000000000002E7
+J/mol 0.0
+0.0
+
+# The reaction equation, in the form A + B --> C + D
+C9H2JJ(24852) + C2H(33) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+6 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1876266.5480587361
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 1.0000000000000002E7
+J/mol 0.0
+0.0
+
+# The reaction equation, in the form A + B --> C + D
+C11H2JJ(24853) + H(5) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+7 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1734693.2563812947
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 1.81E8
+J/mol 0.0
+0.0
+
+# The reaction equation, in the form A + B --> C + D
+C11H2JJ(24854) + H(5) (included =true) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+8 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1555971.2998388298
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+m^3/mol*s 5.36E8
+J/mol 4100.32
+0.0
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(24855) (included =false) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+9 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1570527.9069243525
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 1.0139174811239417E8
+J/mol 144326.31089434697
+1.2236707254246726
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24856) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 10
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1323861.4950246525
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 2.0278349622478834E8
+J/mol 144326.31089434697
+1.2236707254246726
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(24857) (included =false) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+11 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1423012.4778764213
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 1.0139174811239417E8
+J/mol 144326.31089434697
+1.2236707254246726
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24858) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 12
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1293255.2581303054
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 1.6170379267961777E10
+J/mol 113720.074
+0.1195
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24859) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 13
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1293255.2581303054
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 1.6170379267961777E10
+J/mol 113720.074
+0.1195
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24860) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 14
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1293255.2581303054
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 3.2340758535923553E10
+J/mol 113720.074
+0.1195
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24861) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 15
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1293255.2581303054
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 1.6170379267961777E10
+J/mol 113720.074
+0.1195
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24862) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 16
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1293255.2581303054
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 1.6170379267961777E10
+J/mol 113720.074
+0.1195
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(22137) (included =true) --> C11H3J(24863) (included =false)
+# Indices of the reactant and product isomers, starting with 1
+1 17
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1308474.1815703053
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 4.06705882763308E8
+J/mol 128938.99744
+0.8960000000000001
+
+# The reaction equation, in the form A + B --> C + D
+C11H3J(24864) (included =false) --> C11H3J(22137) (included =true)
+# Indices of the reactant and product isomers, starting with 1
+18 1
+# Ground-state energy; allowed units are J/mol, kJ/mol, cal/mol, kcal/mol, or cm^-1
+J/mol 1561914.7501332804
+# High-pressure-limit kinetics model k(T):
+#	Option 1: Arrhenius
+# 	Arrhenius preexponential factor ; allowed units are combinations of volume {m^3, L, or cm^3} and time {s^-1}
+# 	Arrhenius activation energy ; allowed units are J/mol, kJ/mol, cal/mol, or kcal/mol
+# 	Arrhenius temperature exponent
+Arrhenius
+s^-1 4.06705882763308E8
+J/mol 128938.99744
+0.8960000000000001
+
