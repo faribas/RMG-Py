@@ -1316,6 +1316,13 @@ class CoreEdgeReactionModel:
         for spec in self.newSpeciesList:            
             if spec.reactive: spec.generateThermoData(database, quantumMechanics=self.quantumMechanics)
             spec.generateTransportData(database)
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 7b84153... Add and modify calls for generateTransportData()
+        for spec in self.newSpeciesList:
+>>>>>>> 7b84153... Add and modify calls for generateTransportData()
             self.addSpeciesToCore(spec)
 
         for rxn in self.newReactionList:
@@ -1365,6 +1372,7 @@ class CoreEdgeReactionModel:
             
         # Perform species constraints and forbidden species checks
         for spec in self.newSpeciesList:
+<<<<<<< HEAD
             if database.forbiddenStructures.isMoleculeForbidden(spec.molecule[0]):
                 if 'allowed' in self.speciesConstraints and 'reaction libraries' in self.speciesConstraints['allowed']:
                     logging.warning("Species {0} from reaction library {1} is globally forbidden.  It will behave as an inert unless found in a seed mechanism or reaction library.".format(spec.label, reactionLibrary.label))
@@ -1376,6 +1384,13 @@ class CoreEdgeReactionModel:
                 else:
                     raise ForbiddenStructureException("Species constraints forbids species {0} from reaction library {1}. Please reformulate constraints, remove the species, or explicitly allow it.".format(spec.label, reactionLibrary.label))
        
+=======
+            if spec.reactive: spec.generateThermoData(database, quantumMechanics=self.quantumMechanics)
+            spec.generateTransportData(database)
+<<<<<<< HEAD
+>>>>>>> 7b84153... Add and modify calls for generateTransportData()
+=======
+>>>>>>> 7b84153... Add and modify calls for generateTransportData()
         for spec in self.newSpeciesList:
             if spec.reactive: spec.generateThermoData(database, quantumMechanics=self.quantumMechanics)
             spec.generateTransportData(database)
